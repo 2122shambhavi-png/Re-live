@@ -146,6 +146,57 @@ h1,h2,h3,h4{font-family:var(--fh);line-height:1.25}
 .s-skip:hover{color:rgba(255,255,255,.65)}
 
 /* ═══════════════════════════════════════════
+   GRIEF MODE CHAT THEME
+═══════════════════════════════════════════ */
+#s-chat.grief-mode{background:#F5F0FA}
+#s-chat.grief-mode .chat-bar{background:rgba(240,232,250,.97);border-bottom-color:#D8C8F0}
+#s-chat.grief-mode .mr.a .bubble{background:#EDE0F8}
+#s-chat.grief-mode .mic-btn{background:linear-gradient(135deg,#9B59B6,#C39BD3)}
+#s-chat.grief-mode .mic-btn.lst{background:linear-gradient(135deg,#7D3C98,#A569BD)}
+
+/* Quick reply chips */
+.qr-chips{display:flex;gap:8px;flex-wrap:wrap;padding:0 12px 8px}
+.qrchip{padding:8px 16px;border-radius:var(--r-p);background:#fff;border:1.5px solid var(--border);
+  font-size:14px;color:var(--slate);cursor:pointer;font-family:var(--fb);
+  transition:border-color .2s,background .2s,color .2s;-webkit-tap-highlight-color:transparent}
+.qrchip:hover{border-color:var(--indigo);color:var(--indigo);background:var(--indigo-l)}
+.grief-mode .qrchip:hover{border-color:#9B59B6;color:#9B59B6;background:#F3E8FE}
+
+/* Story bubble */
+.story-bubble{background:linear-gradient(135deg,#FFF8F0,#FDECD6)!important;
+  border:1.5px solid #F5D8A8!important;font-size:16px!important;line-height:1.8!important;
+  color:#5C3D1E!important;font-family:'Georgia',serif!important}
+.story-badge{display:inline-flex;align-items:center;gap:4px;
+  background:#F5D8A8;border-radius:var(--r-p);padding:3px 10px;
+  font-size:11px;font-weight:700;color:#92400E;margin-bottom:8px;font-family:var(--fh)}
+
+/* Story Modal */
+.story-sheet{width:100%;max-width:520px;background:#fff;border-radius:28px 28px 0 0;
+  padding:0 0 34px;animation:shrise .35s var(--spring) both;max-height:85vh;overflow-y:auto}
+.stype-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stype-card{background:#FFF8F0;border:2px solid #F5D8A8;border-radius:16px;
+  padding:16px 12px;cursor:pointer;text-align:center;
+  transition:border-color .2s,transform .2s var(--spring),background .2s;
+  -webkit-tap-highlight-color:transparent}
+.stype-card:hover{border-color:#F59E0B;background:#FEF3C7;transform:translateY(-2px)}
+.stype-card:active{transform:scale(.95)}
+.stype-icon{font-size:30px;margin-bottom:6px}
+.stype-name{font-family:var(--fh);font-weight:800;font-size:14px;color:var(--dark)}
+.stype-desc{font-size:12px;color:var(--slate-m);margin-top:2px;line-height:1.35}
+.custom-story-row{display:flex;gap:8px;margin-top:4px}
+.custom-story-inp{flex:1;height:44px;padding:0 14px;background:#F8FAFF;
+  border:1.5px solid var(--border);border-radius:var(--r-md);
+  font-size:15px;color:var(--slate);outline:none;font-family:var(--fb)}
+.custom-story-inp:focus{border-color:var(--amber)}
+.story-go-btn{height:44px;padding:0 18px;background:linear-gradient(135deg,#F59E0B,#FCD34D);
+  border:none;border-radius:var(--r-md);color:#fff;font-family:var(--fh);
+  font-weight:800;font-size:14px;cursor:pointer;white-space:nowrap}
+.cb-story-btn{width:40px;height:40px;border-radius:50%;background:#FEF3C7;border:none;
+  cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;transition:background .2s,transform .2s;-webkit-tap-highlight-color:transparent}
+.cb-story-btn:hover{background:#FDE68A;transform:scale(1.08)}
+
+/* ═══════════════════════════════════════════
    SCREEN 1 — LANDING
 ═══════════════════════════════════════════ */
 #s-home{padding-bottom:80px}
@@ -190,11 +241,13 @@ h1,h2,h3,h4{font-family:var(--fh);line-height:1.25}
 .hero-name-save:hover{background:rgba(99,102,241,.95)}
 
 /* Lang bar */
-.lang-bar{display:flex;gap:8px;padding:18px 20px 0}
-.lchip{padding:8px 18px;border-radius:var(--r-p);border:2px solid var(--border);
+.lang-bar{display:flex;gap:8px;padding:18px 20px 0;overflow-x:auto;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;flex-wrap:nowrap}
+.lang-bar::-webkit-scrollbar{display:none}
+.lchip{padding:8px 16px;border-radius:var(--r-p);border:2px solid var(--border);
   background:#fff;cursor:pointer;font-family:var(--fh);font-weight:700;font-size:13px;
   color:var(--slate-m);transition:border-color .2s,color .2s,background .2s;
-  -webkit-tap-highlight-color:transparent}
+  -webkit-tap-highlight-color:transparent;white-space:nowrap;flex-shrink:0}
 .lchip.act{border-color:var(--indigo);color:var(--indigo);background:var(--indigo-l)}
 
 /* Role section */
@@ -228,6 +281,7 @@ h1,h2,h3,h4{font-family:var(--fh);line-height:1.25}
 .rc-parents{--cc:#E8F5E9}  .rc-parents:hover{border-color:#A5D6A7}
 .rc-gp{--cc:#F3E5F5}       .rc-gp:hover{border-color:#CE93D8}
 .rc-friend{--cc:#FFF9E5}   .rc-friend:hover{border-color:#FFD54F}
+.rc-grief{--cc:#EDE0F8}    .rc-grief:hover{border-color:#C39BD3}
 
 /* Info note */
 .home-note{margin:20px 16px 0;padding:16px 18px;
@@ -605,10 +659,19 @@ input[type=file]{display:none}
     <span class="api-warn-txt">No API key — using scripted replies. Tap to add your key in Settings.</span>
   </div>
 
-  <div class="lang-bar">
-    <button class="lchip act" id="lc-en" onclick="setLang('en',this)">🇬🇧 English</button>
-    <button class="lchip" id="lc-hi" onclick="setLang('hi-en',this)">🇮🇳 Hinglish</button>
-    <button class="lchip" id="lc-hin" onclick="setLang('hi',this)">🔤 Hindi</button>
+  <div class="lang-bar" id="lang-bar">
+    <button class="lchip act" id="lc-en"    onclick="setLang('en',this)">🇬🇧 EN</button>
+    <button class="lchip"     id="lc-hi"    onclick="setLang('hi',this)">🇮🇳 HI</button>
+    <button class="lchip"     id="lc-hi-en" onclick="setLang('hi-en',this)">🇮🇳 Hinglish</button>
+    <button class="lchip"     id="lc-de"    onclick="setLang('de',this)">🇩🇪 DE</button>
+    <button class="lchip"     id="lc-es"    onclick="setLang('es',this)">🇪🇸 ES</button>
+    <button class="lchip"     id="lc-fr"    onclick="setLang('fr',this)">🇫🇷 FR</button>
+    <button class="lchip"     id="lc-ur"    onclick="setLang('ur',this)">🇵🇰 UR</button>
+    <button class="lchip"     id="lc-zh"    onclick="setLang('zh',this)">🇨🇳 ZH</button>
+    <button class="lchip"     id="lc-ar"    onclick="setLang('ar',this)">🇸🇦 AR</button>
+    <button class="lchip"     id="lc-bn"    onclick="setLang('bn',this)">🇧🇩 BN</button>
+    <button class="lchip"     id="lc-pt"    onclick="setLang('pt',this)">🇧🇷 PT</button>
+    <button class="lchip"     id="lc-id"    onclick="setLang('id',this)">🇮🇩 ID</button>
   </div>
 
   <div class="role-sec">
@@ -659,6 +722,12 @@ input[type=file]{display:none}
         <div class="vc-dot" id="vcd-friend" style="display:none">✓</div>
       </button>
 
+      <button class="rc rc-grief" onclick="openChat('grief','💜','Grief Support')" aria-label="Grief &amp; Loss Support" style="grid-column:1/-1;max-width:100%">
+        <div class="rc-icon-wrap" style="background:#EDE0F8">💜</div>
+        <span class="rc-name">Grief &amp; Loss Support</span>
+        <span class="rc-desc">Compassionate presence for heartbreak &amp; loss</span>
+      </button>
+
     </div>
   </div>
 
@@ -683,12 +752,15 @@ input[type=file]{display:none}
         <span class="cb-status"><span class="cb-sdot"></span>Online</span>
       </div>
     </div>
+    <button class="cb-story-btn" id="cb-story-btn" onclick="openStoryModal()" aria-label="Story Time" title="Story Time Mode">📖</button>
     <button class="cb-lang" id="cb-lang-btn" onclick="cycleLang()">EN</button>
   </div>
 
   <div class="chat-msgs" id="chat-msgs" role="log" aria-live="polite">
     <div class="date-chip">Today</div>
   </div>
+
+  <div id="qr-chips-row" class="qr-chips" style="display:none"></div>
 
   <div class="chat-inp">
     <div class="voice-sec">
@@ -810,9 +882,18 @@ input[type=file]{display:none}
             style="height:36px;border:1.5px solid var(--border);border-radius:var(--r-md);
               padding:0 10px;font-family:var(--fh);font-size:13px;font-weight:700;
               color:var(--dark);background:#fff;outline:none;cursor:pointer">
-            <option value="en">English</option>
-            <option value="hi-en">Hinglish</option>
-            <option value="hi">Hindi</option>
+            <option value="en">🇬🇧 English</option>
+            <option value="hi">🇮🇳 Hindi</option>
+            <option value="hi-en">🇮🇳 Hinglish</option>
+            <option value="de">🇩🇪 Deutsch</option>
+            <option value="es">🇪🇸 Español</option>
+            <option value="fr">🇫🇷 Français</option>
+            <option value="ur">🇵🇰 اردو</option>
+            <option value="zh">🇨🇳 中文</option>
+            <option value="ar">🇸🇦 العربية</option>
+            <option value="bn">🇧🇩 বাংলা</option>
+            <option value="pt">🇧🇷 Português</option>
+            <option value="id">🇮🇩 Indonesia</option>
           </select>
         </div>
       </div>
@@ -827,6 +908,19 @@ input[type=file]{display:none}
         <div class="sitem-r">
           <button class="btn btn-d" style="height:36px;padding:0 16px;font-size:13px"
             onclick="clearHistory()">Clear</button>
+        </div>
+      </div>
+      <div class="sitem">
+        <div class="sitem-l">
+          <div class="sitem-ic" style="background:#EEF2FF">🧠</div>
+          <div class="sitem-txt">
+            <div class="sitem-lbl">AI Memory</div>
+            <div class="sitem-sub" id="mem-status">Loading…</div>
+          </div>
+        </div>
+        <div class="sitem-r">
+          <button class="btn btn-o" style="height:36px;padding:0 14px;font-size:13px"
+            onclick="clearMemory()">Clear</button>
         </div>
       </div>
       <div class="sitem">
@@ -910,6 +1004,49 @@ input[type=file]{display:none}
 </div>
 
 <!-- ═══════════════════════════════════════════
+     STORY TIME MODAL
+═══════════════════════════════════════════ -->
+<div class="modal-bd" id="story-modal" onclick="closeStoryOnBack(event)" aria-modal="true" role="dialog">
+  <div class="story-sheet">
+    <div class="mh-bar"></div>
+    <div class="mhd">
+      <h3>📖 Story Time</h3>
+      <p>Choose a story type and I'll tell you a beautiful, soothing tale.</p>
+    </div>
+    <div class="mbd">
+      <div class="stype-grid">
+        <div class="stype-card" onclick="startStory('family')">
+          <div class="stype-icon">👨‍👩‍👧</div>
+          <div class="stype-name">Family Memory</div>
+          <div class="stype-desc">A warm story about family bonds &amp; love</div>
+        </div>
+        <div class="stype-card" onclick="startStory('bedtime')">
+          <div class="stype-icon">🌙</div>
+          <div class="stype-name">Bedtime Story</div>
+          <div class="stype-desc">Soothing tale to ease you to sleep</div>
+        </div>
+        <div class="stype-card" onclick="startStory('folktale')">
+          <div class="stype-icon">🪔</div>
+          <div class="stype-name">Folk Tale</div>
+          <div class="stype-desc">A timeless tale from our culture</div>
+        </div>
+        <div class="stype-card" onclick="startStory('hope')">
+          <div class="stype-icon">🌅</div>
+          <div class="stype-name">Story of Hope</div>
+          <div class="stype-desc">An uplifting story about perseverance</div>
+        </div>
+      </div>
+      <p style="font-size:13px;color:var(--slate-m);font-weight:600;margin-top:4px">Or enter your own topic:</p>
+      <div class="custom-story-row">
+        <input class="custom-story-inp" id="custom-story-inp" type="text"
+          placeholder="e.g. A grandmother and her garden…" maxlength="100"/>
+        <button class="story-go-btn" onclick="startCustomStory()">Tell Story ✨</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
      EMERGENCY OVERLAY
 ═══════════════════════════════════════════ -->
 <div class="sos-bd" id="sos-modal" onclick="closeSosOnBack(event)" aria-modal="true" role="dialog">
@@ -979,6 +1116,24 @@ input[type=file]{display:none}
 ═══════════════════════════════════════════ -->
 <script>
 /* ────────────────────────────────────────────
+   LANGUAGES
+──────────────────────────────────────────── */
+const LANGS = {
+  'en':    { name:'English',    flag:'🇬🇧', sr:'en-US', short:'EN',    inst:'Respond in warm, conversational English only.' },
+  'hi':    { name:'Hindi',      flag:'🇮🇳', sr:'hi-IN', short:'हिं',   inst:'केवल हिंदी में उत्तर दें (देवनागरी लिपि)। उदाहरण: "माँ, आप बिल्कुल सही हैं।"' },
+  'hi-en': { name:'Hinglish',   flag:'🇮🇳', sr:'en-IN', short:'HI-EN', inst:'Mix Hindi and English naturally (Hinglish). Use Hindi for emotions, English for some words. Example: "Mummy koi baat nahi, aap sahi ho."' },
+  'de':    { name:'Deutsch',    flag:'🇩🇪', sr:'de-DE', short:'DE',    inst:'Antworte ausschließlich auf Deutsch, warm und einfühlsam.' },
+  'es':    { name:'Español',    flag:'🇪🇸', sr:'es-ES', short:'ES',    inst:'Responde únicamente en español, con calidez y empatía.' },
+  'fr':    { name:'Français',   flag:'🇫🇷', sr:'fr-FR', short:'FR',    inst:'Réponds uniquement en français, avec chaleur et empathie.' },
+  'ur':    { name:'اردو',       flag:'🇵🇰', sr:'ur-PK', short:'UR',    inst:'صرف اردو میں جواب دیں، گرمجوشی اور ہمدردی کے ساتھ۔' },
+  'zh':    { name:'中文',        flag:'🇨🇳', sr:'zh-CN', short:'中文',  inst:'请只用普通话（简体中文）回复，温暖而富有同情心。' },
+  'ar':    { name:'العربية',    flag:'🇸🇦', sr:'ar-SA', short:'AR',    inst:'أجب فقط باللغة العربية الفصحى، بدفء وتعاطف.' },
+  'bn':    { name:'বাংলা',       flag:'🇧🇩', sr:'bn-BD', short:'BN',    inst:'শুধুমাত্র বাংলায় উত্তর দিন, উষ্ণতা ও সহানুভূতির সাথে।' },
+  'pt':    { name:'Português',  flag:'🇧🇷', sr:'pt-BR', short:'PT',    inst:'Responda somente em português, com calor e empatia.' },
+  'id':    { name:'Indonesia',  flag:'🇮🇩', sr:'id-ID', short:'ID',    inst:'Jawab hanya dalam Bahasa Indonesia, dengan hangat dan penuh empati.' },
+};
+
+/* ────────────────────────────────────────────
    STATE
 ──────────────────────────────────────────── */
 const ST = {
@@ -991,8 +1146,8 @@ const ST = {
     elevenlabs: localStorage.getItem('sv_ek') || ''
   },
   clonedVoices: JSON.parse(localStorage.getItem('sv_cv') || '{}'),
-  chatHistory: [],     // [{role:'user'|'assistant', content:'…'}]
-  micState: 'idle',    // idle | listening | processing
+  chatHistory: [],
+  micState: 'idle',
   recognition: null,
   recorder: null,
   recChunks: [],
@@ -1000,8 +1155,52 @@ const ST = {
   recSeconds: 0,
   cloneRole: null,
   cloneBlob: null,
-  currentAudio: null
+  currentAudio: null,
+  griefMode: false
 };
+
+/* ────────────────────────────────────────────
+   AI MEMORY
+──────────────────────────────────────────── */
+const MEM_KEY = 'sv_mem';
+function getMem() {
+  try { return JSON.parse(localStorage.getItem(MEM_KEY) || '{"facts":[],"sessions":0}'); }
+  catch(e) { return {facts:[],sessions:0}; }
+}
+function saveMem(m) { localStorage.setItem(MEM_KEY, JSON.stringify(m)); }
+
+function addFacts(text) {
+  const m = getMem();
+  const patterns = [
+    { re:/(?:my name is|i(?:'m| am) called|call me)\s+([A-Z][a-z]{1,20})/i, key:'name', tpl:t=>`User's name is ${t}` },
+    { re:/(?:i(?:'m| am) feeling|i feel)\s+([a-z\s]{3,30})/i, key:'mood', tpl:t=>`Recently felt: ${t}` },
+    { re:/(?:i(?:'m| am)|I work as)\s+(a |an )?([a-z\s]{4,25})(?: by profession| by trade)?/i, key:'job', tpl:(_,__,t)=>`Occupation: ${t}` },
+    { re:/(?:i live in|i(?:'m| am) from|my city is)\s+([A-Za-z\s]{3,30})/i, key:'loc', tpl:t=>`Lives in: ${t}` },
+    { re:/my (?:son|daughter|child|grandchild|husband|wife|spouse|partner|friend)\s+(?:is called|is named|named)?\s*([A-Z][a-z]{1,20})/i, key:'family', tpl:t=>`Family member mentioned: ${t}` },
+    { re:/i (?:love|enjoy|like|hobby is)\s+([a-z\s]{3,30})/i, key:'hobby', tpl:t=>`Hobby/interest: ${t}` },
+    { re:/i(?:'m| am)\s+(\d{2,3})\s*(?:years old|yr)/i, key:'age', tpl:t=>`Age: ${t}` },
+  ];
+  let changed = false;
+  patterns.forEach(p => {
+    const match = text.match(p.re);
+    if (match) {
+      const val = p.tpl(...match.slice(1));
+      if (!m.facts.some(f => f.startsWith(p.key))) {
+        m.facts.push(p.key + ':' + val);
+        if (m.facts.length > 25) m.facts = m.facts.slice(-25);
+        changed = true;
+      }
+    }
+  });
+  if (changed) saveMem(m);
+}
+
+function getMemContext() {
+  const m = getMem();
+  if (!m.facts.length) return '';
+  const lines = m.facts.map(f => f.split(':').slice(1).join(':').trim()).filter(Boolean);
+  return `\n\nWhat you know about this person from past conversations:\n- ${lines.join('\n- ')}\nUse this naturally to show you remember them.`;
+}
 
 /* ────────────────────────────────────────────
    SYSTEM PROMPTS
@@ -1041,14 +1240,27 @@ Rules: 1-3 sentences MAX. Never mention you're an AI. Stay in character.`,
 Characteristics: equal, real, honest, supportive without being parental.
 Use "yaar", "dost" naturally. Be casual and genuine.
 Let them vent, celebrate with them, be fully present.
-Rules: 1-3 sentences MAX. Never mention you're an AI. Stay in character.`
+Rules: 1-3 sentences MAX. Never mention you're an AI. Stay in character.`,
+
+  grief: `You are a deeply compassionate grief support companion for someone experiencing loss, grief, or heartbreak.
+Your only job is to make them feel deeply heard and less alone.
+- Validate their pain completely — never minimize or rush their healing
+- Reflect back what they share with warmth and gentleness
+- Never say "I understand how you feel" — say "That sounds incredibly painful"
+- Offer presence, not solutions: "I'm right here with you"
+- Only gently suggest professional help if they express being overwhelmed or in danger
+- Never try to find a silver lining too soon
+- 2-3 sentences MAX. Deeply compassionate. Present. Safe.`
 };
 
-const LANG_SUFFIX = {
-  'en': 'Respond in warm conversational English only.',
-  'hi-en': 'Mix Hindi and English naturally (Hinglish). Use Hindi for emotions, English for some words. Example: "Mummy koi baat nahi, aap sahi ho."',
-  'hi': 'Respond in Hindi only (Devanagari script). Example: "माँ, आप बिल्कुल सही हैं।"'
+const STORY_PROMPTS = {
+  family: `Tell a warm, heartfelt short story (about 150 words) about the bonds of family — grandparents, parents, and children loving each other across generations. Make it feel real and tender.`,
+  bedtime: `Tell a soothing, peaceful bedtime story (about 150 words) with gentle imagery — a quiet village, starlit skies, soft breezes. Designed to calm the mind and ease into sleep.`,
+  folktale: `Tell a traditional South Asian folk tale or fable (about 150 words) with a gentle moral lesson. Include vivid cultural details — markets, festivals, rivers, wisdom of elders.`,
+  hope: `Tell an uplifting short story (about 150 words) about someone who faced hardship and found hope through kindness, persistence, or love. Leave the listener feeling warm and encouraged.`
 };
+
+// LANG_SUFFIX now derived from LANGS object dynamically
 
 const FALLBACK_REPLIES = {
   daughter: [
@@ -1092,7 +1304,8 @@ const GREETINGS = {
   spouse: "My love! 💕 I was waiting to hear your voice. How's your day been?",
   parents: "Oh, my dear! 👨‍👩‍👧 We're so glad you called. How are you feeling today?",
   grandparents: "Oh sweetheart! 👴👵 You made our day. Come, sit with us. How are you?",
-  friend: "Hey, you! 🤝 So glad you reached out. What's on your mind?"
+  friend: "Hey, you! 🤝 So glad you reached out. What's on your mind?",
+  grief: "💜 I'm right here with you. This is a safe space — there's no right or wrong way to feel. Would you like to share what's on your heart today?"
 };
 
 /* ────────────────────────────────────────────
@@ -1164,10 +1377,8 @@ function updateHomeUI() {
   document.getElementById('api-warn-bar').style.display = ST.apiKeys.anthropic ? 'none' : 'flex';
 
   // Language chips
-  ['en','hi-en','hi'].forEach(l => {
-    const ids = {'en':'lc-en','hi-en':'lc-hi','hi':'lc-hin'};
-    document.getElementById(ids[l])?.classList.toggle('act', ST.lang === l);
-  });
+  document.querySelectorAll('.lchip').forEach(c => c.classList.remove('act'));
+  document.getElementById('lc-' + ST.lang)?.classList.add('act');
 
   // Voice clone dots
   Object.keys(ST.clonedVoices).forEach(r => {
@@ -1199,20 +1410,25 @@ function setLang(l, el) {
 function setLangDirect(v) {
   ST.lang = v;
   localStorage.setItem('sv_lang', v);
+  // sync chip highlight
+  document.querySelectorAll('.lchip').forEach(c => c.classList.remove('act'));
+  const chip = document.getElementById('lc-' + v);
+  if (chip) chip.classList.add('act');
   updateChatLangBtn();
 }
 function cycleLang() {
-  const langs = ['en','hi-en','hi'];
-  const i = langs.indexOf(ST.lang);
-  ST.lang = langs[(i+1) % langs.length];
+  const langKeys = Object.keys(LANGS);
+  const i = langKeys.indexOf(ST.lang);
+  ST.lang = langKeys[(i + 1) % langKeys.length];
   localStorage.setItem('sv_lang', ST.lang);
   updateChatLangBtn();
-  showToast('Language: ' + {'en':'English','hi-en':'Hinglish','hi':'Hindi'}[ST.lang]);
+  showToast('Language: ' + (LANGS[ST.lang]?.flag || '') + ' ' + (LANGS[ST.lang]?.name || ST.lang));
 }
 function updateChatLangBtn() {
-  const labels = {'en':'EN','hi-en':'HI-EN','hi':'HI'};
   const btn = document.getElementById('cb-lang-btn');
-  if (btn) btn.textContent = labels[ST.lang] || 'EN';
+  if (btn) btn.textContent = (LANGS[ST.lang] || LANGS['en']).short;
+  const sel = document.getElementById('set-lang');
+  if (sel) sel.value = ST.lang;
 }
 
 /* ────────────────────────────────────────────
@@ -1221,10 +1437,31 @@ function updateChatLangBtn() {
 function openChat(role, icon, name) {
   ST.role = role; ST.icon = icon; ST.name = name;
   ST.chatHistory = [];
+  ST.griefMode = (role === 'grief');
 
   document.getElementById('cb-avatar').textContent = icon;
   document.getElementById('cb-name').textContent = name;
   updateChatLangBtn();
+
+  // Grief mode theme
+  const chatScreen = document.getElementById('s-chat');
+  chatScreen.classList.toggle('grief-mode', ST.griefMode);
+
+  // Story button: hide in grief mode
+  document.getElementById('cb-story-btn').style.display = ST.griefMode ? 'none' : 'flex';
+
+  // Quick reply chips for grief mode
+  const qrRow = document.getElementById('qr-chips-row');
+  if (ST.griefMode) {
+    qrRow.style.display = 'flex';
+    qrRow.innerHTML = [
+      'Tell me about them…', 'I miss them so much', 'I\'m struggling today',
+      'I feel so alone', 'I don\'t know how to cope'
+    ].map(t => `<button class="qrchip" onclick="sendQuickReply(this)">${t}</button>`).join('');
+  } else {
+    qrRow.style.display = 'none';
+    qrRow.innerHTML = '';
+  }
 
   const area = document.getElementById('chat-msgs');
   area.innerHTML = '<div class="date-chip">Today</div>';
@@ -1237,6 +1474,12 @@ function openChat(role, icon, name) {
     addMsg('ai', greeting);
     speakText(greeting);
   }, 500);
+}
+
+function sendQuickReply(btn) {
+  const text = btn.textContent;
+  addMsg('user', text);
+  getAndShowReply(text);
 }
 
 /* ────────────────────────────────────────────
@@ -1305,7 +1548,9 @@ function hideTyping() {
 async function askClaude(userText) {
   if (!ST.apiKeys.anthropic) return useFallback();
 
-  const systemPrompt = PROMPTS[ST.role] + '\n\n' + (LANG_SUFFIX[ST.lang] || LANG_SUFFIX['en']);
+  const langInst = (LANGS[ST.lang] || LANGS['en']).inst;
+  const memCtx   = getMemContext();
+  const systemPrompt = (PROMPTS[ST.role] || PROMPTS.friend) + '\n\n' + langInst + memCtx;
 
   const messages = [...ST.chatHistory];
 
@@ -1347,6 +1592,7 @@ function useFallback() {
 }
 
 async function getAndShowReply(userText) {
+  addFacts(userText); // extract & persist facts
   showTyping();
   try {
     const reply = await askClaude(userText);
@@ -1359,6 +1605,90 @@ async function getAndShowReply(userText) {
     addMsg('ai', fb);
     speakText(fb);
   }
+}
+
+/* ────────────────────────────────────────────
+   STORY TIME MODE
+──────────────────────────────────────────── */
+function openStoryModal() {
+  document.getElementById('story-modal').classList.add('on');
+  document.getElementById('custom-story-inp').value = '';
+}
+function closeStoryModal() {
+  document.getElementById('story-modal').classList.remove('on');
+}
+function closeStoryOnBack(e) {
+  if (e.target.id === 'story-modal') closeStoryModal();
+}
+
+async function startStory(type) {
+  closeStoryModal();
+  const prompt = STORY_PROMPTS[type] || STORY_PROMPTS.family;
+  await deliverStory(prompt, type);
+}
+
+async function startCustomStory() {
+  const topic = document.getElementById('custom-story-inp').value.trim();
+  if (!topic) { showToast('Please enter a story topic'); return; }
+  closeStoryModal();
+  const prompt = `Tell a warm, heartfelt short story (about 150 words) on this topic: "${topic}". Make it vivid, emotional, and uplifting.`;
+  await deliverStory(prompt, 'custom');
+}
+
+async function deliverStory(storyPrompt, type) {
+  const area = document.getElementById('chat-msgs');
+  // Show story indicator as user action
+  const typeLabels = { family:'Family Memory', bedtime:'Bedtime Story', folktale:'Folk Tale', hope:'Story of Hope', custom:'Custom Story' };
+  addMsg('user', `📖 Tell me a ${typeLabels[type] || 'story'}…`);
+
+  showTyping();
+  let storyText = '';
+  if (ST.apiKeys.anthropic) {
+    try {
+      const langInst = (LANGS[ST.lang] || LANGS['en']).inst;
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'x-api-key': ST.apiKeys.anthropic,
+          'anthropic-version': '2023-06-01',
+          'anthropic-dangerous-direct-browser-access': 'true',
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+          model: 'claude-haiku-4-5',
+          max_tokens: 400,
+          system: storyPrompt + '\n\n' + langInst,
+          messages: [{ role:'user', content:'Please tell me the story now.' }]
+        })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        storyText = data.content?.[0]?.text || '';
+      }
+    } catch(e) { console.error('Story fetch error:', e); }
+  }
+  if (!storyText) {
+    storyText = "Once upon a time, in a quiet village where the mango trees swayed gently in the breeze, an old grandmother sat on her porch and told her grandchildren stories of a world full of love, patience, and kindness. And every evening, the stars came out just to listen.";
+  }
+  hideTyping();
+
+  // Render story bubble with special styling
+  const row = document.createElement('div');
+  row.className = 'mr a';
+  row.innerHTML = `
+    <div class="mavatar" aria-hidden="true">${ST.icon}</div>
+    <div class="mbody">
+      <div class="bubble story-bubble">
+        <div class="story-badge">📖 ${typeLabels[type] || 'Story'}</div><br>
+        ${storyText}
+        <button class="rbtn" aria-label="Replay story" onclick="speakText(${JSON.stringify(storyText)})">🔊</button>
+      </div>
+      <div class="mtime" aria-hidden="true">${new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</div>
+    </div>`;
+  area.appendChild(row);
+  area.scrollTop = area.scrollHeight;
+  ST.chatHistory.push({ role:'assistant', content: storyText });
+  speakText(storyText);
 }
 
 /* ────────────────────────────────────────────
@@ -1417,7 +1747,7 @@ function startMic() {
   ST.recognition = new SR();
   ST.recognition.continuous = false;
   ST.recognition.interimResults = false;
-  ST.recognition.lang = ST.lang === 'hi' ? 'hi-IN' : 'en-IN';
+  ST.recognition.lang = (LANGS[ST.lang] || LANGS['en']).sr;
 
   ST.recognition.onstart  = () => setMicState('listening');
   ST.recognition.onresult = e => {
@@ -1660,7 +1990,7 @@ function updateSettingsUI() {
   if (ST.apiKeys.elevenlabs) document.getElementById('set-ekey').placeholder = '••••••••••••••••';
 
   // Voice clone statuses
-  const roles = ['daughter','son','spouse','parents','grandparents','friend'];
+  const roles = ['daughter','son','spouse','parents','grandparents','friend','grief'];
   roles.forEach(r => {
     const st = document.getElementById('vcs-' + r);
     const btn = document.getElementById('vcb-' + r);
@@ -1678,6 +2008,16 @@ function updateSettingsUI() {
 
   // Language
   document.getElementById('set-lang').value = ST.lang;
+
+  // Memory status
+  const mem = getMem();
+  const memEl = document.getElementById('mem-status');
+  if (memEl) {
+    memEl.textContent = mem.facts.length
+      ? `✅ ${mem.facts.length} fact${mem.facts.length > 1 ? 's' : ''} remembered about you`
+      : 'No memories yet — just start chatting!';
+    memEl.style.color = mem.facts.length ? 'var(--green)' : '';
+  }
 }
 
 function saveAkey() {
@@ -1711,10 +2051,13 @@ function clearHistory() {
   ST.chatHistory = [];
   showToast('Conversation cleared');
 }
+function clearMemory() {
+  saveMem({facts:[], sessions:0});
+  showToast('🧠 Memory cleared — starting fresh');
+}
 
 function updateVCDots() {
-  const roles = ['daughter','son','spouse','parents','grandparents','friend'];
-  roles.forEach(r => {
+  ['daughter','son','spouse','parents','grandparents','friend','grief'].forEach(r => {
     const el = document.getElementById('vcd-' + r);
     if (el) el.style.display = ST.clonedVoices[r] ? 'flex' : 'none';
   });
@@ -1742,13 +2085,16 @@ function showToast(msg) {
    KEYBOARD / ESCAPE
 ──────────────────────────────────────────── */
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') { closeSos(); closeCloneModal(); }
+  if (e.key === 'Escape') { closeSos(); closeCloneModal(); closeStoryModal(); }
 });
 
 /* ────────────────────────────────────────────
    INIT (check if already set up)
 ──────────────────────────────────────────── */
 window.addEventListener('DOMContentLoaded', () => {
+  // Increment session counter
+  const m = getMem(); m.sessions = (m.sessions || 0) + 1; saveMem(m);
+
   // If name exists, skip setup
   if (ST.userName || ST.apiKeys.anthropic) {
     enterApp();
