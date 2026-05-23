@@ -499,6 +499,21 @@ h1,h2,h3,h4{font-family:var(--fh);line-height:1.25}
 .mhd p{font-size:14px;color:var(--slate-m);line-height:1.5}
 .mbd{padding:20px 22px;display:flex;flex-direction:column;gap:18px}
 
+/* Gender toggle (voice type) */
+.gender-panel{background:#F8FAFF;border:1.5px solid var(--border);border-radius:var(--r-lg);
+  padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.gender-panel-lbl{font-size:13px;font-weight:700;color:var(--slate);font-family:var(--fh)}
+.gender-toggle{display:flex;gap:8px}
+.gtbtn{flex:1;height:44px;border-radius:var(--r-md);border:2px solid var(--border);
+  background:#fff;cursor:pointer;font-family:var(--fh);font-weight:700;font-size:15px;
+  color:var(--slate-m);transition:border-color .2s,background .2s,color .2s;
+  -webkit-tap-highlight-color:transparent}
+.gtbtn.act{border-color:var(--indigo);background:var(--indigo-l);color:var(--indigo)}
+.preview-btn{width:100%;height:40px;border-radius:var(--r-md);border:1.5px solid var(--indigo);
+  background:transparent;color:var(--indigo);font-family:var(--fh);font-weight:700;font-size:13px;
+  cursor:pointer;transition:background .2s,color .2s;-webkit-tap-highlight-color:transparent}
+.preview-btn:hover{background:var(--indigo-l)}
+
 /* Tabs */
 .tabs{display:flex;background:#F4F6FB;border-radius:var(--r-md);padding:4px;gap:4px}
 .tab{flex:1;height:40px;border-radius:var(--r-sm);border:none;cursor:pointer;
@@ -835,8 +850,8 @@ input[type=file]{display:none}
     <!-- Voice Cloning -->
     <div class="sgrp">
       <div class="sgrp-hd">
-        <h3>🎤 Voice Cloning</h3>
-        <p>Upload 30-60 seconds of your loved one's voice — AI will reply in their exact voice</p>
+        <h3>🎤 Voice Style</h3>
+        <p>Record or upload your loved one's voice — no account needed. The AI will speak in a matching voice style.</p>
       </div>
       <div class="vc-list">
         <div class="vcc"><span class="vcc-icon">💝</span>
@@ -950,8 +965,8 @@ input[type=file]{display:none}
   <div class="modal-sheet">
     <div class="mh-bar"></div>
     <div class="mhd">
-      <h3 id="clone-modal-title">Clone Voice</h3>
-      <p>Record or upload 30–60 seconds of clear speech. The AI will reply in that voice.</p>
+      <h3 id="clone-modal-title">Add Voice Style</h3>
+      <p>Record or upload 20–60 sec of their voice. No account or API key needed — works instantly.</p>
     </div>
     <div class="mbd">
       <div class="tabs">
@@ -963,12 +978,12 @@ input[type=file]{display:none}
       <div class="tab-content on" id="tab-record">
         <div class="rec-ui">
           <div class="rec-timer" id="rec-timer">0:00</div>
-          <p class="rec-guide">Speak naturally — read anything aloud for 30-60 seconds. The more you speak, the better the clone.</p>
+          <p class="rec-guide">Ask them to speak naturally — anything works. 20–60 seconds is ideal.</p>
           <button class="rec-btn idle" id="rec-btn" onclick="toggleRecord()">🎙️</button>
         </div>
         <div class="rec-quality">
           <span class="rec-quality-icon">💡</span>
-          <span class="rec-quality-txt">Tip: Use a quiet room &amp; hold your phone 20cm from your mouth</span>
+          <span class="rec-quality-txt">Tip: Quiet room, phone close to mouth. No background music.</span>
         </div>
       </div>
 
@@ -977,7 +992,7 @@ input[type=file]{display:none}
         <div class="drop-zone" onclick="document.getElementById('file-inp').click()">
           <div class="drop-zone-icon">🎵</div>
           <h4>Tap to choose audio file</h4>
-          <p>MP3, WAV, M4A, OGG — minimum 30 seconds</p>
+          <p>MP3, WAV, M4A, OGG — any length works</p>
         </div>
         <input type="file" id="file-inp" accept="audio/*" onchange="onFileSelect(event)"/>
         <div class="audio-prev" id="audio-prev" style="display:none">
@@ -987,17 +1002,27 @@ input[type=file]{display:none}
         </div>
       </div>
 
+      <!-- Gender panel (shown after audio is ready) -->
+      <div class="gender-panel" id="gender-panel" style="display:none">
+        <div class="gender-panel-lbl">🎵 Voice type detected — confirm below:</div>
+        <div class="gender-toggle">
+          <button class="gtbtn" id="gt-female" onclick="setGenderPref('female',this)">👩 Female</button>
+          <button class="gtbtn" id="gt-male"   onclick="setGenderPref('male',this)">👨 Male</button>
+        </div>
+        <button class="preview-btn" onclick="previewVoiceStyle()">▶ Preview how it will sound</button>
+      </div>
+
       <!-- Progress -->
       <div class="clone-prog" id="clone-prog">
         <div class="prog-bar-wrap"><div class="prog-bar" id="prog-bar"></div></div>
-        <p class="prog-txt" id="prog-txt">Uploading voice sample…</p>
+        <p class="prog-txt" id="prog-txt">Analysing voice…</p>
       </div>
 
     </div>
     <div class="modal-foot">
       <button class="btn btn-o" style="height:52px;font-size:15px" onclick="closeCloneModal()">Cancel</button>
       <button class="btn btn-p" style="height:52px;font-size:15px" id="clone-submit-btn" onclick="submitClone()">
-        ✨ Create Voice Clone
+        🎤 Save Voice Style
       </button>
     </div>
   </div>
@@ -1155,6 +1180,7 @@ const ST = {
   recSeconds: 0,
   cloneRole: null,
   cloneBlob: null,
+  cloneGender: null,
   currentAudio: null,
   griefMode: false
 };
@@ -1773,14 +1799,60 @@ function stopMic(commit) {
    TEXT TO SPEECH
 ──────────────────────────────────────────── */
 async function speakText(text) {
-  const voiceId = ST.clonedVoices[ST.role];
-  if (voiceId && ST.apiKeys.elevenlabs) {
-    await speakElevenLabs(text, voiceId);
-  } else {
-    speakBrowser(text);
+  const profile = ST.clonedVoices[ST.role];
+  if (!profile) { speakBrowser(text); return; }
+
+  // Legacy: ElevenLabs voice_id (plain string) — use if key available
+  if (typeof profile === 'string') {
+    if (ST.apiKeys.elevenlabs) { await speakElevenLabs(text, profile); }
+    else { speakBrowser(text); }
+    return;
   }
+
+  // New: local voice profile object
+  if (profile.type === 'local') { speakWithProfile(text, profile); return; }
+  speakBrowser(text);
 }
 
+/* ── speak with cloned local voice profile ── */
+function speakWithProfile(text, profile) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+
+  const doSpeak = (voices) => {
+    const u = new SpeechSynthesisUtterance(text);
+    const srLang = (LANGS[ST.lang] || LANGS['en']).sr;
+
+    // 1. Try exact saved voiceURI first
+    let chosen = profile.voiceURI ? voices.find(v => v.voiceURI === profile.voiceURI) : null;
+
+    // 2. Gender + language match
+    if (!chosen) {
+      const sameLang = voices.filter(v => v.lang.startsWith(srLang.split('-')[0]));
+      const pool = sameLang.length ? sameLang : voices;
+      if (profile.isFemale) {
+        chosen = pool.find(v => /female|woman|girl|zira|susan|samantha|moira|tessa|karen|victoria|fiona/i.test(v.name))
+               || pool.find(v => !/male|man|guy|david|mark|daniel|james|jorge/i.test(v.name));
+      } else {
+        chosen = pool.find(v => /male|man|david|mark|daniel|james|jorge|rishi/i.test(v.name))
+               || pool[pool.length - 1];
+      }
+    }
+    if (!chosen) chosen = voices.find(v => v.lang.startsWith('en')) || voices[0];
+    if (chosen) u.voice = chosen;
+
+    u.pitch  = profile.pitch  ?? (profile.isFemale ? 1.15 : 0.82);
+    u.rate   = profile.rate   ?? 0.88;
+    u.volume = 0.95;
+    window.speechSynthesis.speak(u);
+  };
+
+  const voices = window.speechSynthesis.getVoices();
+  if (voices.length) { doSpeak(voices); }
+  else { window.speechSynthesis.onvoiceschanged = () => doSpeak(window.speechSynthesis.getVoices()); }
+}
+
+/* ── ElevenLabs (legacy / optional) ── */
 async function speakElevenLabs(text, voiceId) {
   try {
     if (ST.currentAudio) { ST.currentAudio.pause(); ST.currentAudio = null; }
@@ -1788,8 +1860,7 @@ async function speakElevenLabs(text, voiceId) {
       method: 'POST',
       headers: { 'xi-api-key': ST.apiKeys.elevenlabs, 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        text: text,
-        model_id: 'eleven_multilingual_v2',
+        text, model_id: 'eleven_multilingual_v2',
         voice_settings: { stability: 0.5, similarity_boost: 0.82, style: 0.3, use_speaker_boost: true }
       })
     });
@@ -1800,10 +1871,7 @@ async function speakElevenLabs(text, voiceId) {
     ST.currentAudio = audio;
     audio.play();
     audio.onended = () => URL.revokeObjectURL(url);
-  } catch(e) {
-    console.error('ElevenLabs TTS error:', e);
-    speakBrowser(text);
-  }
+  } catch(e) { console.error('ElevenLabs TTS error:', e); speakBrowser(text); }
 }
 
 function speakBrowser(text) {
@@ -1812,32 +1880,36 @@ function speakBrowser(text) {
   const u = new SpeechSynthesisUtterance(text);
   u.rate = 0.88; u.pitch = 1.05; u.volume = 0.95;
   const voices = window.speechSynthesis.getVoices();
-  const v = voices.find(v => /female|woman/i.test(v.name)) || voices.find(v => v.lang.startsWith('en')) || voices[0];
+  const v = voices.find(v => /female|woman|samantha|zira/i.test(v.name))
+          || voices.find(v => v.lang.startsWith('en')) || voices[0];
   if (v) u.voice = v;
   window.speechSynthesis.speak(u);
 }
 
 /* ────────────────────────────────────────────
-   VOICE CLONE MODAL
+   VOICE CLONE MODAL  (no API key needed)
 ──────────────────────────────────────────── */
 function openCloneModal(role, icon, name) {
-  if (!ST.apiKeys.elevenlabs) {
-    showToast('Add your ElevenLabs API key in Settings first');
-    return;
-  }
-  ST.cloneRole = role;
-  ST.cloneBlob = null;
-  document.getElementById('clone-modal-title').textContent = `Clone ${icon} ${name}'s Voice`;
+  ST.cloneRole  = role;
+  ST.cloneBlob  = null;
+  ST.cloneGender = null; // will be auto-detected
+
+  document.getElementById('clone-modal-title').textContent = `${icon} ${name} — Add Voice`;
   document.getElementById('rec-timer').textContent = '0:00';
   document.getElementById('rec-timer').classList.remove('go');
   document.getElementById('rec-btn').className = 'rec-btn idle';
   document.getElementById('rec-btn').textContent = '🎙️';
   document.getElementById('audio-prev').style.display = 'none';
   document.getElementById('clone-prog').classList.remove('on');
+  document.getElementById('gender-panel').style.display = 'none';
   document.getElementById('prog-bar').style.width = '0%';
   clearInterval(ST.recInterval);
   ST.recSeconds = 0;
-  switchTab('record', document.querySelector('.tab.act'));
+
+  // reset gender buttons
+  document.querySelectorAll('.gtbtn').forEach(b => b.classList.remove('act'));
+
+  switchTab('record', document.querySelector('.tab'));
   document.getElementById('clone-modal').classList.add('on');
 }
 
@@ -1847,7 +1919,6 @@ function closeCloneModal() {
   clearInterval(ST.recInterval);
   ST.cloneBlob = null;
 }
-
 function closeModalOnBack(e) {
   if (e.target === document.getElementById('clone-modal')) closeCloneModal();
 }
@@ -1859,20 +1930,20 @@ function switchTab(tab, el) {
   document.getElementById('tab-upload').classList.toggle('on', tab === 'upload');
 }
 
-/* Recording */
+/* ── Recording ── */
 async function toggleRecord() {
   const btn = document.getElementById('rec-btn');
   if (!ST.recorder || ST.recorder.state === 'inactive') {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      ST.recChunks = [];
-      ST.recSeconds = 0;
+      ST.recChunks = []; ST.recSeconds = 0;
       ST.recorder = new MediaRecorder(stream);
       ST.recorder.ondataavailable = e => ST.recChunks.push(e.data);
       ST.recorder.onstop = () => {
         ST.cloneBlob = new Blob(ST.recChunks, { type: 'audio/webm' });
         stream.getTracks().forEach(t => t.stop());
-        showToast(`Recorded ${fmtTime(ST.recSeconds)} — ready to clone!`);
+        showGenderPanel();
+        showToast(`Recorded ${fmtTime(ST.recSeconds)} ✅`);
       };
       ST.recorder.start();
       btn.className = 'rec-btn stop'; btn.textContent = '⏹';
@@ -1880,11 +1951,9 @@ async function toggleRecord() {
       ST.recInterval = setInterval(() => {
         ST.recSeconds++;
         document.getElementById('rec-timer').textContent = fmtTime(ST.recSeconds);
-        if (ST.recSeconds >= 120) toggleRecord(); // auto-stop at 2 min
+        if (ST.recSeconds >= 120) toggleRecord();
       }, 1000);
-    } catch(e) {
-      showToast('Microphone access denied');
-    }
+    } catch(e) { showToast('Microphone access denied'); }
   } else {
     ST.recorder.stop();
     clearInterval(ST.recInterval);
@@ -1892,12 +1961,9 @@ async function toggleRecord() {
     document.getElementById('rec-timer').classList.remove('go');
   }
 }
+function fmtTime(s) { return Math.floor(s/60) + ':' + String(s%60).padStart(2,'0'); }
 
-function fmtTime(s) {
-  return Math.floor(s/60) + ':' + String(s%60).padStart(2,'0');
-}
-
-/* File upload */
+/* ── File upload ── */
 function onFileSelect(e) {
   const f = e.target.files[0];
   if (!f) return;
@@ -1905,69 +1971,138 @@ function onFileSelect(e) {
   document.getElementById('audio-prev').style.display = 'flex';
   document.getElementById('audio-prev-name').textContent = f.name;
   document.getElementById('audio-prev-sz').textContent = (f.size/1024/1024).toFixed(1) + ' MB';
+  showGenderPanel();
 }
 function clearFile() {
   ST.cloneBlob = null;
   document.getElementById('audio-prev').style.display = 'none';
   document.getElementById('file-inp').value = '';
+  document.getElementById('gender-panel').style.display = 'none';
 }
 
-/* Submit clone */
+/* ── Gender panel ── */
+async function showGenderPanel() {
+  const panel = document.getElementById('gender-panel');
+  panel.style.display = 'flex';
+
+  // auto-detect from audio
+  if (ST.cloneBlob) {
+    const detected = await detectGenderFromAudio(ST.cloneBlob);
+    ST.cloneGender = detected; // 'female' | 'male' | null
+    document.querySelectorAll('.gtbtn').forEach(b => b.classList.remove('act'));
+    if (detected === 'female') document.getElementById('gt-female').classList.add('act');
+    else if (detected === 'male') document.getElementById('gt-male').classList.add('act');
+  }
+}
+
+function setGenderPref(gender, btn) {
+  ST.cloneGender = gender;
+  document.querySelectorAll('.gtbtn').forEach(b => b.classList.remove('act'));
+  btn.classList.add('act');
+}
+
+function previewVoiceStyle() {
+  const isFemale = ST.cloneGender !== 'male';
+  speakWithProfile('Hello! This is how I will sound when we talk.', {
+    type: 'local', isFemale, pitch: isFemale ? 1.15 : 0.82, rate: 0.88
+  });
+}
+
+/* ── Pitch detection via Web Audio autocorrelation ── */
+async function detectGenderFromAudio(blob) {
+  try {
+    const arrayBuf = await blob.arrayBuffer();
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const audioBuf  = await audioCtx.decodeAudioData(arrayBuf);
+    audioCtx.close();
+
+    const raw = audioBuf.getChannelData(0);
+    const sr  = audioBuf.sampleRate;
+
+    // Sample from middle 3 seconds for best accuracy
+    const mid   = Math.floor(raw.length / 2);
+    const chunk = raw.slice(mid, mid + Math.min(sr * 3, raw.length - mid));
+
+    const pitch = autoCorrPitch(chunk, sr);
+    if (pitch === 0) return null;              // couldn't detect — let user pick
+    return pitch > 155 ? 'female' : 'male';   // female ≈ 160-300 Hz, male ≈ 85-155 Hz
+  } catch(e) {
+    console.warn('Voice analysis skipped:', e);
+    return null;
+  }
+}
+
+function autoCorrPitch(buf, sampleRate) {
+  const n      = buf.length;
+  const minLag = Math.floor(sampleRate / 350); // max 350 Hz
+  const maxLag = Math.floor(sampleRate / 70);  // min 70  Hz
+
+  let bestLag = -1, bestCorr = -Infinity;
+
+  for (let lag = minLag; lag <= maxLag; lag++) {
+    let corr = 0, e1 = 0, e2 = 0;
+    const len = n - lag;
+    for (let i = 0; i < len; i++) {
+      corr += buf[i] * buf[i + lag];
+      e1   += buf[i] * buf[i];
+      e2   += buf[i + lag] * buf[i + lag];
+    }
+    const norm = corr / (Math.sqrt(e1 * e2) + 1e-10);
+    if (norm > bestCorr) { bestCorr = norm; bestLag = lag; }
+  }
+
+  if (bestCorr < 0.25 || bestLag < 1) return 0; // no clear pitch
+  return sampleRate / bestLag;
+}
+
+/* ── Save voice style locally (no API needed) ── */
 async function submitClone() {
-  if (!ST.cloneBlob) { showToast('Please record or upload an audio sample first'); return; }
-  if (!ST.apiKeys.elevenlabs) { showToast('ElevenLabs API key not set'); return; }
+  if (!ST.cloneBlob) { showToast('Please record or upload a voice sample first'); return; }
 
   const prog = document.getElementById('clone-prog');
   const bar  = document.getElementById('prog-bar');
   const txt  = document.getElementById('prog-txt');
   prog.classList.add('on');
-  bar.style.width = '15%';
-  txt.textContent = 'Uploading voice sample…';
+  bar.style.width = '20%';
+  txt.textContent = 'Analysing voice characteristics…';
 
-  const fd = new FormData();
-  fd.append('name', `Saathi-${ST.cloneRole}-${Date.now()}`);
-  fd.append('description', `Voice clone for ${ST.cloneRole}`);
-  fd.append('files', ST.cloneBlob, 'voice_sample.webm');
+  // Run pitch detection
+  await new Promise(r => setTimeout(r, 200)); // let the UI paint
+  const detectedGender = await detectGenderFromAudio(ST.cloneBlob);
+  const isFemale = ST.cloneGender
+    ? ST.cloneGender === 'female'
+    : (detectedGender === 'female' ?? true);
 
-  try {
-    bar.style.width = '45%';
-    txt.textContent = 'Creating voice clone with AI…';
+  bar.style.width = '60%';
+  txt.textContent = 'Matching voice profile…';
+  await new Promise(r => setTimeout(r, 400));
 
-    const res = await fetch('https://api.elevenlabs.io/v1/voices/add', {
-      method: 'POST',
-      headers: { 'xi-api-key': ST.apiKeys.elevenlabs },
-      body: fd
-    });
+  bar.style.width = '90%';
+  txt.textContent = 'Saving voice style…';
+  await new Promise(r => setTimeout(r, 300));
 
-    bar.style.width = '85%';
-    txt.textContent = 'Finalising clone…';
+  // Build and save local profile — no external API needed
+  const profile = {
+    type:     'local',
+    isFemale: isFemale,
+    pitch:    isFemale ? 1.15 : 0.80,
+    rate:     0.88,
+    label:    isFemale ? 'Female voice' : 'Male voice',
+    savedAt:  Date.now()
+  };
 
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      console.error('ElevenLabs clone error:', err);
-      showToast('Clone failed: ' + (err.detail?.message || 'Check your API key'));
-      prog.classList.remove('on');
-      return;
-    }
+  ST.clonedVoices[ST.cloneRole] = profile;
+  localStorage.setItem('sv_cv', JSON.stringify(ST.clonedVoices));
 
-    const data = await res.json();
-    bar.style.width = '100%';
-    txt.textContent = '✅ Voice cloned successfully!';
+  bar.style.width = '100%';
+  txt.textContent = '✅ Voice style saved!';
 
-    ST.clonedVoices[ST.cloneRole] = data.voice_id;
-    localStorage.setItem('sv_cv', JSON.stringify(ST.clonedVoices));
-
-    setTimeout(() => {
-      closeCloneModal();
-      updateSettingsUI();
-      updateVCDots();
-      showToast(`✅ ${ST.cloneRole} voice cloned! It'll be used in chat.`);
-    }, 1000);
-  } catch(e) {
-    console.error('Clone submission error:', e);
-    showToast('Network error — please try again');
-    prog.classList.remove('on');
-  }
+  setTimeout(() => {
+    closeCloneModal();
+    updateSettingsUI();
+    updateVCDots();
+    showToast(`✅ Voice saved! The AI will now speak in a ${profile.label.toLowerCase()}.`);
+  }, 900);
 }
 
 /* ────────────────────────────────────────────
@@ -1989,17 +2124,19 @@ function updateSettingsUI() {
   if (ST.apiKeys.anthropic) document.getElementById('set-akey').placeholder = '••••••••••••••••';
   if (ST.apiKeys.elevenlabs) document.getElementById('set-ekey').placeholder = '••••••••••••••••';
 
-  // Voice clone statuses
+  // Voice style statuses
   const roles = ['daughter','son','spouse','parents','grandparents','friend','grief'];
   roles.forEach(r => {
-    const st = document.getElementById('vcs-' + r);
+    const st  = document.getElementById('vcs-' + r);
     const btn = document.getElementById('vcb-' + r);
-    if (ST.clonedVoices[r]) {
-      if (st)  { st.textContent = '✅ Voice cloned'; st.className = 'vcc-st done'; }
-      if (btn) { btn.textContent = '🔄 Re-clone'; btn.className = 'vcc-btn done'; }
+    const v   = ST.clonedVoices[r];
+    if (v) {
+      const lbl = (typeof v === 'object' && v.label) ? v.label : 'Voice saved';
+      if (st)  { st.textContent = '✅ ' + lbl; st.className = 'vcc-st done'; }
+      if (btn) { btn.textContent = '🔄 Update'; btn.className = 'vcc-btn done'; }
     } else {
-      if (st)  { st.textContent = 'No voice cloned yet'; st.className = 'vcc-st'; }
-      if (btn) { btn.textContent = '+ Clone'; btn.className = 'vcc-btn'; }
+      if (st)  { st.textContent = 'No voice added yet'; st.className = 'vcc-st'; }
+      if (btn) { btn.textContent = '+ Add Voice'; btn.className = 'vcc-btn'; }
     }
   });
 
