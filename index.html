@@ -146,6 +146,43 @@ h1,h2,h3,h4{font-family:var(--fh);line-height:1.25}
 .s-skip:hover{color:rgba(255,255,255,.65)}
 
 /* ═══════════════════════════════════════════
+   SPEAKING INDICATOR
+═══════════════════════════════════════════ */
+.speak-ring{position:absolute;inset:-6px;border-radius:50%;
+  border:3px solid var(--indigo);opacity:0;pointer-events:none;
+  transition:opacity .3s}
+.cb-avatar.speaking .speak-ring{opacity:1;animation:speakpulse 1s ease-in-out infinite}
+@keyframes speakpulse{0%,100%{transform:scale(1);opacity:.7}50%{transform:scale(1.12);opacity:1}}
+
+/* Voice shortcut in chat bar */
+.cb-voice-btn{width:40px;height:40px;border-radius:50%;
+  background:linear-gradient(135deg,#D1FAE5,#A7F3D0);border:none;
+  cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;transition:background .2s,transform .2s;-webkit-tap-highlight-color:transparent;
+  position:relative}
+.cb-voice-btn:hover{transform:scale(1.08)}
+.cb-voice-btn.has-voice{background:linear-gradient(135deg,var(--green),#34D399)}
+.cb-voice-dot{position:absolute;top:0;right:0;width:10px;height:10px;
+  background:var(--green);border-radius:50%;border:2px solid #fff;display:none}
+.cb-voice-btn.has-voice .cb-voice-dot{display:block}
+
+/* Clone modal steps */
+.clone-steps{display:flex;flex-direction:column;gap:10px}
+.cstep{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;
+  background:#F8FAFF;border-radius:var(--r-md);border-left:3px solid var(--indigo)}
+.cstep-num{width:24px;height:24px;border-radius:50%;background:var(--indigo);
+  color:#fff;font-size:12px;font-weight:800;font-family:var(--fh);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.cstep-txt{font-size:13px;color:var(--slate);line-height:1.5}
+.cstep-txt strong{color:var(--dark)}
+
+.wa-tip{display:flex;align-items:center;gap:10px;padding:10px 14px;
+  background:#E7F8EE;border-radius:var(--r-md);border-left:3px solid #25D366}
+.wa-tip-icon{font-size:22px;flex-shrink:0}
+.wa-tip-txt{font-size:13px;color:#1a5c31;line-height:1.45}
+.wa-tip-txt strong{color:#0d3b1f}
+
+/* ═══════════════════════════════════════════
    GRIEF MODE CHAT THEME
 ═══════════════════════════════════════════ */
 #s-chat.grief-mode{background:#F5F0FA}
@@ -761,12 +798,15 @@ input[type=file]{display:none}
   <div class="chat-bar">
     <button class="cb-back" onclick="goHome()" aria-label="Back">←</button>
     <div class="cb-mid">
-      <div class="cb-avatar" id="cb-avatar">💝</div>
+      <div class="cb-avatar" id="cb-avatar">💝<span class="speak-ring"></span></div>
       <div class="cb-info">
         <span class="cb-name" id="cb-name">Daughter</span>
         <span class="cb-status"><span class="cb-sdot"></span>Online</span>
       </div>
     </div>
+    <button class="cb-voice-btn" id="cb-voice-btn" onclick="openVoiceForRole()" aria-label="Add voice sample" title="Add voice of this person">
+      🎤<div class="cb-voice-dot"></div>
+    </button>
     <button class="cb-story-btn" id="cb-story-btn" onclick="openStoryModal()" aria-label="Story Time" title="Story Time Mode">📖</button>
     <button class="cb-lang" id="cb-lang-btn" onclick="cycleLang()">EN</button>
   </div>
@@ -965,25 +1005,48 @@ input[type=file]{display:none}
   <div class="modal-sheet">
     <div class="mh-bar"></div>
     <div class="mhd">
-      <h3 id="clone-modal-title">Add Voice Style</h3>
-      <p>Record or upload 20–60 sec of their voice. No account or API key needed — works instantly.</p>
+      <h3 id="clone-modal-title">🎤 Add Their Voice</h3>
+      <p id="clone-modal-sub">The AI will speak in a voice that matches theirs. No account needed.</p>
     </div>
     <div class="mbd">
+
+      <!-- How to get a recording -->
+      <div class="clone-steps">
+        <div class="cstep">
+          <div class="cstep-num">1</div>
+          <div class="cstep-txt"><strong>Get a recording of them speaking.</strong> A WhatsApp voice note, a phone call recording, or a video — any audio works.</div>
+        </div>
+        <div class="cstep">
+          <div class="cstep-num">2</div>
+          <div class="cstep-txt"><strong>Record live</strong> if they are with you right now, or <strong>upload the file</strong> if you already have one saved.</div>
+        </div>
+        <div class="cstep">
+          <div class="cstep-num">3</div>
+          <div class="cstep-txt"><strong>Tap Save</strong> — the AI will speak in a matching voice every time you chat.</div>
+        </div>
+      </div>
+
+      <!-- WhatsApp tip -->
+      <div class="wa-tip">
+        <div class="wa-tip-icon">💬</div>
+        <div class="wa-tip-txt"><strong>Easy way:</strong> Open WhatsApp → find an old voice message from them → hold it → Share/Forward → save to your phone → upload it here.</div>
+      </div>
+
       <div class="tabs">
-        <button class="tab act" onclick="switchTab('record',this)">🎙️ Record</button>
-        <button class="tab" onclick="switchTab('upload',this)">📁 Upload file</button>
+        <button class="tab act" id="tab-rec-btn" onclick="switchTab('record',this)">🎙️ Record Now</button>
+        <button class="tab" id="tab-up-btn" onclick="switchTab('upload',this)">📁 Upload File</button>
       </div>
 
       <!-- Record tab -->
       <div class="tab-content on" id="tab-record">
         <div class="rec-ui">
           <div class="rec-timer" id="rec-timer">0:00</div>
-          <p class="rec-guide">Ask them to speak naturally — anything works. 20–60 seconds is ideal.</p>
+          <p class="rec-guide">Press the button and ask them to speak — read anything, tell a story, say hello. 20–60 seconds is perfect.</p>
           <button class="rec-btn idle" id="rec-btn" onclick="toggleRecord()">🎙️</button>
         </div>
         <div class="rec-quality">
           <span class="rec-quality-icon">💡</span>
-          <span class="rec-quality-txt">Tip: Quiet room, phone close to mouth. No background music.</span>
+          <span class="rec-quality-txt">Quiet room, no TV in background, hold phone near their mouth.</span>
         </div>
       </div>
 
@@ -991,8 +1054,8 @@ input[type=file]{display:none}
       <div class="tab-content" id="tab-upload">
         <div class="drop-zone" onclick="document.getElementById('file-inp').click()">
           <div class="drop-zone-icon">🎵</div>
-          <h4>Tap to choose audio file</h4>
-          <p>MP3, WAV, M4A, OGG — any length works</p>
+          <h4>Tap to choose their audio</h4>
+          <p>WhatsApp voice note · MP3 · WAV · M4A · any audio file</p>
         </div>
         <input type="file" id="file-inp" accept="audio/*" onchange="onFileSelect(event)"/>
         <div class="audio-prev" id="audio-prev" style="display:none">
@@ -1002,14 +1065,14 @@ input[type=file]{display:none}
         </div>
       </div>
 
-      <!-- Gender panel (shown after audio is ready) -->
+      <!-- Gender confirm (shown after audio ready) -->
       <div class="gender-panel" id="gender-panel" style="display:none">
-        <div class="gender-panel-lbl">🎵 Voice type detected — confirm below:</div>
+        <div class="gender-panel-lbl">Voice type auto-detected — is this correct?</div>
         <div class="gender-toggle">
-          <button class="gtbtn" id="gt-female" onclick="setGenderPref('female',this)">👩 Female</button>
-          <button class="gtbtn" id="gt-male"   onclick="setGenderPref('male',this)">👨 Male</button>
+          <button class="gtbtn" id="gt-female" onclick="setGenderPref('female',this)">👩 Female (Mum / Wife / Daughter…)</button>
+          <button class="gtbtn" id="gt-male"   onclick="setGenderPref('male',this)">👨 Male (Dad / Husband / Son…)</button>
         </div>
-        <button class="preview-btn" onclick="previewVoiceStyle()">▶ Preview how it will sound</button>
+        <button class="preview-btn" onclick="previewVoiceStyle()">▶ Hear a preview of the voice</button>
       </div>
 
       <!-- Progress -->
@@ -1022,7 +1085,7 @@ input[type=file]{display:none}
     <div class="modal-foot">
       <button class="btn btn-o" style="height:52px;font-size:15px" onclick="closeCloneModal()">Cancel</button>
       <button class="btn btn-p" style="height:52px;font-size:15px" id="clone-submit-btn" onclick="submitClone()">
-        🎤 Save Voice Style
+        ✅ Save Voice
       </button>
     </div>
   </div>
@@ -1475,6 +1538,7 @@ function openChat(role, icon, name) {
 
   // Story button: hide in grief mode
   document.getElementById('cb-story-btn').style.display = ST.griefMode ? 'none' : 'flex';
+  updateVoiceBtn();
 
   // Quick reply chips for grief mode
   const qrRow = document.getElementById('qr-chips-row');
@@ -1798,64 +1862,122 @@ function stopMic(commit) {
 /* ────────────────────────────────────────────
    TEXT TO SPEECH
 ──────────────────────────────────────────── */
-async function speakText(text) {
-  const profile = ST.clonedVoices[ST.role];
-  if (!profile) { speakBrowser(text); return; }
+/* ════════════════════════════════════════════
+   TTS ENGINE  (reliable cross-browser)
+════════════════════════════════════════════ */
 
-  // Legacy: ElevenLabs voice_id (plain string) — use if key available
-  if (typeof profile === 'string') {
-    if (ST.apiKeys.elevenlabs) { await speakElevenLabs(text, profile); }
-    else { speakBrowser(text); }
-    return;
+// Cache voices once loaded — getVoices() returns [] on first call in Chrome
+let _voiceCache = [];
+let _voicesReady = false;
+function initVoices() {
+  const load = () => {
+    const v = window.speechSynthesis?.getVoices() || [];
+    if (v.length) { _voiceCache = v; _voicesReady = true; }
+  };
+  load();
+  if (window.speechSynthesis) {
+    window.speechSynthesis.addEventListener('voiceschanged', () => { load(); });
+  }
+  // fallback poll — some browsers never fire voiceschanged
+  setTimeout(load, 500);
+  setTimeout(load, 1500);
+}
+
+// Chrome bug: speechSynthesis silently pauses after ~15 s in background tab
+let _keepAlive;
+function startKeepAlive() {
+  clearInterval(_keepAlive);
+  _keepAlive = setInterval(() => {
+    if (window.speechSynthesis?.speaking && window.speechSynthesis?.paused) {
+      window.speechSynthesis.resume();
+    }
+  }, 5000);
+}
+function stopKeepAlive() { clearInterval(_keepAlive); }
+
+// Set/clear the speaking ring on the avatar
+function setSpeaking(on) {
+  document.getElementById('cb-avatar')?.classList.toggle('speaking', on);
+}
+
+// Pick best matching voice from cache
+function pickVoice(isFemale, langCode) {
+  const pool = _voiceCache.length ? _voiceCache : (window.speechSynthesis?.getVoices() || []);
+  if (!pool.length) return null;
+  const base = langCode?.split('-')[0] || 'en';
+  const sameLang = pool.filter(v => v.lang.startsWith(base));
+  const search   = sameLang.length ? sameLang : pool;
+  let v = null;
+  if (isFemale) {
+    v = search.find(x => /female|woman|girl|zira|susan|samantha|moira|tessa|karen|victoria|fiona|allison|ava/i.test(x.name))
+     || search.find(x => !/\bmale\b|\bman\b|\bguy\b|david|mark|daniel|james|jorge|rishi/i.test(x.name));
+  } else {
+    v = search.find(x => /\bmale\b|\bman\b|david|mark|daniel|james|jorge|rishi|alex/i.test(x.name))
+     || search[search.length - 1];
+  }
+  return v || search[0] || pool[0];
+}
+
+function doUtter(text, voice, pitch, rate) {
+  const u = new SpeechSynthesisUtterance(text);
+  if (voice) u.voice = voice;
+  u.pitch  = pitch  ?? 1.05;
+  u.rate   = rate   ?? 0.88;
+  u.volume = 0.95;
+  u.onstart = () => { setSpeaking(true); startKeepAlive(); };
+  u.onend   = () => { setSpeaking(false); stopKeepAlive(); };
+  u.onerror = () => { setSpeaking(false); stopKeepAlive(); };
+  window.speechSynthesis.speak(u);
+}
+
+async function speakText(text) {
+  if (!text) return;
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  setSpeaking(false);
+
+  const profile = ST.clonedVoices[ST.role];
+
+  // Legacy ElevenLabs string voice_id
+  if (typeof profile === 'string' && ST.apiKeys.elevenlabs) {
+    await speakElevenLabs(text, profile); return;
   }
 
-  // New: local voice profile object
-  if (profile.type === 'local') { speakWithProfile(text, profile); return; }
+  // Local voice profile
+  if (profile?.type === 'local') {
+    speakWithProfile(text, profile); return;
+  }
+
   speakBrowser(text);
 }
 
-/* ── speak with cloned local voice profile ── */
 function speakWithProfile(text, profile) {
   if (!window.speechSynthesis) return;
-  window.speechSynthesis.cancel();
-
-  const doSpeak = (voices) => {
-    const u = new SpeechSynthesisUtterance(text);
-    const srLang = (LANGS[ST.lang] || LANGS['en']).sr;
-
-    // 1. Try exact saved voiceURI first
-    let chosen = profile.voiceURI ? voices.find(v => v.voiceURI === profile.voiceURI) : null;
-
-    // 2. Gender + language match
-    if (!chosen) {
-      const sameLang = voices.filter(v => v.lang.startsWith(srLang.split('-')[0]));
-      const pool = sameLang.length ? sameLang : voices;
-      if (profile.isFemale) {
-        chosen = pool.find(v => /female|woman|girl|zira|susan|samantha|moira|tessa|karen|victoria|fiona/i.test(v.name))
-               || pool.find(v => !/male|man|guy|david|mark|daniel|james|jorge/i.test(v.name));
-      } else {
-        chosen = pool.find(v => /male|man|david|mark|daniel|james|jorge|rishi/i.test(v.name))
-               || pool[pool.length - 1];
-      }
-    }
-    if (!chosen) chosen = voices.find(v => v.lang.startsWith('en')) || voices[0];
-    if (chosen) u.voice = chosen;
-
-    u.pitch  = profile.pitch  ?? (profile.isFemale ? 1.15 : 0.82);
-    u.rate   = profile.rate   ?? 0.88;
-    u.volume = 0.95;
-    window.speechSynthesis.speak(u);
+  const srLang = (LANGS[ST.lang] || LANGS['en']).sr;
+  const run = () => {
+    const voice = pickVoice(profile.isFemale, srLang);
+    doUtter(text, voice, profile.pitch ?? (profile.isFemale ? 1.15 : 0.82), profile.rate ?? 0.88);
   };
-
-  const voices = window.speechSynthesis.getVoices();
-  if (voices.length) { doSpeak(voices); }
-  else { window.speechSynthesis.onvoiceschanged = () => doSpeak(window.speechSynthesis.getVoices()); }
+  if (_voicesReady) { run(); }
+  else { setTimeout(run, 600); } // wait for voices to load
 }
 
-/* ── ElevenLabs (legacy / optional) ── */
+function speakBrowser(text) {
+  if (!window.speechSynthesis) return;
+  const srLang = (LANGS[ST.lang] || LANGS['en']).sr;
+  const run = () => {
+    const voice = pickVoice(true, srLang); // default to female (warmer)
+    doUtter(text, voice, 1.05, 0.88);
+  };
+  if (_voicesReady) { run(); }
+  else { setTimeout(run, 600); }
+}
+
+/* ── ElevenLabs (optional, if user has key) ── */
 async function speakElevenLabs(text, voiceId) {
   try {
     if (ST.currentAudio) { ST.currentAudio.pause(); ST.currentAudio = null; }
+    setSpeaking(true);
     const res = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
       method: 'POST',
       headers: { 'xi-api-key': ST.apiKeys.elevenlabs, 'Content-Type': 'application/json' },
@@ -1864,31 +1986,45 @@ async function speakElevenLabs(text, voiceId) {
         voice_settings: { stability: 0.5, similarity_boost: 0.82, style: 0.3, use_speaker_boost: true }
       })
     });
-    if (!res.ok) { speakBrowser(text); return; }
+    if (!res.ok) { setSpeaking(false); speakBrowser(text); return; }
     const buf = await res.arrayBuffer();
     const url = URL.createObjectURL(new Blob([buf], { type: 'audio/mpeg' }));
     const audio = new Audio(url);
     ST.currentAudio = audio;
-    audio.play();
-    audio.onended = () => URL.revokeObjectURL(url);
-  } catch(e) { console.error('ElevenLabs TTS error:', e); speakBrowser(text); }
-}
-
-function speakBrowser(text) {
-  if (!window.speechSynthesis) return;
-  window.speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(text);
-  u.rate = 0.88; u.pitch = 1.05; u.volume = 0.95;
-  const voices = window.speechSynthesis.getVoices();
-  const v = voices.find(v => /female|woman|samantha|zira/i.test(v.name))
-          || voices.find(v => v.lang.startsWith('en')) || voices[0];
-  if (v) u.voice = v;
-  window.speechSynthesis.speak(u);
+    audio.onended  = () => { setSpeaking(false); URL.revokeObjectURL(url); };
+    audio.onerror  = () => { setSpeaking(false); speakBrowser(text); };
+    audio.play().catch(() => { setSpeaking(false); speakBrowser(text); });
+  } catch(e) { setSpeaking(false); speakBrowser(text); }
 }
 
 /* ────────────────────────────────────────────
    VOICE CLONE MODAL  (no API key needed)
 ──────────────────────────────────────────── */
+
+// Shortcut: open clone modal for whichever role is active in chat
+function openVoiceForRole() {
+  const ROLE_META = {
+    daughter:     ['💝','Daughter'],
+    son:          ['💙','Son'],
+    spouse:       ['💕','Partner'],
+    parents:      ['👨‍👩‍👧','Parents'],
+    grandparents: ['👴👵','Grandparents'],
+    friend:       ['🤝','Friend'],
+    grief:        ['💜','Support companion'],
+  };
+  const [icon, name] = ROLE_META[ST.role] || ['🎤', ST.name];
+  openCloneModal(ST.role, icon, name);
+}
+
+// Update the green voice button state in chat bar
+function updateVoiceBtn() {
+  const btn = document.getElementById('cb-voice-btn');
+  if (!btn) return;
+  const has = !!ST.clonedVoices[ST.role];
+  btn.classList.toggle('has-voice', has);
+  btn.title = has ? 'Voice saved — tap to update' : 'Add their voice so AI speaks like them';
+}
+
 function openCloneModal(role, icon, name) {
   ST.cloneRole  = role;
   ST.cloneBlob  = null;
@@ -2101,6 +2237,7 @@ async function submitClone() {
     closeCloneModal();
     updateSettingsUI();
     updateVCDots();
+    updateVoiceBtn();
     showToast(`✅ Voice saved! The AI will now speak in a ${profile.label.toLowerCase()}.`);
   }, 900);
 }
@@ -2232,12 +2369,13 @@ window.addEventListener('DOMContentLoaded', () => {
   // Increment session counter
   const m = getMem(); m.sessions = (m.sessions || 0) + 1; saveMem(m);
 
-  // If name exists, skip setup
+  // Pre-load TTS voices (async in Chrome — must start early)
+  initVoices();
+
+  // If name or key exists, skip setup screen
   if (ST.userName || ST.apiKeys.anthropic) {
     enterApp();
   }
-  // Load voices list for browser TTS
-  window.speechSynthesis?.addEventListener('voiceschanged', () => {});
   updateVCDots();
 });
 </script>
