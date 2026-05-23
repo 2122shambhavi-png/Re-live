@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Saathi Voice – Your AI Companion</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─── Reset & Tokens ──────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue:      #4A90E2;
+      --blue-lt:   #5BA3F5;
+      --orange:    #F5A623;
+      --lavender:  #B19CD9;
+      --cream:     #FFF8F0;
+      --dark:      #2C3E50;
+      --muted:     #6B7280;
+      --border:    #E5E7EB;
+      --red:       #E74C3C;
+      --shadow-sm: 0 2px 12px rgba(0,0,0,.08);
+      --shadow-md: 0 8px 32px rgba(0,0,0,.12);
+      --shadow-lg: 0 16px 48px rgba(0,0,0,.18);
+      --radius:    24px;
+      --transition: .3s ease;
+    }
+
+    html { font-size: 16px; scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--cream);
+      color: var(--dark);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4 { font-family: 'Poppins', sans-serif; line-height: 1.25; }
+
+    /* ─── Screen system ───────────────────────────────────── */
+    .screen { display: none; min-height: 100vh; }
+    .screen.active { display: flex; flex-direction: column; }
+
+    /* ─── Utility ─────────────────────────────────────────── */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      gap: 8px; cursor: pointer; border: none; border-radius: 16px;
+      font-family: 'Poppins', sans-serif; font-weight: 600;
+      font-size: 18px; min-height: 56px; padding: 0 28px;
+      transition: transform var(--transition), box-shadow var(--transition),
+                  background var(--transition);
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn:active { transform: scale(.95); }
+    .btn-primary { background: linear-gradient(135deg, var(--blue), var(--blue-lt)); color: #fff; box-shadow: 0 4px 16px rgba(74,144,226,.35); }
+    .btn-primary:hover { box-shadow: 0 8px 24px rgba(74,144,226,.45); transform: translateY(-2px); }
+    .btn-danger  { background: var(--red); color: #fff; box-shadow: 0 4px 16px rgba(231,76,60,.35); }
+    .btn-danger:hover  { box-shadow: 0 8px 24px rgba(231,76,60,.45); transform: translateY(-2px); }
+    .btn-outline { background: #fff; color: var(--blue); border: 2px solid var(--blue); }
+    .btn-outline:hover { background: #EBF4FF; }
+
+    /* ══════════════════════════════════════════════════════════
+       SCREEN 1 – LANDING
+    ══════════════════════════════════════════════════════════ */
+    #screen-landing {
+      background: linear-gradient(160deg, #FFF8F0 0%, #EEF4FF 100%);
+    }
+
+    /* ── Header ─────────────────────────────────────────── */
+    .landing-header {
+      display: flex; flex-direction: column; align-items: center;
+      padding: 40px 24px 24px;
+      background: rgba(255,255,255,.7);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255,255,255,.6);
+    }
+
+    .logo-lockup {
+      display: flex; align-items: center; gap: 14px; margin-bottom: 8px;
+    }
+
+    .logo-icon {
+      width: 60px; height: 60px;
+      background: linear-gradient(135deg, #FFD6D6, #D6E9FF);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 30px;
+      box-shadow: 0 4px 16px rgba(74,144,226,.2);
+      animation: heartbeat 2.5s ease-in-out infinite;
+    }
+
+    @keyframes heartbeat {
+      0%,100% { transform: scale(1); }
+      14%      { transform: scale(1.12); }
+      28%      { transform: scale(1); }
+      42%      { transform: scale(1.06); }
+    }
+
+    .app-title {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      font-size: clamp(32px, 5vw, 42px);
+      color: var(--dark);
+      letter-spacing: -0.5px;
+    }
+
+    .tagline {
+      font-size: clamp(16px, 2.5vw, 20px);
+      color: var(--muted);
+      text-align: center;
+      font-weight: 400;
+      line-height: 1.5;
+    }
+
+    /* ── Hero ───────────────────────────────────────────── */
+    .hero {
+      padding: 32px 24px 16px;
+      text-align: center;
+    }
+
+    .hero-illustration {
+      width: 100%;
+      max-width: 420px;
+      height: 180px;
+      margin: 0 auto 28px;
+      background: linear-gradient(135deg, #FFE5CC 0%, #E5EEFF 50%, #F0E5FF 100%);
+      border-radius: var(--radius);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 72px;
+      gap: 8px;
+      box-shadow: var(--shadow-sm);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-illustration::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(circle at 30% 50%, rgba(255,200,150,.4), transparent 60%),
+                  radial-gradient(circle at 70% 50%, rgba(177,156,217,.3), transparent 60%);
+    }
+
+    .hero-figures {
+      display: flex; gap: 4px; position: relative; z-index: 1;
+      font-size: clamp(40px, 8vw, 68px);
+    }
+
+    .hero-heading {
+      font-size: clamp(24px, 4vw, 32px);
+      font-weight: 600;
+      color: var(--dark);
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    /* ── Cards grid ─────────────────────────────────────── */
+    .cards-section { padding: 28px 24px 48px; }
+
+    .cards-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--lavender);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    @media (max-width: 1024px) { .cards-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 600px)  { .cards-grid { grid-template-columns: 1fr; } }
+
+    .role-card {
+      background: #fff;
+      border-radius: var(--radius);
+      padding: 28px 20px 24px;
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
+      transition: transform var(--transition), box-shadow var(--transition);
+      display: flex; flex-direction: column; align-items: center; gap: 12px;
+      text-align: center;
+      min-height: 180px;
+      border: 2px solid transparent;
+      -webkit-tap-highlight-color: transparent;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .role-card::before {
+      content: '';
+      position: absolute; inset: 0;
+      opacity: 0; transition: opacity var(--transition);
+    }
+
+    .role-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+    }
+    .role-card:active { transform: scale(.97) translateY(-2px); }
+
+    .card-icon-wrap {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 36px;
+      flex-shrink: 0;
+    }
+
+    .card-name {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600; font-size: 22px;
+      color: var(--dark);
+    }
+
+    .card-desc {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* Card colour themes */
+    .card-daughter .card-icon-wrap { background: #FFE5E5; }
+    .card-daughter:hover { border-color: #FFB3B3; }
+
+    .card-son .card-icon-wrap { background: #E5F2FF; }
+    .card-son:hover { border-color: #90C8FF; }
+
+    .card-spouse .card-icon-wrap { background: #FFE0E6; }
+    .card-spouse:hover { border-color: #FFB3C6; }
+
+    .card-parents .card-icon-wrap { background: #E8F5E9; }
+    .card-parents:hover { border-color: #A5D6A7; }
+
+    .card-grandparents .card-icon-wrap { background: #F3E5F5; }
+    .card-grandparents:hover { border-color: #CE93D8; }
+
+    .card-friend .card-icon-wrap { background: #FFF9E5; }
+    .card-friend:hover { border-color: #FFD54F; }
+
+    /* ── Footer note ────────────────────────────────────── */
+    .landing-footer {
+      padding: 16px 24px 32px;
+      text-align: center;
+      font-size: 14px;
+      color: #9CA3AF;
+      border-top: 1px solid var(--border);
+    }
+    .landing-footer span { color: var(--lavender); font-weight: 600; }
+
+    /* ══════════════════════════════════════════════════════════
+       SCREEN 2 – CHAT
+    ══════════════════════════════════════════════════════════ */
+    #screen-chat {
+      background: #F7F9FC;
+    }
+
+    /* ── Top bar ────────────────────────────────────────── */
+    .chat-topbar {
+      height: 80px;
+      background: rgba(255,255,255,.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; padding: 0 16px;
+      gap: 12px;
+      flex-shrink: 0;
+      position: sticky; top: 0; z-index: 10;
+      box-shadow: 0 2px 16px rgba(0,0,0,.06);
+    }
+
+    .topbar-btn {
+      width: 48px; height: 48px;
+      border-radius: 50%; border: none; cursor: pointer;
+      background: rgba(74,144,226,.1);
+      color: var(--blue);
+      font-size: 22px;
+      display: flex; align-items: center; justify-content: center;
+      transition: background var(--transition), transform var(--transition);
+      flex-shrink: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .topbar-btn:hover { background: rgba(74,144,226,.2); transform: scale(1.08); }
+    .topbar-btn:active { transform: scale(.92); }
+
+    .topbar-center {
+      flex: 1;
+      display: flex; flex-direction: column; align-items: center; gap: 2px;
+    }
+
+    .topbar-role-icon { font-size: 24px; }
+    .topbar-role-name {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 500; font-size: 18px;
+      color: var(--dark);
+    }
+    .topbar-status {
+      font-size: 12px; color: #22C55E; font-weight: 500;
+      display: flex; align-items: center; gap: 4px;
+    }
+    .topbar-status::before {
+      content: '';
+      width: 7px; height: 7px; background: #22C55E;
+      border-radius: 50%; display: inline-block;
+      animation: pulse-green 2s ease-in-out infinite;
+    }
+    @keyframes pulse-green {
+      0%,100% { opacity: 1; transform: scale(1); }
+      50%      { opacity: .5; transform: scale(1.3); }
+    }
+
+    /* ── Chat area ──────────────────────────────────────── */
+    .chat-area {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px 16px;
+      display: flex; flex-direction: column; gap: 16px;
+      scroll-behavior: smooth;
+    }
+
+    /* Date divider */
+    .date-divider {
+      display: flex; align-items: center; gap: 12px;
+      font-size: 13px; color: #9CA3AF; font-weight: 500;
+    }
+    .date-divider::before, .date-divider::after {
+      content: ''; flex: 1; height: 1px; background: var(--border);
+    }
+
+    /* Message rows */
+    .msg-row {
+      display: flex; gap: 10px; max-width: 88%;
+      animation: msg-in 300ms ease both;
+    }
+    .msg-row.user { align-self: flex-end; flex-direction: row-reverse; }
+    .msg-row.ai   { align-self: flex-start; }
+
+    @keyframes msg-in {
+      from { opacity: 0; transform: translateY(10px) scale(.97); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .msg-avatar {
+      width: 40px; height: 40px; border-radius: 50%;
+      flex-shrink: 0; font-size: 20px;
+      display: flex; align-items: center; justify-content: center;
+      align-self: flex-end;
+    }
+    .msg-row.ai .msg-avatar { background: linear-gradient(135deg, #EEF4FF, #F3E5F5); }
+    .msg-row.user .msg-avatar { background: linear-gradient(135deg, #4A90E2, #5BA3F5); color: #fff; font-size: 16px; font-family: 'Poppins', sans-serif; font-weight: 700; }
+
+    .msg-body { display: flex; flex-direction: column; gap: 4px; }
+
+    .bubble {
+      padding: 14px 18px;
+      border-radius: 24px;
+      font-size: 18px; line-height: 1.6;
+      max-width: 520px;
+      word-break: break-word;
+    }
+
+    .msg-row.user .bubble {
+      background: linear-gradient(135deg, var(--blue), var(--blue-lt));
+      color: #fff;
+      border-radius: 24px 24px 4px 24px;
+      box-shadow: 0 4px 16px rgba(74,144,226,.3);
+    }
+
+    .msg-row.ai .bubble {
+      background: #fff;
+      color: var(--dark);
+      border-radius: 24px 24px 24px 4px;
+      box-shadow: var(--shadow-sm);
+      position: relative;
+    }
+
+    .replay-btn {
+      position: absolute; bottom: 10px; right: 12px;
+      width: 28px; height: 28px; border-radius: 50%;
+      background: rgba(74,144,226,.12);
+      border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; color: var(--blue);
+      transition: background var(--transition), transform var(--transition);
+    }
+    .replay-btn:hover { background: rgba(74,144,226,.25); transform: scale(1.15); }
+
+    .msg-time {
+      font-size: 12px; color: #9CA3AF;
+      align-self: flex-end;
+    }
+    .msg-row.user .msg-time { align-self: flex-start; }
+
+    /* Typing indicator */
+    .typing-row {
+      display: flex; gap: 10px; max-width: 88%; align-self: flex-start;
+      animation: msg-in 300ms ease both;
+    }
+
+    .typing-bubble {
+      background: #fff; border-radius: 24px 24px 24px 4px;
+      padding: 16px 20px; display: flex; gap: 6px;
+      align-items: center; box-shadow: var(--shadow-sm);
+    }
+
+    .dot {
+      width: 9px; height: 9px; background: var(--muted);
+      border-radius: 50%; animation: bounce 1.2s ease-in-out infinite;
+    }
+    .dot:nth-child(2) { animation-delay: .2s; }
+    .dot:nth-child(3) { animation-delay: .4s; }
+
+    @keyframes bounce {
+      0%,60%,100% { transform: translateY(0); opacity: .5; }
+      30%          { transform: translateY(-8px); opacity: 1; }
+    }
+
+    /* ── Input area ─────────────────────────────────────── */
+    .chat-input-area {
+      background: rgba(255,255,255,.97);
+      border-top: 1px solid var(--border);
+      padding: 16px 16px 24px;
+      flex-shrink: 0;
+    }
+
+    /* Mic section */
+    .mic-section {
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .mic-btn {
+      width: 72px; height: 72px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--blue), var(--blue-lt));
+      border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 30px; color: #fff;
+      box-shadow: 0 6px 24px rgba(74,144,226,.4);
+      transition: transform var(--transition), box-shadow var(--transition),
+                  background var(--transition);
+      position: relative;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .mic-btn::before {
+      content: '';
+      position: absolute;
+      inset: -6px;
+      border-radius: 50%;
+      border: 3px solid transparent;
+      transition: border-color var(--transition);
+    }
+
+    .mic-btn:hover { transform: scale(1.08); box-shadow: 0 10px 32px rgba(74,144,226,.5); }
+    .mic-btn:active { transform: scale(.94); }
+
+    .mic-btn.listening {
+      background: linear-gradient(135deg, #E74C3C, #FF6B6B);
+      box-shadow: 0 6px 24px rgba(231,76,60,.5);
+      animation: mic-pulse 1s ease-in-out infinite;
+    }
+
+    @keyframes mic-pulse {
+      0%,100% { transform: scale(1);    box-shadow: 0 6px 24px rgba(231,76,60,.4); }
+      50%      { transform: scale(1.12); box-shadow: 0 10px 40px rgba(231,76,60,.7); }
+    }
+
+    .mic-btn.processing {
+      background: linear-gradient(135deg, var(--orange), #FFD166);
+      box-shadow: 0 6px 24px rgba(245,166,35,.5);
+      cursor: wait;
+    }
+
+    .mic-ripple {
+      position: absolute; inset: 0; border-radius: 50%;
+      background: rgba(255,255,255,.3);
+      animation: ripple-out 1s ease-out infinite;
+      pointer-events: none;
+      display: none;
+    }
+    .mic-btn.listening .mic-ripple { display: block; }
+
+    @keyframes ripple-out {
+      from { transform: scale(1); opacity: .6; }
+      to   { transform: scale(2); opacity: 0; }
+    }
+
+    .mic-label {
+      font-size: 14px; color: var(--muted); font-weight: 500;
+      transition: color var(--transition);
+    }
+    .mic-btn.listening ~ .mic-label { color: var(--red); }
+
+    /* Text row */
+    .text-row {
+      display: flex; align-items: center; gap: 10px;
+    }
+
+    .text-input {
+      flex: 1; height: 52px;
+      border: 2px solid var(--border); border-radius: 26px;
+      padding: 0 18px;
+      font-family: 'Inter', sans-serif; font-size: 17px; color: var(--dark);
+      background: #FAFAFA;
+      outline: none;
+      transition: border-color var(--transition), box-shadow var(--transition);
+    }
+    .text-input:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 4px rgba(74,144,226,.12);
+      background: #fff;
+    }
+    .text-input::placeholder { color: #BCBCBC; }
+
+    .send-btn {
+      width: 52px; height: 52px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--blue), var(--blue-lt));
+      border: none; cursor: pointer; color: #fff; font-size: 20px;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 14px rgba(74,144,226,.35);
+      transition: transform var(--transition), box-shadow var(--transition), opacity var(--transition);
+      opacity: 0; pointer-events: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .send-btn.visible { opacity: 1; pointer-events: auto; }
+    .send-btn:hover { transform: scale(1.1); box-shadow: 0 6px 20px rgba(74,144,226,.5); }
+    .send-btn:active { transform: scale(.92); }
+
+    /* ── Emergency FAB ──────────────────────────────────── */
+    .sos-fab {
+      position: fixed;
+      right: 20px; bottom: 160px;
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      background: var(--red);
+      border: none; cursor: pointer;
+      color: #fff; font-size: 22px;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 20px rgba(231,76,60,.5);
+      z-index: 20;
+      animation: sos-glow 2.5s ease-in-out infinite;
+      -webkit-tap-highlight-color: transparent;
+      transition: transform var(--transition);
+    }
+    .sos-fab:hover { transform: scale(1.12); }
+    .sos-fab:active { transform: scale(.9); }
+
+    @keyframes sos-glow {
+      0%,100% { box-shadow: 0 4px 20px rgba(231,76,60,.5); }
+      50%      { box-shadow: 0 4px 36px rgba(231,76,60,.85); }
+    }
+
+    /* ── Voice wave (decorative) ────────────────────────── */
+    .voice-wave {
+      display: flex; align-items: center; justify-content: center;
+      gap: 4px; height: 32px; margin-bottom: 4px;
+      opacity: 0; transition: opacity var(--transition);
+    }
+    .voice-wave.active { opacity: 1; }
+
+    .wave-bar {
+      width: 4px; border-radius: 4px;
+      background: var(--red);
+      animation: wave-bar 0.8s ease-in-out infinite;
+    }
+    .wave-bar:nth-child(1) { height: 12px; animation-delay: 0s; }
+    .wave-bar:nth-child(2) { height: 22px; animation-delay: .15s; }
+    .wave-bar:nth-child(3) { height: 30px; animation-delay: .30s; }
+    .wave-bar:nth-child(4) { height: 22px; animation-delay: .45s; }
+    .wave-bar:nth-child(5) { height: 12px; animation-delay: .60s; }
+
+    @keyframes wave-bar {
+      0%,100% { transform: scaleY(.5); opacity: .5; }
+      50%      { transform: scaleY(1.3); opacity: 1; }
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       SCREEN 3 – EMERGENCY OVERLAY
+    ══════════════════════════════════════════════════════════ */
+    .overlay-backdrop {
+      display: none;
+      position: fixed; inset: 0; z-index: 50;
+      background: rgba(0,0,0,.55);
+      backdrop-filter: blur(4px);
+      align-items: flex-start; justify-content: center;
+      padding: 24px;
+      overflow-y: auto;
+      animation: backdrop-in 200ms ease both;
+    }
+    .overlay-backdrop.open { display: flex; }
+
+    @keyframes backdrop-in {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    .emergency-card {
+      background: #fff;
+      border-radius: var(--radius);
+      padding: 32px 28px;
+      width: 100%; max-width: 420px;
+      box-shadow: var(--shadow-lg);
+      margin: auto;
+      animation: card-rise 300ms cubic-bezier(.34,1.56,.64,1) both;
+    }
+
+    @keyframes card-rise {
+      from { opacity: 0; transform: translateY(32px) scale(.94); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .sos-header {
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+      margin-bottom: 24px; text-align: center;
+    }
+    .sos-emoji { font-size: 64px; line-height: 1; }
+    .sos-title {
+      font-size: 28px; font-weight: 700;
+      color: var(--red);
+    }
+    .sos-sub {
+      font-size: 18px; color: var(--muted); line-height: 1.5;
+    }
+
+    .helplines { display: flex; flex-direction: column; gap: 0; margin-bottom: 28px; }
+
+    .helpline-item {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .helpline-item:last-child { border-bottom: none; }
+
+    .helpline-country {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600; font-size: 16px; color: var(--dark);
+      margin-bottom: 2px;
+    }
+    .helpline-org {
+      font-size: 14px; color: var(--muted); font-weight: 500;
+    }
+    .helpline-number {
+      font-size: 24px; font-weight: 700;
+      color: var(--blue);
+      text-decoration: none;
+      display: block; margin-top: 4px;
+      transition: color var(--transition);
+    }
+    .helpline-number:hover { color: var(--blue-lt); text-decoration: underline; }
+
+    .sos-actions {
+      display: flex; gap: 12px;
+    }
+    .sos-actions .btn { flex: 1; font-size: 17px; }
+
+    /* ══════════════════════════════════════════════════════════
+       TOAST
+    ══════════════════════════════════════════════════════════ */
+    .toast {
+      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+      background: var(--dark); color: #fff;
+      padding: 12px 24px; border-radius: 12px;
+      font-size: 15px; font-weight: 500;
+      opacity: 0; pointer-events: none;
+      transition: opacity .3s ease;
+      z-index: 100; white-space: nowrap;
+    }
+    .toast.show { opacity: 1; }
+
+    /* ══════════════════════════════════════════════════════════
+       SPINNER (processing state)
+    ══════════════════════════════════════════════════════════ */
+    .spinner {
+      width: 28px; height: 28px;
+      border: 3px solid rgba(255,255,255,.4);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+      display: none;
+    }
+    .mic-btn.processing .spinner { display: block; }
+    .mic-btn.processing .mic-icon { display: none; }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* ── Scrollbar ──────────────────────────────────────── */
+    .chat-area::-webkit-scrollbar { width: 6px; }
+    .chat-area::-webkit-scrollbar-track { background: transparent; }
+    .chat-area::-webkit-scrollbar-thumb { background: #D1D5DB; border-radius: 3px; }
+  </style>
+</head>
+
+<body>
+
+<!-- ══════════════════════════════════════════════════════════
+     SCREEN 1: LANDING
+════════════════════════════════════════════════════════════ -->
+<main id="screen-landing" class="screen active">
+
+  <header class="landing-header">
+    <div class="logo-lockup">
+      <div class="logo-icon" aria-hidden="true">💗</div>
+      <h1 class="app-title">Saathi Voice</h1>
+    </div>
+    <p class="tagline">Your AI Companion &mdash; Always Here to Listen</p>
+  </header>
+
+  <section class="hero">
+    <div class="hero-illustration" aria-hidden="true">
+      <div class="hero-figures">👴 😊 👵</div>
+    </div>
+    <h2 class="hero-heading">Who do you want to talk to today?</h2>
+  </section>
+
+  <section class="cards-section">
+    <p class="cards-label">Choose a companion</p>
+    <div class="cards-grid" role="list">
+
+      <button class="role-card card-daughter" role="listitem"
+              onclick="openChat('daughter','💝','Daughter')"
+              aria-label="Talk to a caring daughter">
+        <div class="card-icon-wrap">💝</div>
+        <div class="card-name">Daughter</div>
+        <div class="card-desc">Talk to a caring, loving daughter</div>
+      </button>
+
+      <button class="role-card card-son" role="listitem"
+              onclick="openChat('son','💙','Son')"
+              aria-label="Talk to a supportive son">
+        <div class="card-icon-wrap">💙</div>
+        <div class="card-name">Son</div>
+        <div class="card-desc">Talk to a supportive, protective son</div>
+      </button>
+
+      <button class="role-card card-spouse" role="listitem"
+              onclick="openChat('spouse','💕','Spouse')"
+              aria-label="Talk to a loving spouse">
+        <div class="card-icon-wrap">💕</div>
+        <div class="card-name">Spouse</div>
+        <div class="card-desc">Talk to a loving, understanding partner</div>
+      </button>
+
+      <button class="role-card card-parents" role="listitem"
+              onclick="openChat('parents','👨‍👩‍👧','Parents')"
+              aria-label="Talk to wise parents">
+        <div class="card-icon-wrap">👨‍👩‍👧</div>
+        <div class="card-name">Parents</div>
+        <div class="card-desc">Talk to wise, proud parents</div>
+      </button>
+
+      <button class="role-card card-grandparents" role="listitem"
+              onclick="openChat('grandparents','👴👵','Grandparents')"
+              aria-label="Talk to gentle grandparents">
+        <div class="card-icon-wrap">👴👵</div>
+        <div class="card-name">Grandparents</div>
+        <div class="card-desc">Talk to gentle, loving grandparents</div>
+      </button>
+
+      <button class="role-card card-friend" role="listitem"
+              onclick="openChat('friend','🤝','Friend')"
+              aria-label="Talk to a best friend">
+        <div class="card-icon-wrap">🤝</div>
+        <div class="card-name">Friend</div>
+        <div class="card-desc">Talk to a non-judgmental best friend</div>
+      </button>
+
+    </div>
+  </section>
+
+  <footer class="landing-footer">
+    Made with <span>♥</span> for the people who deserve to feel heard
+  </footer>
+
+</main>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     SCREEN 2: CHAT
+════════════════════════════════════════════════════════════ -->
+<section id="screen-chat" class="screen" aria-label="Chat with your companion">
+
+  <!-- Top bar -->
+  <div class="chat-topbar">
+    <button class="topbar-btn" onclick="goBack()" aria-label="Go back">&#8592;</button>
+
+    <div class="topbar-center">
+      <span class="topbar-role-icon" id="topbar-icon" aria-hidden="true">💝</span>
+      <span class="topbar-role-name" id="topbar-name">Daughter</span>
+      <span class="topbar-status" id="topbar-status">Online</span>
+    </div>
+
+    <button class="topbar-btn" onclick="openEmergency()" aria-label="Emergency resources">&#9881;</button>
+  </div>
+
+  <!-- Messages -->
+  <div class="chat-area" id="chat-area" role="log" aria-live="polite" aria-label="Conversation">
+
+    <div class="date-divider" aria-label="Today">Today</div>
+
+    <!-- Initial AI greeting (injected by JS) -->
+
+  </div>
+
+  <!-- Emergency FAB -->
+  <button class="sos-fab" onclick="openEmergency()" aria-label="Emergency help">🆘</button>
+
+  <!-- Input -->
+  <div class="chat-input-area">
+
+    <div class="mic-section">
+      <div class="voice-wave" id="voice-wave" aria-hidden="true">
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+      </div>
+
+      <button class="mic-btn" id="mic-btn"
+              onclick="toggleMic()"
+              aria-label="Tap to speak">
+        <div class="mic-ripple" aria-hidden="true"></div>
+        <span class="mic-icon" aria-hidden="true">🎙️</span>
+        <div class="spinner" aria-hidden="true"></div>
+      </button>
+
+      <span class="mic-label" id="mic-label">Tap to speak</span>
+    </div>
+
+    <div class="text-row">
+      <input
+        type="text"
+        class="text-input"
+        id="text-input"
+        placeholder="Or type your message…"
+        aria-label="Type your message"
+        oninput="onTextInput()"
+        onkeydown="onTextKeydown(event)"
+        maxlength="500"
+      />
+      <button class="send-btn" id="send-btn"
+              onclick="sendText()"
+              aria-label="Send message">&#9658;</button>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     EMERGENCY OVERLAY
+════════════════════════════════════════════════════════════ -->
+<div class="overlay-backdrop" id="emergency-overlay"
+     role="dialog" aria-modal="true" aria-labelledby="sos-title"
+     onclick="closeEmergencyOnBackdrop(event)">
+
+  <div class="emergency-card">
+    <div class="sos-header">
+      <div class="sos-emoji" aria-hidden="true">🆘</div>
+      <h2 class="sos-title" id="sos-title">You're Not Alone</h2>
+      <p class="sos-sub">Please reach out for help. These kind people are available right now.</p>
+    </div>
+
+    <div class="helplines" role="list">
+
+      <div class="helpline-item" role="listitem">
+        <div class="helpline-country">India</div>
+        <div class="helpline-org">AASRA Suicide Prevention</div>
+        <a class="helpline-number" href="tel:912227546669" aria-label="Call AASRA: 91-22-2754-6669">91-22-2754 6669</a>
+      </div>
+
+      <div class="helpline-item" role="listitem">
+        <div class="helpline-country">India</div>
+        <div class="helpline-org">Vandrevala Foundation</div>
+        <a class="helpline-number" href="tel:18002662345" aria-label="Call Vandrevala: 1860-2662-345">1860-2662-345</a>
+      </div>
+
+      <div class="helpline-item" role="listitem">
+        <div class="helpline-country">United States</div>
+        <div class="helpline-org">988 Suicide &amp; Crisis Lifeline</div>
+        <a class="helpline-number" href="tel:988" aria-label="Call 988 Lifeline">988</a>
+      </div>
+
+      <div class="helpline-item" role="listitem">
+        <div class="helpline-country">United Kingdom</div>
+        <div class="helpline-org">Samaritans</div>
+        <a class="helpline-number" href="tel:116123" aria-label="Call Samaritans: 116 123">116 123</a>
+      </div>
+
+    </div>
+
+    <div class="sos-actions">
+      <a href="tel:112" class="btn btn-danger" role="button">📞 Call Now</a>
+      <button class="btn btn-outline" onclick="closeEmergency()">Continue Talking</button>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- Toast -->
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     JAVASCRIPT
+════════════════════════════════════════════════════════════ -->
+<script>
+  /* ── State ───────────────────────────────────────────── */
+  let currentRole   = 'daughter';
+  let currentName   = 'Daughter';
+  let currentIcon   = '💝';
+  let micState      = 'idle';   // idle | listening | processing
+  let recognition   = null;
+  let speechPending = false;
+
+  /* ── Greeting scripts per role ───────────────────────── */
+  const greetings = {
+    daughter:     "Hi Papa / Maa! 💝 I was just thinking about you. How are you feeling today? Is everything okay?",
+    son:          "Hey! I was hoping you'd call. 💙 How are you doing today? Tell me everything.",
+    spouse:       "My love! 💕 I was waiting to hear your voice. How's your day been? Let's chat.",
+    parents:      "Oh, my dear! 👨‍👩‍👧 We're so glad you called. We were just thinking about you. How are you?",
+    grandparents: "Oh sweetheart! 👴👵 You made our day. Come, sit with us. How are you? Tell us everything!",
+    friend:       "Hey, you! 🤝 So glad you reached out. What's on your mind? No judgement here, ever.",
+  };
+
+  const aiReplies = {
+    daughter: [
+      "I understand, and I'm right here with you. Tell me more — how long have you been feeling this way?",
+      "That sounds really hard. You're so strong for going through all of this. Have you been eating well?",
+      "I love you so much. You know I'm always here, any time of day or night.",
+      "Let's take a breath together. In… and out. You're safe, and you are loved.",
+      "Remember that time we laughed about that? You always know how to make the best of things.",
+    ],
+    son: [
+      "Of course! I've got you. Tell me what happened and we'll figure it out together.",
+      "You've always been there for me, and now it's my turn to be here for you.",
+      "That sounds tough. Let's talk it through — I'm not going anywhere.",
+      "I'm proud of you, every single day. Don't ever forget that.",
+      "You raised me right. Let me carry some of this weight for you.",
+    ],
+    spouse: [
+      "My darling, thank you for sharing that with me. I'm right here, always.",
+      "I fell in love with you for exactly this reason — you feel things so deeply.",
+      "We've faced so much together. This is nothing we can't handle, side by side.",
+      "Tell me more. I want to understand everything you're going through.",
+      "You are my whole world. Please don't carry this alone.",
+    ],
+    parents: [
+      "We're so proud of the person you've become. Whatever you're facing, you are more than capable.",
+      "Come here, let us give you a hug. We've got you, always.",
+      "You know, when you were small, you had this same look — and every time, you got through it.",
+      "You are our greatest joy. Please tell us what's weighing on your heart.",
+      "We may not have all the answers, but we have all the love in the world for you.",
+    ],
+    grandparents: [
+      "Oh, bless your heart. Come, sit with us a while. Tell us everything.",
+      "In our day, we faced hard times too. And love — love always carried us through.",
+      "You are the light of our lives, you know that? Every day, we think of you.",
+      "We've got all the time in the world for you. Talk to us, dear.",
+      "That reminds us of a story… but first, tell us more about how you're doing.",
+    ],
+    friend: [
+      "Hey, no judgement — just tell me what's going on. I'm all ears.",
+      "That's a lot to carry. I'm really glad you told me.",
+      "Okay so here's what we're going to do — we talk it through, then decide. Together.",
+      "You're not alone in this, I promise. Not even a little bit.",
+      "You know you can say anything to me, right? Anything at all.",
+    ],
+  };
+
+  /* ── Navigation ──────────────────────────────────────── */
+  function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    window.scrollTo(0, 0);
+  }
+
+  function openChat(role, icon, name) {
+    currentRole = role;
+    currentIcon = icon;
+    currentName = name;
+
+    document.getElementById('topbar-icon').textContent = icon;
+    document.getElementById('topbar-name').textContent = name;
+
+    clearMessages();
+    showScreen('screen-chat');
+
+    setTimeout(() => {
+      addMessage('ai', greetings[role] || "Hello! I'm so glad you're here. How are you doing today?");
+    }, 600);
+  }
+
+  function goBack() {
+    stopMic();
+    showScreen('screen-landing');
+  }
+
+  /* ── Messages ────────────────────────────────────────── */
+  function clearMessages() {
+    const area = document.getElementById('chat-area');
+    area.innerHTML = '<div class="date-divider" aria-hidden="true">Today</div>';
+  }
+
+  function addMessage(type, text) {
+    const area = document.getElementById('chat-area');
+
+    const row = document.createElement('div');
+    row.className = `msg-row ${type}`;
+
+    const avatar = document.createElement('div');
+    avatar.className = 'msg-avatar';
+    avatar.setAttribute('aria-hidden', 'true');
+
+    if (type === 'ai') {
+      avatar.textContent = currentIcon;
+    } else {
+      avatar.textContent = 'You';
+    }
+
+    const body = document.createElement('div');
+    body.className = 'msg-body';
+
+    const bubble = document.createElement('div');
+    bubble.className = 'bubble';
+    bubble.textContent = text;
+
+    if (type === 'ai') {
+      const replay = document.createElement('button');
+      replay.className = 'replay-btn';
+      replay.setAttribute('aria-label', 'Replay voice message');
+      replay.textContent = '🔊';
+      replay.onclick = () => speakText(text);
+      bubble.appendChild(replay);
+    }
+
+    const time = document.createElement('div');
+    time.className = 'msg-time';
+    time.textContent = currentTime();
+    time.setAttribute('aria-hidden', 'true');
+
+    body.appendChild(bubble);
+    body.appendChild(time);
+    row.appendChild(avatar);
+    row.appendChild(body);
+    area.appendChild(row);
+
+    scrollToBottom();
+  }
+
+  function showTyping() {
+    const area = document.getElementById('chat-area');
+    const row = document.createElement('div');
+    row.className = 'typing-row';
+    row.id = 'typing-row';
+
+    const avatar = document.createElement('div');
+    avatar.className = 'msg-avatar';
+    avatar.textContent = currentIcon;
+    avatar.setAttribute('aria-hidden', 'true');
+
+    const bubble = document.createElement('div');
+    bubble.className = 'typing-bubble';
+    bubble.setAttribute('aria-label', `${currentName} is typing`);
+    bubble.innerHTML = '<div class="dot"></div><div class="dot"></div><div class="dot"></div>';
+
+    row.appendChild(avatar);
+    row.appendChild(bubble);
+    area.appendChild(row);
+    scrollToBottom();
+  }
+
+  function hideTyping() {
+    const el = document.getElementById('typing-row');
+    if (el) el.remove();
+  }
+
+  function scrollToBottom() {
+    const area = document.getElementById('chat-area');
+    area.scrollTop = area.scrollHeight;
+  }
+
+  function currentTime() {
+    return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  }
+
+  /* ── AI reply ────────────────────────────────────────── */
+  function simulateAiReply() {
+    const replies = aiReplies[currentRole] || aiReplies.friend;
+    const reply = replies[Math.floor(Math.random() * replies.length)];
+    const delay = 1200 + Math.random() * 900;
+
+    showTyping();
+    setTimeout(() => {
+      hideTyping();
+      addMessage('ai', reply);
+      speakText(reply);
+    }, delay);
+  }
+
+  /* ── Text input ──────────────────────────────────────── */
+  function onTextInput() {
+    const val = document.getElementById('text-input').value.trim();
+    const btn = document.getElementById('send-btn');
+    btn.classList.toggle('visible', val.length > 0);
+  }
+
+  function onTextKeydown(e) {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendText(); }
+  }
+
+  function sendText() {
+    const input = document.getElementById('text-input');
+    const text = input.value.trim();
+    if (!text) return;
+
+    addMessage('user', text);
+    input.value = '';
+    document.getElementById('send-btn').classList.remove('visible');
+    simulateAiReply();
+  }
+
+  /* ── Microphone ──────────────────────────────────────── */
+  function toggleMic() {
+    if (micState === 'idle') startMic();
+    else if (micState === 'listening') stopMic(true);
+    else if (micState === 'processing') showToast('Please wait…');
+  }
+
+  function setMicState(state) {
+    micState = state;
+    const btn   = document.getElementById('mic-btn');
+    const label = document.getElementById('mic-label');
+    const wave  = document.getElementById('voice-wave');
+
+    btn.classList.remove('listening', 'processing');
+
+    if (state === 'idle') {
+      label.textContent = 'Tap to speak';
+      wave.classList.remove('active');
+      btn.setAttribute('aria-label', 'Tap to speak');
+    } else if (state === 'listening') {
+      btn.classList.add('listening');
+      label.textContent = 'Listening… tap to stop';
+      wave.classList.add('active');
+      btn.setAttribute('aria-label', 'Listening – tap to stop');
+    } else if (state === 'processing') {
+      btn.classList.add('processing');
+      label.textContent = 'Processing…';
+      wave.classList.remove('active');
+      btn.setAttribute('aria-label', 'Processing your message');
+    }
+  }
+
+  function startMic() {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (!SR) {
+      showToast('Voice not supported — please type your message.');
+      return;
+    }
+
+    recognition = new SR();
+    recognition.continuous   = false;
+    recognition.interimResults = false;
+    recognition.lang          = 'en-IN';
+
+    recognition.onstart = () => setMicState('listening');
+
+    recognition.onresult = (e) => {
+      const transcript = e.results[0][0].transcript;
+      setMicState('processing');
+      setTimeout(() => {
+        addMessage('user', transcript);
+        setMicState('idle');
+        simulateAiReply();
+      }, 400);
+    };
+
+    recognition.onerror = (e) => {
+      setMicState('idle');
+      if (e.error !== 'no-speech') showToast('Could not hear you — please try again.');
+    };
+
+    recognition.onend = () => {
+      if (micState === 'listening') setMicState('idle');
+    };
+
+    recognition.start();
+  }
+
+  function stopMic(commit = false) {
+    if (recognition) { recognition.stop(); recognition = null; }
+    setMicState('idle');
+  }
+
+  /* ── Text-to-speech ─────────────────────────────────── */
+  function speakText(text) {
+    if (!window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.rate  = 0.88;
+    utter.pitch = 1.05;
+    utter.volume = 0.95;
+
+    const voices = window.speechSynthesis.getVoices();
+    const preferred = voices.find(v => /female|woman/i.test(v.name)) ||
+                      voices.find(v => v.lang.startsWith('en')) ||
+                      voices[0];
+    if (preferred) utter.voice = preferred;
+
+    window.speechSynthesis.speak(utter);
+  }
+
+  /* ── Emergency ───────────────────────────────────────── */
+  function openEmergency() {
+    document.getElementById('emergency-overlay').classList.add('open');
+    document.getElementById('emergency-overlay').focus();
+  }
+
+  function closeEmergency() {
+    document.getElementById('emergency-overlay').classList.remove('open');
+  }
+
+  function closeEmergencyOnBackdrop(e) {
+    if (e.target === document.getElementById('emergency-overlay')) closeEmergency();
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeEmergency();
+  });
+
+  /* ── Toast ───────────────────────────────────────────── */
+  let toastTimer;
+  function showToast(msg) {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.remove('show'), 3000);
+  }
+
+  /* ── Speech synthesis voice load ────────────────────── */
+  window.speechSynthesis?.addEventListener('voiceschanged', () => {});
+</script>
+
+</body>
+</html>

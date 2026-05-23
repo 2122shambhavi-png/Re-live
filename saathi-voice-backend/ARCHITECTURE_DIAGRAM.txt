@@ -1,0 +1,216 @@
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                        SAATHI VOICE ARCHITECTURE                          ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│                           USER JOURNEY                                   │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  1. Opens app → 2. Selects role → 3. Speaks → 4. Hears response        │
+│                    (daughter,son,etc)    🎤              🔊              │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│                         FRONTEND (Your App)                              │
+│                      React / React Native / Flutter                      │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  ┌────────────┐  ┌────────────┐  ┌────────────┐  ┌────────────┐       │
+│  │ Role Select│  │ Mic Record │  │ Play Audio │  │  History   │       │
+│  └────────────┘  └────────────┘  └────────────┘  └────────────┘       │
+│                                                                          │
+└────────────────────────────┬────────────────────────────────────────────┘
+                             │ HTTP REST API
+                             ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    SAATHI VOICE BACKEND (This Repo)                      │
+│                         Express.js Server                                │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  ┌───────────────────────────────────────────────────────────────────┐ │
+│  │                      API ROUTES (routes/api.js)                    │ │
+│  │                                                                     │ │
+│  │  POST /users              POST /users/select-role                 │ │
+│  │  GET  /roles              POST /conversation/voice                │ │
+│  │  POST /conversation/text  GET  /conversation/history/:userId      │ │
+│  └───────────────────────────────────────────────────────────────────┘ │
+│                                                                          │
+│  ┌─────────────────────┐  ┌─────────────────────────────────────────┐ │
+│  │   USER CONTROLLER   │  │     CONVERSATION CONTROLLER              │ │
+│  │ (userController.js) │  │  (conversationController.js)             │ │
+│  ├─────────────────────┤  ├─────────────────────────────────────────┤ │
+│  │ • Create user       │  │ • Handle voice input                     │ │
+│  │ • Get user          │  │ • Handle text input                      │ │
+│  │ • Select role       │  │ • Get history                            │ │
+│  │ • Get roles         │  │ • Get memory                             │ │
+│  └─────────────────────┘  └─────────────────────────────────────────┘ │
+│                                                                          │
+│  ┌─────────────────────┐  ┌─────────────────┐  ┌──────────────────┐  │
+│  │   AI SERVICE        │  │  SPEECH SERVICE │  │  MEMORY SERVICE  │  │
+│  │  (aiService.js)     │  │(speechService.js)│  │(memoryService.js)│  │
+│  ├─────────────────────┤  ├─────────────────┤  ├──────────────────┤  │
+│  │ • Generate response │  │ • Transcribe    │  │ • Get context    │  │
+│  │ • Build prompts     │  │ • Synthesize    │  │ • Save convo     │  │
+│  │ • Detect mood       │  │ • Audio convert │  │ • Update memory  │  │
+│  │ • Crisis detection  │  │                 │  │ • Log crisis     │  │
+│  └─────────────────────┘  └─────────────────┘  └──────────────────┘  │
+│                                                                          │
+└────┬────────────┬────────────┬────────────┬─────────────────────────────┘
+     │            │            │            │
+     ▼            ▼            ▼            ▼
+┌─────────┐  ┌─────────┐  ┌─────────┐  ┌──────────┐
+│PostgreSQL│  │ Claude  │  │ Whisper │  │ElevenLabs│
+│ Database │  │   API   │  │   API   │  │   API    │
+├─────────┤  ├─────────┤  ├─────────┤  ├──────────┤
+│• users  │  │Generate │  │Speech-  │  │Text-to-  │
+│• convos │  │empathic │  │to-text  │  │speech    │
+│• memory │  │responses│  │         │  │          │
+│• crisis │  │         │  │         │  │          │
+└─────────┘  └─────────┘  └─────────┘  └──────────┘
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    VOICE CONVERSATION FLOW                               │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  User speaks "Aaj mujhe bahut akela feel ho raha hai"                   │
+│       │                                                                  │
+│       ▼                                                                  │
+│  📤 Frontend sends audio file to POST /conversation/voice               │
+│       │                                                                  │
+│       ▼                                                                  │
+│  🎯 Backend: conversationController.handleVoiceInput()                  │
+│       │                                                                  │
+│       ├─► Get user's selected role (e.g., "daughter")                   │
+│       ├─► Get user's language mix (e.g., "hi-en")                       │
+│       │                                                                  │
+│       ▼                                                                  │
+│  🎤 speechService.transcribeAudio() → Whisper API                       │
+│       │                                                                  │
+│       ▼ Returns: "Aaj mujhe bahut akela feel ho raha hai"               │
+│       │                                                                  │
+│       ▼                                                                  │
+│  🧠 memoryService.getMemoryContext()                                    │
+│       │                                                                  │
+│       ▼ Returns: "User lives in Jaipur, daughter in Mumbai..."          │
+│       │                                                                  │
+│       ▼                                                                  │
+│  🤖 aiService.generateResponse()                                        │
+│       │                                                                  │
+│       ├─► Build system prompt with daughter personality                 │
+│       ├─► Inject memory context                                         │
+│       ├─► Send to Claude API                                            │
+│       │                                                                  │
+│       ▼ Returns: "Mummy main samajh sakti hoon..."                      │
+│       │                                                                  │
+│       ├─► Detect mood: "lonely"                                         │
+│       ├─► Detect crisis: null                                           │
+│       │                                                                  │
+│       ▼                                                                  │
+│  🔊 speechService.synthesizeSpeech() → ElevenLabs API                   │
+│       │                                                                  │
+│       ▼ Returns: Audio buffer (MP3)                                     │
+│       │                                                                  │
+│       ▼                                                                  │
+│  💾 memoryService.saveConversation()                                    │
+│       │                                                                  │
+│       ├─► Save to database                                              │
+│       ├─► Update memory context                                         │
+│       │                                                                  │
+│       ▼                                                                  │
+│  📥 Return audio + metadata to frontend                                 │
+│       │                                                                  │
+│       ▼                                                                  │
+│  🔊 Frontend plays audio response to user                               │
+│                                                                          │
+│  Total time: ~8-15 seconds                                              │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│                         DATABASE SCHEMA                                  │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  users                     conversations                                 │
+│  ├─ user_id (PK)           ├─ conversation_id (PK)                      │
+│  ├─ name                   ├─ user_id (FK)                              │
+│  ├─ phone                  ├─ role                                       │
+│  ├─ current_role           ├─ messages (JSONB)                          │
+│  ├─ language_mix           ├─ mood_detected                             │
+│  └─ created_at             ├─ topics (array)                            │
+│                            └─ created_at                                 │
+│  memory_context                                                          │
+│  ├─ user_id (PK)           crisis_alerts                                │
+│  ├─ summary                ├─ alert_id (PK)                             │
+│  ├─ key_details (JSONB)    ├─ user_id (FK)                              │
+│  ├─ last_topics            ├─ message_text                              │
+│  ├─ last_mood              ├─ severity                                  │
+│  └─ updated_at             └─ created_at                                │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    ROLE PERSONALITY SYSTEM                               │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  Each role has:                                                          │
+│  ┌────────────────────────────────────────────────────────────────────┐│
+│  │ • Unique system prompt (personality, tone, language style)         ││
+│  │ • Voice ID (from ElevenLabs)                                       ││
+│  │ • Emotional approach (how to respond to different moods)           ││
+│  └────────────────────────────────────────────────────────────────────┘│
+│                                                                          │
+│  Example: Daughter Role                                                 │
+│  ┌────────────────────────────────────────────────────────────────────┐│
+│  │ System Prompt:                                                     ││
+│  │ "You are the user's loving daughter. Use Mummy/Papa naturally.    ││
+│  │  Respond warmly in 1-3 sentences. Mix Hindi-English. If parent    ││
+│  │  is sad → comfort them, validate feelings..."                     ││
+│  │                                                                     ││
+│  │ Voice: Young female voice (ElevenLabs)                             ││
+│  │ Tone: Caring, warm, validating                                     ││
+│  └────────────────────────────────────────────────────────────────────┘│
+│                                                                          │
+│  9 Roles Available:                                                      │
+│  👧 Daughter  👦 Son  👩 Mother  👨 Father  🤵 Husband  👰 Wife          │
+│  🤝 Friend  👴 Grandfather  👵 Grandmother                               │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│                      CRISIS DETECTION SYSTEM                             │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  Keywords monitored (multilingual):                                      │
+│  ┌────────────────────────────────────────────────────────────────────┐│
+│  │ HIGH:   "suicide", "मरना चाहता", "kill myself", "end it all"     ││
+│  │ MEDIUM: "depressed", "hopeless", "can't go on", "नहीं संभल रहा"   ││
+│  │ LOW:    "very sad", "बहुत दुखी", "struggling"                     ││
+│  └────────────────────────────────────────────────────────────────────┘│
+│                                                                          │
+│  If detected:                                                            │
+│  ├─► AI responds with empathy + crisis resources                        │
+│  ├─► Alert logged in database                                           │
+│  └─► Returns crisis_level in API response                               │
+│                                                                          │
+│  Crisis Response (India):                                                │
+│  "Main dekh raha hoon aap bahut overwhelmed feel kar rahe hain.         │
+│   Please kisi trusted person ya helpline se baat karein.                │
+│   India: AASRA 9820466726, Vandrevala Foundation 9999666555."           │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                          KEY TAKEAWAYS                                    ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║                                                                           ║
+║  ✅ Complete voice conversation pipeline (8-15 seconds end-to-end)       ║
+║  ✅ 9 emotionally intelligent role personalities                         ║
+║  ✅ Memory system that remembers context across conversations            ║
+║  ✅ Crisis detection with safety resources                               ║
+║  ✅ Natural Hindi-English (Hinglish) mixing                              ║
+║  ✅ RESTful API ready for frontend integration                           ║
+║  ✅ PostgreSQL for persistent storage                                    ║
+║  ✅ Production-ready error handling                                      ║
+║                                                                           ║
+╚═══════════════════════════════════════════════════════════════════════════╝
