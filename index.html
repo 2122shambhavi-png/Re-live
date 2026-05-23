@@ -1349,7 +1349,9 @@ const ST = {
   cloneGender: null,
   currentAudio: null,
   griefMode: false,
-  agentIds: JSON.parse(localStorage.getItem('sv_aids') || '{}')
+  agentIds: JSON.parse(localStorage.getItem('sv_aids') || JSON.stringify({
+    daughter: 'agent_5601ksb4anzcf7xs6vaj5cxsj7v1'
+  }))
 };
 
 /* ────────────────────────────────────────────
@@ -2378,7 +2380,8 @@ async function startLiveVoice() {
     setLiveBtnState('idle'); return;
   }
 
-  const wsUrl = `wss://api.elevenlabs.io/v1/convai/conversation?agent_id=${agentId}`;
+  const wsUrl = `wss://api.elevenlabs.io/v1/convai/conversation?agent_id=${agentId}`
+             + (ST.apiKeys.elevenlabs ? `&xi-api-key=${ST.apiKeys.elevenlabs}` : '');
   ELA.ws = new WebSocket(wsUrl);
 
   ELA.ws.onopen = () => {
