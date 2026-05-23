@@ -146,6 +146,54 @@ h1,h2,h3,h4{font-family:var(--fh);line-height:1.25}
 .s-skip:hover{color:rgba(255,255,255,.65)}
 
 /* ═══════════════════════════════════════════
+   ELEVENLABS LIVE VOICE BAR
+═══════════════════════════════════════════ */
+.live-bar{
+  display:none;align-items:center;justify-content:space-between;gap:10px;
+  padding:10px 14px;
+  background:linear-gradient(135deg,#ECFDF5,#D1FAE5);
+  border-bottom:1px solid #A7F3D0}
+.live-bar.on{display:flex}
+.live-ind{display:flex;align-items:center;gap:7px;
+  font-size:13px;font-weight:700;font-family:var(--fh);color:#065F46}
+.live-dot{width:9px;height:9px;border-radius:50%;background:#10B981;
+  animation:pdot 1s ease-in-out infinite;flex-shrink:0}
+.live-status{font-size:12px;color:#065F46;font-weight:600}
+.live-btn{height:40px;padding:0 18px;border-radius:var(--r-p);border:none;
+  cursor:pointer;font-family:var(--fh);font-weight:800;font-size:14px;
+  color:#fff;background:linear-gradient(135deg,#6366F1,#818CF8);
+  box-shadow:var(--sh-c);transition:all .2s var(--spring);
+  -webkit-tap-highlight-color:transparent;flex-shrink:0}
+.live-btn:hover{transform:scale(1.05)}
+.live-btn:active{transform:scale(.95)}
+.live-btn.connecting{background:linear-gradient(135deg,#F59E0B,#FCD34D);animation:none}
+.live-btn.connected{background:linear-gradient(135deg,#EF4444,#F87171)}
+
+/* Transcript live bubble */
+.live-transcript{font-size:13px;color:var(--slate-m);font-style:italic;
+  padding:4px 8px;background:rgba(0,0,0,.04);border-radius:8px;
+  min-height:20px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* Agent ID settings */
+.aid-row{display:flex;gap:8px;align-items:center;padding:10px 14px;
+  border-bottom:1px solid var(--border)}
+.aid-row:last-child{border-bottom:none}
+.aid-icon{font-size:22px;width:32px;text-align:center;flex-shrink:0}
+.aid-name{font-family:var(--fh);font-weight:700;font-size:13px;color:var(--dark);
+  width:80px;flex-shrink:0}
+.aid-inp{flex:1;height:38px;padding:0 10px;background:#F8FAFF;
+  border:1.5px solid var(--border);border-radius:var(--r-md);
+  font-size:12px;font-family:'Courier New',monospace;color:var(--slate);
+  outline:none;transition:border-color .2s}
+.aid-inp:focus{border-color:var(--indigo)}
+.aid-inp::placeholder{color:#AABDD6;font-size:11px}
+.aid-save{height:38px;padding:0 12px;background:var(--indigo);border:none;
+  border-radius:var(--r-md);color:#fff;font-size:12px;font-weight:700;
+  cursor:pointer;font-family:var(--fh);white-space:nowrap;flex-shrink:0;
+  transition:background .2s}
+.aid-save:hover{background:var(--indigo-d)}
+
+/* ═══════════════════════════════════════════
    SPEAKING INDICATOR
 ═══════════════════════════════════════════ */
 .speak-ring{position:absolute;inset:-6px;border-radius:50%;
@@ -811,6 +859,16 @@ input[type=file]{display:none}
     <button class="cb-lang" id="cb-lang-btn" onclick="cycleLang()">EN</button>
   </div>
 
+  <!-- ElevenLabs Live Voice Bar (shown when agent ID is set for this role) -->
+  <div class="live-bar" id="live-bar">
+    <div class="live-ind">
+      <div class="live-dot"></div>
+      <span class="live-status" id="live-status">Ready for live voice</span>
+    </div>
+    <span class="live-transcript" id="live-transcript">Tap to start…</span>
+    <button class="live-btn" id="live-btn" onclick="toggleLiveVoice()">🎙️ Live</button>
+  </div>
+
   <div class="chat-msgs" id="chat-msgs" role="log" aria-live="polite">
     <div class="date-chip">Today</div>
   </div>
@@ -917,6 +975,51 @@ input[type=file]{display:none}
         <div class="vcc"><span class="vcc-icon">🤝</span>
           <div class="vcc-info"><div class="vcc-name">Friend</div><div class="vcc-st" id="vcs-friend">No voice cloned yet</div></div>
           <button class="vcc-btn" id="vcb-friend" onclick="openCloneModal('friend','🤝','Friend')">+ Clone</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ElevenLabs Voice Agents -->
+    <div class="sgrp">
+      <div class="sgrp-hd">
+        <h3>🤖 ElevenLabs Voice Agents</h3>
+        <p>Paste the Agent ID from elevenlabs.io → Conversational AI. Each role can have its own agent with its own voice.</p>
+      </div>
+      <div id="agent-id-list">
+        <div class="aid-row">
+          <div class="aid-icon">💝</div><div class="aid-name">Daughter</div>
+          <input class="aid-inp" id="aid-daughter" type="text" placeholder="agent_xxxxxxxxxxxxxxxx"/>
+          <button class="aid-save" onclick="saveAgentId('daughter')">Save</button>
+        </div>
+        <div class="aid-row">
+          <div class="aid-icon">💙</div><div class="aid-name">Son</div>
+          <input class="aid-inp" id="aid-son" type="text" placeholder="agent_xxxxxxxxxxxxxxxx"/>
+          <button class="aid-save" onclick="saveAgentId('son')">Save</button>
+        </div>
+        <div class="aid-row">
+          <div class="aid-icon">💕</div><div class="aid-name">Partner</div>
+          <input class="aid-inp" id="aid-spouse" type="text" placeholder="agent_xxxxxxxxxxxxxxxx"/>
+          <button class="aid-save" onclick="saveAgentId('spouse')">Save</button>
+        </div>
+        <div class="aid-row">
+          <div class="aid-icon">👨‍👩‍👧</div><div class="aid-name">Parents</div>
+          <input class="aid-inp" id="aid-parents" type="text" placeholder="agent_xxxxxxxxxxxxxxxx"/>
+          <button class="aid-save" onclick="saveAgentId('parents')">Save</button>
+        </div>
+        <div class="aid-row">
+          <div class="aid-icon">👴👵</div><div class="aid-name">Grandparents</div>
+          <input class="aid-inp" id="aid-grandparents" type="text" placeholder="agent_xxxxxxxxxxxxxxxx"/>
+          <button class="aid-save" onclick="saveAgentId('grandparents')">Save</button>
+        </div>
+        <div class="aid-row">
+          <div class="aid-icon">🤝</div><div class="aid-name">Friend</div>
+          <input class="aid-inp" id="aid-friend" type="text" placeholder="agent_xxxxxxxxxxxxxxxx"/>
+          <button class="aid-save" onclick="saveAgentId('friend')">Save</button>
+        </div>
+        <div class="aid-row">
+          <div class="aid-icon">💜</div><div class="aid-name">Grief</div>
+          <input class="aid-inp" id="aid-grief" type="text" placeholder="agent_xxxxxxxxxxxxxxxx"/>
+          <button class="aid-save" onclick="saveAgentId('grief')">Save</button>
         </div>
       </div>
     </div>
@@ -1245,7 +1348,8 @@ const ST = {
   cloneBlob: null,
   cloneGender: null,
   currentAudio: null,
-  griefMode: false
+  griefMode: false,
+  agentIds: JSON.parse(localStorage.getItem('sv_aids') || '{}')
 };
 
 /* ────────────────────────────────────────────
@@ -1539,6 +1643,7 @@ function openChat(role, icon, name) {
   // Story button: hide in grief mode
   document.getElementById('cb-story-btn').style.display = ST.griefMode ? 'none' : 'flex';
   updateVoiceBtn();
+  updateLiveBar();
 
   // Quick reply chips for grief mode
   const qrRow = document.getElementById('qr-chips-row');
@@ -2242,6 +2347,209 @@ async function submitClone() {
   }, 900);
 }
 
+/* ════════════════════════════════════════════
+   ELEVENLABS CONVERSATIONAL AI ENGINE
+════════════════════════════════════════════ */
+const ELA = {
+  ws: null, stream: null, audioCtx: null, processor: null,
+  audioQueue: [], isPlaying: false, isConnected: false,
+  currentSource: null
+};
+
+function toggleLiveVoice() {
+  ELA.isConnected ? stopLiveVoice() : startLiveVoice();
+}
+
+async function startLiveVoice() {
+  const agentId = ST.agentIds[ST.role];
+  if (!agentId) {
+    showToast('Add your ElevenLabs Agent ID in Settings first');
+    goSettings();
+    return;
+  }
+  setLiveBtnState('connecting');
+
+  try {
+    ELA.stream = await navigator.mediaDevices.getUserMedia({
+      audio: { sampleRate: 16000, channelCount: 1, echoCancellation: true, noiseSuppression: true }
+    });
+  } catch(e) {
+    showToast('Microphone access denied');
+    setLiveBtnState('idle'); return;
+  }
+
+  const wsUrl = `wss://api.elevenlabs.io/v1/convai/conversation?agent_id=${agentId}`;
+  ELA.ws = new WebSocket(wsUrl);
+
+  ELA.ws.onopen = () => {
+    ELA.isConnected = true;
+    setLiveBtnState('connected');
+    startAudioCapture();
+    // Hide normal mic/text input — agent handles everything
+    document.getElementById('mic-lbl').textContent = '🔴 Live agent active';
+  };
+
+  ELA.ws.onmessage = (evt) => {
+    try { handleAgentMsg(JSON.parse(evt.data)); } catch(e) {}
+  };
+
+  ELA.ws.onclose = () => {
+    ELA.isConnected = false;
+    setLiveBtnState('idle');
+    cleanupELA();
+    document.getElementById('live-transcript').textContent = 'Session ended.';
+    document.getElementById('mic-lbl').textContent = 'Tap to speak';
+  };
+
+  ELA.ws.onerror = () => {
+    showToast('Connection failed — check Agent ID in Settings');
+    setLiveBtnState('idle');
+    cleanupELA();
+  };
+}
+
+function stopLiveVoice() {
+  ELA.ws?.close();
+  cleanupELA();
+  setLiveBtnState('idle');
+}
+
+function cleanupELA() {
+  ELA.stream?.getTracks().forEach(t => t.stop());
+  ELA.processor?.disconnect();
+  try { ELA.audioCtx?.close(); } catch(e) {}
+  ELA.stream = null; ELA.processor = null; ELA.audioCtx = null;
+  ELA.audioQueue = []; ELA.isPlaying = false;
+  setSpeaking(false);
+}
+
+function startAudioCapture() {
+  ELA.audioCtx = new AudioContext({ sampleRate: 16000 });
+  const src = ELA.audioCtx.createMediaStreamSource(ELA.stream);
+  ELA.processor = ELA.audioCtx.createScriptProcessor(4096, 1, 1);
+
+  ELA.processor.onaudioprocess = (e) => {
+    if (ELA.ws?.readyState !== WebSocket.OPEN) return;
+    const f32 = e.inputBuffer.getChannelData(0);
+    const pcm = new Int16Array(f32.length);
+    for (let i = 0; i < f32.length; i++) {
+      const c = Math.max(-1, Math.min(1, f32[i]));
+      pcm[i] = c < 0 ? c * 32768 : c * 32767;
+    }
+    // base64 encode in chunks to avoid call-stack overflow
+    const bytes = new Uint8Array(pcm.buffer);
+    let bin = '';
+    for (let i = 0; i < bytes.length; i += 8192) {
+      bin += String.fromCharCode(...bytes.subarray(i, i + 8192));
+    }
+    ELA.ws.send(JSON.stringify({ user_audio_chunk: btoa(bin) }));
+  };
+
+  src.connect(ELA.processor);
+  ELA.processor.connect(ELA.audioCtx.destination);
+}
+
+function handleAgentMsg(data) {
+  switch (data.type) {
+    case 'conversation_initiation_metadata':
+      document.getElementById('live-transcript').textContent = 'Listening…';
+      addLiveChip('🟢 Live session started — speak now');
+      break;
+
+    case 'ping':
+      ELA.ws?.send(JSON.stringify({ type: 'pong', event_id: data.ping_event?.event_id }));
+      break;
+
+    case 'user_transcript': {
+      const t = data.user_transcription_event?.user_transcript?.trim();
+      if (t) {
+        document.getElementById('live-transcript').textContent = '🎤 ' + t;
+        addMsg('user', t, false);
+        addFacts(t);
+      }
+      break;
+    }
+
+    case 'agent_response': {
+      const t = data.agent_response_event?.agent_response?.trim();
+      if (t) addMsg('ai', t, false);
+      setSpeaking(true);
+      document.getElementById('live-transcript').textContent = '💬 ' + (t || '…');
+      break;
+    }
+
+    case 'audio': {
+      const b64 = data.audio_event?.audio_base64;
+      if (b64) { ELA.audioQueue.push(b64); if (!ELA.isPlaying) playNextChunk(); }
+      break;
+    }
+
+    case 'interruption':
+      ELA.audioQueue = [];
+      ELA.isPlaying = false;
+      setSpeaking(false);
+      document.getElementById('live-transcript').textContent = 'Listening…';
+      break;
+  }
+}
+
+async function playNextChunk() {
+  if (!ELA.audioQueue.length) { ELA.isPlaying = false; setSpeaking(false); return; }
+  ELA.isPlaying = true;
+  const b64 = ELA.audioQueue.shift();
+  try {
+    const bin = atob(b64);
+    const bytes = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    const blob = new Blob([bytes.buffer], { type: 'audio/mpeg' });
+    const url  = URL.createObjectURL(blob);
+    const aud  = new Audio(url);
+    aud.onended = () => { URL.revokeObjectURL(url); playNextChunk(); };
+    aud.onerror = () => { URL.revokeObjectURL(url); playNextChunk(); };
+    await aud.play();
+  } catch(e) { playNextChunk(); }
+}
+
+function setLiveBtnState(state) {
+  const btn = document.getElementById('live-btn');
+  const st  = document.getElementById('live-status');
+  if (!btn) return;
+  btn.className = 'live-btn ' + state;
+  if (state === 'idle')        { btn.textContent = '🎙️ Live'; st.textContent = 'Ready for live voice'; }
+  if (state === 'connecting')  { btn.textContent = '⏳ Connecting…'; st.textContent = 'Connecting to agent…'; }
+  if (state === 'connected')   { btn.textContent = '🔴 End Call'; st.textContent = 'Live — agent listening'; }
+}
+
+function addLiveChip(msg) {
+  const area = document.getElementById('chat-msgs');
+  const el   = document.createElement('div');
+  el.className = 'date-chip';
+  el.style.cssText = 'background:rgba(16,185,129,.14);color:#065F46;font-weight:700';
+  el.textContent = msg;
+  area.appendChild(el);
+  area.scrollTop = area.scrollHeight;
+}
+
+// Show/hide live bar when entering chat
+function updateLiveBar() {
+  const hasAgent = !!ST.agentIds[ST.role];
+  document.getElementById('live-bar').classList.toggle('on', hasAgent);
+  if (!hasAgent) stopLiveVoice();
+}
+
+// Save agent ID from settings
+function saveAgentId(role) {
+  const inp = document.getElementById('aid-' + role);
+  const val = inp?.value.trim();
+  if (!val) { showToast('Please paste the Agent ID first'); return; }
+  ST.agentIds[role] = val;
+  localStorage.setItem('sv_aids', JSON.stringify(ST.agentIds));
+  inp.value = '';
+  inp.placeholder = val.slice(0, 18) + '…';
+  showToast('✅ Agent saved for ' + role);
+  updateLiveBar();
+}
+
 /* ────────────────────────────────────────────
    SETTINGS UI
 ──────────────────────────────────────────── */
@@ -2282,6 +2590,12 @@ function updateSettingsUI() {
 
   // Language
   document.getElementById('set-lang').value = ST.lang;
+
+  // Agent IDs
+  ['daughter','son','spouse','parents','grandparents','friend','grief'].forEach(r => {
+    const inp = document.getElementById('aid-' + r);
+    if (inp && ST.agentIds[r]) inp.placeholder = ST.agentIds[r].slice(0, 20) + '…';
+  });
 
   // Memory status
   const mem = getMem();
