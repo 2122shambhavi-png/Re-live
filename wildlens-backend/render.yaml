@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: wildlens-backend
+    runtime: node
+    rootDir: .
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: ANTHROPIC_API_KEY
+        sync: false          # you'll paste this in Render dashboard
+      - key: FRONTEND_URL
+        sync: false          # you'll set this to your Netlify URL
+    autoDeploy: true

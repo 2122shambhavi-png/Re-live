@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Saathi Voice – Your AI Companion</title>
+  <title>WildLens — AI Animal Discovery</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 
   <style>
 /* ═══════════════════════════════════════════
@@ -14,31 +14,30 @@
 ═══════════════════════════════════════════ */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --indigo:#6366F1; --indigo-d:#4338CA; --indigo-l:#EEF2FF;
-  --amber:#F59E0B;  --amber-l:#FEF3C7;
-  --rose:#F43F5E;   --rose-l:#FFF1F2;
-  --green:#10B981;  --teal:#0D9488;
-  --dark:#1C1839;   --slate:#334155; --slate-m:#64748B; --slate-lt:#CBD5E1;
-  --border:#E2E8F0; --bg:#FFFBF5;    --bg-card:#FFFFFF; --bg-chat:#F1F5FF;
-  --fh:'Poppins',sans-serif; --fb:'Inter',sans-serif;
+  --g1:#1B5E20; --g2:#2E7D32; --g3:#4CAF50; --g4:#A5D6A7; --g5:#E8F5E9;
+  --amber:#E65100; --amber-m:#FF8F00; --amber-l:#FFF8E1;
+  --sky:#0277BD; --sky-l:#E1F5FE;
+  --rose:#C62828; --rose-l:#FFEBEE;
+  --purple:#6A1B9A; --purple-l:#F3E5F5;
+  --brown:#4E342E; --brown-l:#EFEBE9;
+  --dark:#1A2F1A; --slate:#37474F; --slate-m:#78909C; --slate-lt:#B0BEC5;
+  --border:#DCEDC8; --bg:#FFFEF9; --bg-card:#FFFFFF; --bg-chat:#F1F8E9;
+  --fh:'Nunito',sans-serif; --fb:'Inter',sans-serif;
   --r-xl:28px; --r-lg:20px; --r-md:14px; --r-sm:8px; --r-p:999px;
-  --sh-sm:0 2px 8px rgba(0,0,0,.06); --sh-md:0 8px 32px rgba(0,0,0,.10);
-  --sh-lg:0 20px 60px rgba(0,0,0,.15); --sh-c:0 8px 32px rgba(99,102,241,.25);
+  --sh-sm:0 2px 10px rgba(0,0,0,.07); --sh-md:0 8px 32px rgba(0,0,0,.11);
+  --sh-lg:0 20px 60px rgba(0,0,0,.15);
   --ease:cubic-bezier(.25,.46,.45,.94); --spring:cubic-bezier(.34,1.56,.64,1);
 }
 html{font-size:16px;scroll-behavior:smooth}
 body{font-family:var(--fb);background:var(--bg);color:var(--slate);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
 h1,h2,h3,h4{font-family:var(--fh);line-height:1.25}
 
-/* animated bg */
 .grad-bg{position:fixed;inset:0;z-index:-1;
   background:
-    radial-gradient(ellipse 80% 60% at 20% 10%,rgba(167,139,250,.16) 0%,transparent 60%),
-    radial-gradient(ellipse 60% 50% at 80% 90%,rgba(245,158,11,.10) 0%,transparent 60%),
-    radial-gradient(ellipse 70% 70% at 50% 50%,rgba(236,72,153,.06) 0%,transparent 70%),
-    #FFFBF5;
-  animation:gshift 14s ease-in-out infinite alternate}
-@keyframes gshift{0%{filter:hue-rotate(0deg)}100%{filter:hue-rotate(18deg)}}
+    radial-gradient(ellipse 70% 50% at 20% 10%,rgba(76,175,80,.10) 0%,transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 80%,rgba(230,81,0,.07) 0%,transparent 60%),
+    radial-gradient(ellipse 80% 80% at 50% 50%,rgba(27,94,32,.04) 0%,transparent 70%),
+    #FFFEF9}
 
 /* ═══════════════════════════════════════════
    SCREEN SYSTEM
@@ -47,606 +46,393 @@ h1,h2,h3,h4{font-family:var(--fh);line-height:1.25}
 .screen.active{display:flex}
 
 /* ═══════════════════════════════════════════
-   BOTTOM NAV
-═══════════════════════════════════════════ */
-.bnav{
-  position:fixed;bottom:0;left:0;right:0;height:72px;
-  background:rgba(28,24,57,.94);backdrop-filter:blur(24px);
-  border-top:1px solid rgba(255,255,255,.08);
-  display:none;align-items:center;z-index:30;padding:0 6px}
-.bnav.on{display:flex}
-.ni{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:3px;padding:8px 4px;cursor:pointer;border:none;background:none;
-  color:rgba(255,255,255,.4);transition:color .2s;min-height:56px;
-  -webkit-tap-highlight-color:transparent}
-.ni.act{color:var(--indigo)}
-.ni-icon{font-size:22px}
-.ni-lbl{font-size:10px;font-family:var(--fh);font-weight:700;text-transform:uppercase;letter-spacing:.4px}
-.sos-ni{width:52px;height:52px;border-radius:50%;background:var(--rose);border:none;
-  cursor:pointer;color:#fff;font-size:20px;display:flex;align-items:center;justify-content:center;
-  box-shadow:0 4px 16px rgba(244,63,94,.45);flex-shrink:0;
-  animation:sos-g 2.5s ease-in-out infinite;-webkit-tap-highlight-color:transparent}
-@keyframes sos-g{0%,100%{box-shadow:0 4px 16px rgba(244,63,94,.4)}50%{box-shadow:0 4px 30px rgba(244,63,94,.8)}}
-
-/* ═══════════════════════════════════════════
-   SHARED UTILITIES
+   UTILITIES
 ═══════════════════════════════════════════ */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;border:none;
-  font-family:var(--fh);font-weight:700;transition:transform .2s var(--spring),box-shadow .2s var(--ease),opacity .2s;
+  font-family:var(--fh);font-weight:800;transition:transform .2s var(--spring),box-shadow .2s var(--ease),opacity .2s;
   -webkit-tap-highlight-color:transparent}
 .btn:active{transform:scale(.94)!important}
-.btn-p{background:linear-gradient(135deg,var(--indigo),#818CF8);color:#fff;border-radius:var(--r-p);
-  padding:0 28px;height:56px;font-size:17px;box-shadow:var(--sh-c)}
-.btn-p:hover{transform:translateY(-2px);box-shadow:0 12px 36px rgba(99,102,241,.35)}
-.btn-d{background:var(--rose);color:#fff;border-radius:var(--r-p);padding:0 24px;height:52px;font-size:16px;
-  box-shadow:0 4px 16px rgba(244,63,94,.3)}
-.btn-o{background:transparent;color:var(--indigo);border:2px solid var(--indigo);border-radius:var(--r-p);
-  padding:0 24px;height:52px;font-size:16px}
-.btn-o:hover{background:var(--indigo-l)}
+.btn-p{background:linear-gradient(135deg,var(--g2),var(--g3));color:#fff;border-radius:var(--r-p);
+  padding:0 28px;height:56px;font-size:17px;box-shadow:0 8px 24px rgba(46,125,50,.35)}
+.btn-p:hover{transform:translateY(-2px);box-shadow:0 12px 36px rgba(46,125,50,.45)}
+.btn-o{background:transparent;color:var(--g2);border:2px solid var(--g3);border-radius:var(--r-p);
+  padding:0 24px;height:48px;font-size:15px}
+.btn-o:hover{background:var(--g5)}
 
-.tag{display:inline-flex;align-items:center;gap:4px;padding:4px 12px;border-radius:var(--r-p);
-  font-size:12px;font-weight:700;font-family:var(--fh)}
-.tag-g{background:#D1FAE5;color:#065F46}
-.tag-b{background:var(--indigo-l);color:var(--indigo-d)}
-.tag-a{background:var(--amber-l);color:#92400E}
+.tag{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:var(--r-p);
+  font-size:12px;font-weight:800;font-family:var(--fh)}
+.tag-g{background:var(--g5);color:var(--g1)}
+.tag-a{background:var(--amber-l);color:var(--amber)}
+.tag-s{background:var(--sky-l);color:var(--sky)}
+.tag-r{background:var(--rose-l);color:var(--rose)}
+.tag-b{background:var(--brown-l);color:var(--brown)}
 
-.toast{position:fixed;bottom:88px;left:50%;transform:translateX(-50%) translateY(20px);
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);
   background:var(--dark);color:#fff;padding:12px 24px;border-radius:var(--r-md);
-  font-size:15px;font-weight:500;z-index:200;opacity:0;white-space:nowrap;
-  transition:opacity .3s var(--ease),transform .3s var(--spring)}
+  font-size:15px;font-weight:600;z-index:200;opacity:0;white-space:nowrap;
+  transition:opacity .3s var(--ease),transform .3s var(--spring);pointer-events:none}
 .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+
+@keyframes float{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-8px) rotate(1deg)}}
+@keyframes pdot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.5)}}
 
 /* ═══════════════════════════════════════════
    SCREEN 0 — SETUP
 ═══════════════════════════════════════════ */
 #s-setup{
-  background:linear-gradient(150deg,#1C1839 0%,#2D1F69 55%,#1C3456 100%);
-  justify-content:center;align-items:center;padding:32px 20px}
+  background:linear-gradient(160deg,#0A2E0A 0%,#1B5E20 45%,#0D3B12 100%);
+  justify-content:center;align-items:center;padding:32px 20px;min-height:100vh}
 
-.setup-card{
-  width:100%;max-width:440px;
-  background:rgba(255,255,255,.07);backdrop-filter:blur(30px);
-  border:1px solid rgba(255,255,255,.13);border-radius:32px;
-  padding:40px 32px;display:flex;flex-direction:column;gap:28px}
+.setup-card{width:100%;max-width:460px;
+  background:rgba(255,255,255,.08);backdrop-filter:blur(30px);
+  border:1px solid rgba(255,255,255,.14);border-radius:32px;
+  padding:40px 32px;display:flex;flex-direction:column;gap:26px}
 
 .s-logo{display:flex;flex-direction:column;align-items:center;gap:10px}
-.s-logo-icon{width:78px;height:78px;border-radius:26px;
-  background:linear-gradient(135deg,rgba(99,102,241,.45),rgba(168,85,247,.45));
-  display:flex;align-items:center;justify-content:center;font-size:38px;
-  animation:float 3.5s ease-in-out infinite}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
-.s-logo h1{font-size:clamp(26px,5vw,30px);font-weight:800;color:#fff;text-align:center}
+.s-logo-icon{width:82px;height:82px;border-radius:28px;
+  background:linear-gradient(135deg,rgba(76,175,80,.5),rgba(255,143,0,.4));
+  display:flex;align-items:center;justify-content:center;font-size:42px;
+  animation:float 4s ease-in-out infinite}
+.s-logo h1{font-size:clamp(28px,5vw,34px);font-weight:900;color:#fff;text-align:center;letter-spacing:-.5px}
 .s-logo p{font-size:15px;color:rgba(255,255,255,.55);text-align:center;line-height:1.6}
 
 .s-pills{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
 .s-pill{padding:6px 14px;border-radius:var(--r-p);background:rgba(255,255,255,.1);
-  color:rgba(255,255,255,.65);font-size:13px;font-weight:500}
+  color:rgba(255,255,255,.7);font-size:13px;font-weight:600;font-family:var(--fh)}
 
 .s-form{display:flex;flex-direction:column;gap:14px}
 .s-fl{display:flex;flex-direction:column;gap:6px}
-.s-fl label{font-size:13px;font-weight:700;color:rgba(255,255,255,.65);font-family:var(--fh)}
+.s-fl label{font-size:12px;font-weight:800;color:rgba(255,255,255,.65);font-family:var(--fh);
+  text-transform:uppercase;letter-spacing:.5px}
 .s-inp{width:100%;height:50px;padding:0 18px;background:rgba(255,255,255,.1);
   border:1.5px solid rgba(255,255,255,.2);border-radius:var(--r-md);
   font-size:16px;color:#fff;outline:none;font-family:var(--fb);
   transition:border-color .2s,background .2s}
-.s-inp:focus{border-color:var(--indigo);background:rgba(255,255,255,.16)}
-.s-inp::placeholder{color:rgba(255,255,255,.3)}
+.s-inp:focus{border-color:rgba(76,175,80,.8);background:rgba(255,255,255,.16)}
+.s-inp::placeholder{color:rgba(255,255,255,.28)}
 .s-hint{font-size:12px;color:rgba(255,255,255,.4);line-height:1.5}
-.s-hint a{color:rgba(139,92,246,.9);text-decoration:none}
+.s-hint a{color:rgba(165,214,167,.9);text-decoration:none}
+
+.seg-row{display:flex;flex-direction:column;gap:8px}
+.seg-lbl{font-size:12px;font-weight:800;color:rgba(255,255,255,.65);font-family:var(--fh);
+  text-transform:uppercase;letter-spacing:.5px}
+.seg{display:flex;background:rgba(0,0,0,.25);border-radius:12px;padding:4px;gap:4px}
+.sg{flex:1;height:40px;border-radius:9px;border:none;cursor:pointer;
+  font-family:var(--fh);font-weight:800;font-size:13px;color:rgba(255,255,255,.55);
+  background:transparent;transition:background .2s,color .2s,box-shadow .2s;
+  -webkit-tap-highlight-color:transparent;white-space:nowrap}
+.sg.act{background:linear-gradient(135deg,var(--g2),var(--g3));color:#fff;
+  box-shadow:0 3px 10px rgba(46,125,50,.4)}
 
 .s-actions{display:flex;flex-direction:column;gap:12px;align-items:center}
-.s-btn{width:100%;height:56px;border-radius:16px;
-  background:linear-gradient(135deg,#6366F1,#818CF8);
-  color:#fff;font-family:var(--fh);font-weight:800;font-size:17px;
-  border:none;cursor:pointer;box-shadow:0 8px 24px rgba(99,102,241,.4);
+.s-btn{width:100%;height:58px;border-radius:16px;
+  background:linear-gradient(135deg,#2E7D32,#4CAF50);
+  color:#fff;font-family:var(--fh);font-weight:900;font-size:18px;
+  border:none;cursor:pointer;box-shadow:0 8px 24px rgba(46,125,50,.45);
   transition:transform .2s var(--spring),box-shadow .2s}
-.s-btn:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(99,102,241,.55)}
+.s-btn:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(46,125,50,.55)}
 .s-btn:active{transform:scale(.96)}
 .s-skip{font-size:14px;color:rgba(255,255,255,.4);cursor:pointer;text-decoration:underline}
 .s-skip:hover{color:rgba(255,255,255,.65)}
 
 /* ═══════════════════════════════════════════
-   ELEVENLABS FULL-SCREEN CALL OVERLAY
+   SCREEN 1 — MAIN / UPLOAD
 ═══════════════════════════════════════════ */
-.call-overlay{
-  display:none;position:fixed;inset:0;z-index:100;
-  background:linear-gradient(160deg,#0F0C29 0%,#1C1839 40%,#24243E 100%);
-  flex-direction:column;align-items:center;justify-content:space-between;
-  padding:60px 24px 50px;
-  animation:callin .35s var(--ease) both}
-.call-overlay.on{display:flex}
-@keyframes callin{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:none}}
+#s-main{padding-bottom:24px}
 
-/* top section */
-.call-top{display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center}
-.call-avatar-wrap{position:relative;width:120px;height:120px}
-.call-avatar{width:120px;height:120px;border-radius:50%;
-  background:linear-gradient(135deg,rgba(99,102,241,.4),rgba(168,85,247,.4));
-  display:flex;align-items:center;justify-content:center;font-size:54px;
-  position:relative;z-index:2}
-.call-ring{position:absolute;inset:0;border-radius:50%;
-  border:2px solid rgba(99,102,241,.5);
-  animation:callring 2s ease-out infinite;pointer-events:none}
-.call-ring:nth-child(2){animation-delay:.6s;border-color:rgba(99,102,241,.3)}
-.call-ring:nth-child(3){animation-delay:1.2s;border-color:rgba(99,102,241,.15)}
-@keyframes callring{
-  0%{transform:scale(1);opacity:.8}
-  100%{transform:scale(2.2);opacity:0}}
-.call-overlay.speaking .call-ring{border-color:rgba(16,185,129,.6)}
-.call-overlay.speaking .call-ring:nth-child(2){border-color:rgba(16,185,129,.35)}
-.call-overlay.speaking .call-ring:nth-child(3){border-color:rgba(16,185,129,.15)}
-
-.call-name{font-family:var(--fh);font-weight:800;font-size:28px;color:#fff}
-.call-status{font-size:15px;color:rgba(255,255,255,.55);font-weight:500;
-  display:flex;align-items:center;gap:7px}
-.call-sdot{width:8px;height:8px;border-radius:50%;background:#10B981;
-  animation:pdot 1.2s ease-in-out infinite}
-
-/* waveform canvas */
-.call-wave-wrap{width:100%;max-width:340px;height:70px;
-  display:flex;align-items:center;justify-content:center}
-#call-canvas{width:100%;height:70px;border-radius:12px;
-  background:rgba(255,255,255,.04)}
-
-/* live transcript */
-.call-transcript-box{
-  width:100%;max-width:380px;min-height:80px;max-height:130px;
-  overflow-y:auto;border-radius:var(--r-lg);
-  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.10);
-  padding:14px 16px;display:flex;flex-direction:column;gap:8px}
-.call-transcript-box::-webkit-scrollbar{width:0}
-.ctxt{font-size:14px;line-height:1.55;animation:mslide .25s var(--spring) both}
-.ctxt.user{color:rgba(255,255,255,.7);text-align:right}
-.ctxt.agent{color:#fff;font-weight:500}
-.ctxt.user::before{content:'You: ';color:rgba(255,255,255,.4);font-size:11px}
-.ctxt.agent::before{content:'';font-size:11px}
-
-/* bottom controls */
-.call-controls{display:flex;gap:20px;align-items:center}
-.call-mute-btn{width:58px;height:58px;border-radius:50%;border:none;cursor:pointer;
-  background:rgba(255,255,255,.1);font-size:22px;
-  display:flex;align-items:center;justify-content:center;
-  transition:background .2s,transform .2s;-webkit-tap-highlight-color:transparent}
-.call-mute-btn:hover{background:rgba(255,255,255,.2);transform:scale(1.08)}
-.call-mute-btn.muted{background:rgba(244,63,94,.3)}
-.call-end-btn{width:74px;height:74px;border-radius:50%;border:none;cursor:pointer;
-  background:linear-gradient(135deg,#EF4444,#DC2626);font-size:28px;
-  display:flex;align-items:center;justify-content:center;
-  box-shadow:0 8px 28px rgba(239,68,68,.5);
-  transition:transform .2s var(--spring),box-shadow .2s;
-  -webkit-tap-highlight-color:transparent}
-.call-end-btn:hover{transform:scale(1.1);box-shadow:0 12px 36px rgba(239,68,68,.65)}
-.call-end-btn:active{transform:scale(.92)}
-.call-timer{font-family:var(--fh);font-weight:800;font-size:16px;
-  color:rgba(255,255,255,.5);letter-spacing:.5px;min-width:48px;text-align:center}
-
-/* connecting state */
-.call-overlay.connecting .call-avatar{animation:float 1.5s ease-in-out infinite}
-.call-overlay.connecting .call-sdot{background:var(--amber);
-  animation:pdot .6s ease-in-out infinite}
-
-/* ═══════════════════════════════════════════
-   ELEVENLABS LIVE VOICE BAR
-═══════════════════════════════════════════ */
-.live-bar{
-  display:none;align-items:center;justify-content:space-between;gap:10px;
-  padding:10px 14px;
-  background:linear-gradient(135deg,#ECFDF5,#D1FAE5);
-  border-bottom:1px solid #A7F3D0}
-.live-bar.on{display:flex}
-.live-ind{display:flex;align-items:center;gap:7px;
-  font-size:13px;font-weight:700;font-family:var(--fh);color:#065F46}
-.live-dot{width:9px;height:9px;border-radius:50%;background:#10B981;
-  animation:pdot 1s ease-in-out infinite;flex-shrink:0}
-.live-status{font-size:12px;color:#065F46;font-weight:600}
-.live-btn{height:40px;padding:0 18px;border-radius:var(--r-p);border:none;
-  cursor:pointer;font-family:var(--fh);font-weight:800;font-size:14px;
-  color:#fff;background:linear-gradient(135deg,#6366F1,#818CF8);
-  box-shadow:var(--sh-c);transition:all .2s var(--spring);
-  -webkit-tap-highlight-color:transparent;flex-shrink:0}
-.live-btn:hover{transform:scale(1.05)}
-.live-btn:active{transform:scale(.95)}
-.live-btn.connecting{background:linear-gradient(135deg,#F59E0B,#FCD34D);animation:none}
-.live-btn.connected{background:linear-gradient(135deg,#EF4444,#F87171)}
-
-/* Transcript live bubble */
-.live-transcript{font-size:13px;color:var(--slate-m);font-style:italic;
-  padding:4px 8px;background:rgba(0,0,0,.04);border-radius:8px;
-  min-height:20px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-
-/* Agent ID settings */
-.aid-row{display:flex;gap:8px;align-items:center;padding:10px 14px;
-  border-bottom:1px solid var(--border)}
-.aid-row:last-child{border-bottom:none}
-.aid-icon{font-size:22px;width:32px;text-align:center;flex-shrink:0}
-.aid-name{font-family:var(--fh);font-weight:700;font-size:13px;color:var(--dark);
-  width:80px;flex-shrink:0}
-.aid-inp{flex:1;height:38px;padding:0 10px;background:#F8FAFF;
-  border:1.5px solid var(--border);border-radius:var(--r-md);
-  font-size:12px;font-family:'Courier New',monospace;color:var(--slate);
-  outline:none;transition:border-color .2s}
-.aid-inp:focus{border-color:var(--indigo)}
-.aid-inp::placeholder{color:#AABDD6;font-size:11px}
-.aid-save{height:38px;padding:0 12px;background:var(--indigo);border:none;
-  border-radius:var(--r-md);color:#fff;font-size:12px;font-weight:700;
-  cursor:pointer;font-family:var(--fh);white-space:nowrap;flex-shrink:0;
-  transition:background .2s}
-.aid-save:hover{background:var(--indigo-d)}
-
-/* ═══════════════════════════════════════════
-   SPEAKING INDICATOR
-═══════════════════════════════════════════ */
-.speak-ring{position:absolute;inset:-6px;border-radius:50%;
-  border:3px solid var(--indigo);opacity:0;pointer-events:none;
-  transition:opacity .3s}
-.cb-avatar.speaking .speak-ring{opacity:1;animation:speakpulse 1s ease-in-out infinite}
-@keyframes speakpulse{0%,100%{transform:scale(1);opacity:.7}50%{transform:scale(1.12);opacity:1}}
-
-/* Voice shortcut in chat bar */
-.cb-voice-btn{width:40px;height:40px;border-radius:50%;
-  background:linear-gradient(135deg,#D1FAE5,#A7F3D0);border:none;
-  cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;transition:background .2s,transform .2s;-webkit-tap-highlight-color:transparent;
-  position:relative}
-.cb-voice-btn:hover{transform:scale(1.08)}
-.cb-voice-btn.has-voice{background:linear-gradient(135deg,var(--green),#34D399)}
-.cb-voice-dot{position:absolute;top:0;right:0;width:10px;height:10px;
-  background:var(--green);border-radius:50%;border:2px solid #fff;display:none}
-.cb-voice-btn.has-voice .cb-voice-dot{display:block}
-
-/* Clone modal steps */
-.clone-steps{display:flex;flex-direction:column;gap:10px}
-.cstep{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;
-  background:#F8FAFF;border-radius:var(--r-md);border-left:3px solid var(--indigo)}
-.cstep-num{width:24px;height:24px;border-radius:50%;background:var(--indigo);
-  color:#fff;font-size:12px;font-weight:800;font-family:var(--fh);
-  display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
-.cstep-txt{font-size:13px;color:var(--slate);line-height:1.5}
-.cstep-txt strong{color:var(--dark)}
-
-.wa-tip{display:flex;align-items:center;gap:10px;padding:10px 14px;
-  background:#E7F8EE;border-radius:var(--r-md);border-left:3px solid #25D366}
-.wa-tip-icon{font-size:22px;flex-shrink:0}
-.wa-tip-txt{font-size:13px;color:#1a5c31;line-height:1.45}
-.wa-tip-txt strong{color:#0d3b1f}
-
-/* ═══════════════════════════════════════════
-   GRIEF MODE CHAT THEME
-═══════════════════════════════════════════ */
-#s-chat.grief-mode{background:#F5F0FA}
-#s-chat.grief-mode .chat-bar{background:rgba(240,232,250,.97);border-bottom-color:#D8C8F0}
-#s-chat.grief-mode .mr.a .bubble{background:#EDE0F8}
-#s-chat.grief-mode .mic-btn{background:linear-gradient(135deg,#9B59B6,#C39BD3)}
-#s-chat.grief-mode .mic-btn.lst{background:linear-gradient(135deg,#7D3C98,#A569BD)}
-
-/* Quick reply chips */
-.qr-chips{display:flex;gap:8px;flex-wrap:wrap;padding:0 12px 8px}
-.qrchip{padding:8px 16px;border-radius:var(--r-p);background:#fff;border:1.5px solid var(--border);
-  font-size:14px;color:var(--slate);cursor:pointer;font-family:var(--fb);
-  transition:border-color .2s,background .2s,color .2s;-webkit-tap-highlight-color:transparent}
-.qrchip:hover{border-color:var(--indigo);color:var(--indigo);background:var(--indigo-l)}
-.grief-mode .qrchip:hover{border-color:#9B59B6;color:#9B59B6;background:#F3E8FE}
-
-/* Story bubble */
-.story-bubble{background:linear-gradient(135deg,#FFF8F0,#FDECD6)!important;
-  border:1.5px solid #F5D8A8!important;font-size:16px!important;line-height:1.8!important;
-  color:#5C3D1E!important;font-family:'Georgia',serif!important}
-.story-badge{display:inline-flex;align-items:center;gap:4px;
-  background:#F5D8A8;border-radius:var(--r-p);padding:3px 10px;
-  font-size:11px;font-weight:700;color:#92400E;margin-bottom:8px;font-family:var(--fh)}
-
-/* Story Modal */
-.story-sheet{width:100%;max-width:520px;background:#fff;border-radius:28px 28px 0 0;
-  padding:0 0 34px;animation:shrise .35s var(--spring) both;max-height:85vh;overflow-y:auto}
-.stype-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.stype-card{background:#FFF8F0;border:2px solid #F5D8A8;border-radius:16px;
-  padding:16px 12px;cursor:pointer;text-align:center;
-  transition:border-color .2s,transform .2s var(--spring),background .2s;
-  -webkit-tap-highlight-color:transparent}
-.stype-card:hover{border-color:#F59E0B;background:#FEF3C7;transform:translateY(-2px)}
-.stype-card:active{transform:scale(.95)}
-.stype-icon{font-size:30px;margin-bottom:6px}
-.stype-name{font-family:var(--fh);font-weight:800;font-size:14px;color:var(--dark)}
-.stype-desc{font-size:12px;color:var(--slate-m);margin-top:2px;line-height:1.35}
-.custom-story-row{display:flex;gap:8px;margin-top:4px}
-.custom-story-inp{flex:1;height:44px;padding:0 14px;background:#F8FAFF;
-  border:1.5px solid var(--border);border-radius:var(--r-md);
-  font-size:15px;color:var(--slate);outline:none;font-family:var(--fb)}
-.custom-story-inp:focus{border-color:var(--amber)}
-.story-go-btn{height:44px;padding:0 18px;background:linear-gradient(135deg,#F59E0B,#FCD34D);
-  border:none;border-radius:var(--r-md);color:#fff;font-family:var(--fh);
-  font-weight:800;font-size:14px;cursor:pointer;white-space:nowrap}
-.cb-story-btn{width:40px;height:40px;border-radius:50%;background:#FEF3C7;border:none;
-  cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;transition:background .2s,transform .2s;-webkit-tap-highlight-color:transparent}
-.cb-story-btn:hover{background:#FDE68A;transform:scale(1.08)}
-
-/* ═══════════════════════════════════════════
-   SCREEN 1 — LANDING
-═══════════════════════════════════════════ */
-#s-home{padding-bottom:80px}
-
-.hero{background:linear-gradient(150deg,#1C1839 0%,#2D1F69 60%,#1E3356 100%);
-  padding:50px 22px 40px;position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;inset:0;
-  background:radial-gradient(ellipse 80% 100% at 70% 0%,rgba(99,102,241,.28),transparent),
-             radial-gradient(ellipse 60% 80% at 5% 100%,rgba(168,85,247,.18),transparent);
+.main-hero{
+  background:linear-gradient(160deg,#1B5E20 0%,#2E7D32 50%,#1A3B1A 100%);
+  padding:44px 22px 32px;position:relative;overflow:hidden}
+.main-hero::before{content:'';position:absolute;inset:0;
+  background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E");
   pointer-events:none}
-.hero-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;position:relative;z-index:1}
-.hero-brand{display:flex;align-items:center;gap:10px}
-.hero-brand-icon{width:42px;height:42px;border-radius:14px;
-  background:linear-gradient(135deg,rgba(99,102,241,.5),rgba(168,85,247,.5));
-  display:flex;align-items:center;justify-content:center;font-size:20px;
-  animation:float 3.5s ease-in-out infinite}
-.hero-brand-name{font-family:var(--fh);font-size:20px;font-weight:800;color:#fff}
-.hero-cfg-btn{width:42px;height:42px;border-radius:50%;
+.main-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;position:relative;z-index:1}
+.brand{display:flex;align-items:center;gap:10px}
+.brand-icon{width:42px;height:42px;border-radius:14px;
+  background:linear-gradient(135deg,rgba(76,175,80,.45),rgba(255,143,0,.35));
+  display:flex;align-items:center;justify-content:center;font-size:22px;
+  animation:float 4s ease-in-out infinite}
+.brand-name{font-family:var(--fh);font-size:22px;font-weight:900;color:#fff;letter-spacing:-.3px}
+.icon-btn{width:42px;height:42px;border-radius:50%;
   background:rgba(255,255,255,.1);border:none;cursor:pointer;
-  color:rgba(255,255,255,.75);font-size:18px;display:flex;align-items:center;justify-content:center;
+  color:rgba(255,255,255,.8);font-size:18px;display:flex;align-items:center;justify-content:center;
   transition:background .2s;-webkit-tap-highlight-color:transparent}
-.hero-cfg-btn:hover{background:rgba(255,255,255,.2)}
+.icon-btn:hover{background:rgba(255,255,255,.2)}
+.hero-title{font-family:var(--fh);font-weight:900;font-size:clamp(22px,4vw,30px);
+  color:#fff;line-height:1.2;margin-bottom:6px;position:relative;z-index:1}
+.hero-sub{font-size:15px;color:rgba(255,255,255,.6);line-height:1.5;position:relative;z-index:1}
 
-.hero-body{position:relative;z-index:1}
-.hero-time-tag{display:inline-flex;align-items:center;gap:6px;
-  background:rgba(255,255,255,.1);border-radius:var(--r-p);
-  padding:5px 14px;margin-bottom:10px;font-size:13px;color:rgba(255,255,255,.75);font-weight:500}
-.hero-h1{font-family:var(--fh);font-weight:800;font-size:clamp(26px,5vw,34px);
-  color:#fff;line-height:1.22;margin-bottom:8px}
-.hero-sub{font-size:16px;color:rgba(255,255,255,.6);line-height:1.5;margin-bottom:18px}
-
-.hero-name-row{display:flex;gap:8px;max-width:320px}
-.hero-name-inp{flex:1;height:42px;padding:0 16px;
-  background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.2);
-  border-radius:var(--r-p);font-size:15px;color:#fff;outline:none;font-family:var(--fb);
-  transition:border-color .2s}
-.hero-name-inp:focus{border-color:rgba(99,102,241,.8)}
-.hero-name-inp::placeholder{color:rgba(255,255,255,.35)}
-.hero-name-save{height:42px;padding:0 18px;background:rgba(99,102,241,.75);
-  border:none;border-radius:var(--r-p);color:#fff;font-size:14px;font-weight:700;
-  cursor:pointer;font-family:var(--fh);transition:background .2s}
-.hero-name-save:hover{background:rgba(99,102,241,.95)}
-
-/* Lang bar */
-.lang-bar{display:flex;gap:8px;padding:18px 20px 0;overflow-x:auto;
-  -webkit-overflow-scrolling:touch;scrollbar-width:none;flex-wrap:nowrap}
-.lang-bar::-webkit-scrollbar{display:none}
-.lchip{padding:8px 16px;border-radius:var(--r-p);border:2px solid var(--border);
-  background:#fff;cursor:pointer;font-family:var(--fh);font-weight:700;font-size:13px;
+/* Control bar */
+.ctrl-bar{display:flex;gap:8px;padding:14px 16px;
+  background:#fff;border-bottom:1px solid var(--border);
+  overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.ctrl-bar::-webkit-scrollbar{display:none}
+.ctrl-chip{padding:8px 14px;border-radius:var(--r-p);border:2px solid var(--border);
+  background:#fff;cursor:pointer;font-family:var(--fh);font-weight:800;font-size:13px;
   color:var(--slate-m);transition:border-color .2s,color .2s,background .2s;
   -webkit-tap-highlight-color:transparent;white-space:nowrap;flex-shrink:0}
-.lchip.act{border-color:var(--indigo);color:var(--indigo);background:var(--indigo-l)}
+.ctrl-chip.act{border-color:var(--g2);color:var(--g2);background:var(--g5)}
+.ctrl-sep{width:1px;background:var(--border);flex-shrink:0;margin:4px 2px;align-self:stretch}
 
-/* Role section */
-.role-sec{padding:22px 16px 0}
-.role-sec-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
-.role-sec-title{font-family:var(--fh);font-weight:800;font-size:20px;color:var(--dark)}
+/* Upload */
+.upload-wrap{padding:22px 16px}
+.drop-zone{border:3px dashed var(--g4);border-radius:24px;
+  background:linear-gradient(135deg,var(--g5),rgba(255,248,225,.5));
+  padding:48px 24px;text-align:center;cursor:pointer;
+  transition:border-color .25s,background .25s,transform .2s var(--spring)}
+.drop-zone:hover,.drop-zone.drag{border-color:var(--g3);background:rgba(76,175,80,.06);transform:scale(1.01)}
+.drop-zone.drag{border-style:solid}
+.dz-icon{font-size:56px;margin-bottom:14px;display:block;animation:dzfloat 3s ease-in-out infinite}
+@keyframes dzfloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-6px) scale(1.05)}}
+.dz-title{font-family:var(--fh);font-weight:900;font-size:22px;color:var(--g1);margin-bottom:6px}
+.dz-sub{font-size:14px;color:var(--slate-m);line-height:1.5;margin-bottom:20px}
+.dz-btn{display:inline-flex;align-items:center;gap:8px;
+  background:linear-gradient(135deg,var(--g2),var(--g3));color:#fff;
+  border-radius:var(--r-p);padding:0 28px;height:50px;font-size:16px;font-weight:800;
+  font-family:var(--fh);border:none;cursor:pointer;
+  box-shadow:0 6px 20px rgba(46,125,50,.35);
+  transition:transform .2s var(--spring),box-shadow .2s;-webkit-tap-highlight-color:transparent}
+.dz-btn:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(46,125,50,.45)}
+.dz-btn:active{transform:scale(.95)}
+.dz-formats{font-size:12px;color:var(--slate-lt);margin-top:12px}
+.or-sep{display:flex;align-items:center;gap:12px;color:var(--slate-lt);font-size:14px;margin:12px 0}
+.or-sep::before,.or-sep::after{content:'';flex:1;height:1px;background:var(--border)}
+.cam-btn{width:100%;height:52px;border-radius:16px;border:2px solid var(--border);
+  background:#fff;cursor:pointer;font-family:var(--fh);font-weight:800;font-size:15px;
+  color:var(--slate);display:flex;align-items:center;justify-content:center;gap:8px;
+  transition:border-color .2s,background .2s;-webkit-tap-highlight-color:transparent}
+.cam-btn:hover{border-color:var(--g3);background:var(--g5);color:var(--g2)}
+input[type=file]{display:none}
 
-.roles-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-@media(max-width:480px){.roles-grid{grid-template-columns:repeat(2,1fr)}}
-@media(min-width:768px){.roles-grid{grid-template-columns:repeat(3,1fr);max-width:640px}}
+/* Mode note */
+.mode-note{margin:0 16px;padding:14px 18px;border-radius:var(--r-lg);display:flex;gap:12px;align-items:flex-start}
+.mode-note.kid{background:linear-gradient(135deg,#FFFDE7,#FFF9C4);border-left:4px solid #FFC107}
+.mode-note.student{background:linear-gradient(135deg,var(--sky-l),#E3F2FD);border-left:4px solid var(--sky)}
+.mode-note.adult{background:linear-gradient(135deg,var(--brown-l),#EFEBE9);border-left:4px solid var(--brown)}
+.mn-icon{font-size:22px;flex-shrink:0;margin-top:1px}
+.mn-txt{font-size:14px;line-height:1.5;color:var(--slate)}
+.mn-txt strong{color:var(--dark)}
 
-.rc{background:#fff;border-radius:22px;padding:18px 12px 16px;cursor:pointer;
-  display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;
-  box-shadow:0 4px 20px rgba(0,0,0,.06);border:2.5px solid transparent;
-  transition:transform .25s var(--spring),box-shadow .25s var(--ease),border-color .25s;
-  position:relative;overflow:hidden;-webkit-tap-highlight-color:transparent}
-.rc:hover{transform:translateY(-4px) scale(1.02);box-shadow:0 14px 40px rgba(0,0,0,.11)}
-.rc:active{transform:scale(.95)}
-.rc-icon-wrap{width:60px;height:60px;border-radius:50%;display:flex;align-items:center;
-  justify-content:center;font-size:28px;transition:transform .25s var(--spring)}
-.rc:hover .rc-icon-wrap{transform:scale(1.12)}
-.rc-name{font-family:var(--fh);font-weight:800;font-size:15px;color:var(--dark)}
-.rc-desc{font-size:12px;color:var(--slate-m);line-height:1.35}
-.vc-dot{position:absolute;top:8px;right:8px;width:20px;height:20px;border-radius:50%;
-  background:var(--green);display:flex;align-items:center;justify-content:center;font-size:10px}
-
-/* Card colours */
-.rc-daughter{--cc:#FFE5E5} .rc-daughter:hover{border-color:#FFB3B3}
-.rc-son{--cc:#E5F2FF}      .rc-son:hover{border-color:#90C8FF}
-.rc-spouse{--cc:#FFE0E6}   .rc-spouse:hover{border-color:#FFB3C6}
-.rc-parents{--cc:#E8F5E9}  .rc-parents:hover{border-color:#A5D6A7}
-.rc-gp{--cc:#F3E5F5}       .rc-gp:hover{border-color:#CE93D8}
-.rc-friend{--cc:#FFF9E5}   .rc-friend:hover{border-color:#FFD54F}
-.rc-grief{--cc:#EDE0F8}    .rc-grief:hover{border-color:#C39BD3}
-
-/* Info note */
-.home-note{margin:20px 16px 0;padding:16px 18px;
-  background:linear-gradient(135deg,#EEF2FF,#F5F3FF);border-radius:var(--r-lg);
-  display:flex;gap:12px;align-items:flex-start}
-.home-note-icon{font-size:22px;flex-shrink:0}
-.home-note-txt{font-size:14px;color:var(--slate);line-height:1.5}
-.home-note-txt strong{color:var(--indigo-d)}
-
-/* API key warning */
-.api-warn{margin:12px 16px 0;padding:14px 18px;
-  background:var(--amber-l);border-radius:var(--r-lg);border-left:4px solid var(--amber);
-  display:flex;gap:10px;align-items:center;cursor:pointer}
-.api-warn-icon{font-size:20px;flex-shrink:0}
-.api-warn-txt{font-size:14px;color:#92400E;font-weight:600}
+/* Examples */
+.examples-sec{padding:20px 16px 0}
+.sec-title{font-family:var(--fh);font-weight:800;font-size:17px;color:var(--dark);margin-bottom:12px}
+.examples-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.eg-card{background:#fff;border-radius:16px;overflow:hidden;cursor:pointer;
+  box-shadow:var(--sh-sm);border:2px solid transparent;
+  transition:transform .2s var(--spring),box-shadow .2s,border-color .2s;
+  -webkit-tap-highlight-color:transparent}
+.eg-card:hover{transform:translateY(-3px) scale(1.03);box-shadow:var(--sh-md);border-color:var(--g4)}
+.eg-card:active{transform:scale(.95)}
+.eg-img{width:100%;aspect-ratio:1;display:flex;align-items:center;justify-content:center;
+  font-size:36px;background:var(--g5)}
+.eg-lbl{font-family:var(--fh);font-weight:800;font-size:12px;color:var(--dark);
+  padding:6px 8px;text-align:center}
 
 /* ═══════════════════════════════════════════
-   SCREEN 2 — CHAT
+   SCREEN 2 — LOADING
 ═══════════════════════════════════════════ */
-#s-chat{background:var(--bg-chat);padding-bottom:80px}
+#s-loading{
+  background:linear-gradient(160deg,#1B5E20 0%,#2E7D32 60%,#0D3B12 100%);
+  justify-content:center;align-items:center;padding:40px 24px;text-align:center}
 
-.chat-bar{background:rgba(255,255,255,.97);backdrop-filter:blur(16px);
-  border-bottom:1px solid var(--border);padding:10px 14px;
-  display:flex;align-items:center;gap:10px;
-  position:sticky;top:0;z-index:10;box-shadow:0 2px 20px rgba(0,0,0,.06)}
-.cb-back{width:44px;height:44px;border-radius:50%;background:var(--indigo-l);
-  border:none;cursor:pointer;color:var(--indigo);font-size:20px;
+.loading-anim{position:relative;width:160px;height:160px;margin:0 auto 30px}
+.l-circle{width:160px;height:160px;border-radius:50%;
+  border:3px solid rgba(255,255,255,.1);border-top-color:rgba(76,175,80,.8);
+  animation:lspin 1.2s linear infinite;position:absolute;inset:0}
+.l-circle:nth-child(2){width:120px;height:120px;inset:20px;border-top-color:rgba(255,143,0,.7);animation-duration:.9s;animation-direction:reverse}
+.l-circle:nth-child(3){width:80px;height:80px;inset:40px;border-top-color:rgba(255,255,255,.5);animation-duration:.6s}
+@keyframes lspin{to{transform:rotate(360deg)}}
+.l-icon{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:40px}
+.loading-title{font-family:var(--fh);font-weight:900;font-size:26px;color:#fff;margin-bottom:10px}
+.loading-sub{font-size:16px;color:rgba(255,255,255,.6);line-height:1.6;max-width:300px;margin:0 auto 24px}
+.loading-steps{display:flex;flex-direction:column;gap:10px;max-width:280px;margin:0 auto}
+.l-step{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:var(--r-md);
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);
+  font-size:14px;color:rgba(255,255,255,.7);font-family:var(--fh);font-weight:600}
+.l-step.done{color:rgba(165,214,167,.9);background:rgba(76,175,80,.1)}
+.l-step.active{color:#fff;background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.2)}
+.l-step-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.3);flex-shrink:0}
+.l-step.done .l-step-dot{background:var(--g3)}
+.l-step.active .l-step-dot{background:#fff;animation:pdot 1s ease-in-out infinite}
+
+/* ═══════════════════════════════════════════
+   SCREEN 3 — PROFILE
+═══════════════════════════════════════════ */
+#s-profile{padding-bottom:30px}
+
+.profile-hero{position:relative;overflow:hidden}
+.profile-img-wrap{width:100%;max-height:280px;overflow:hidden;position:relative}
+.profile-img-wrap img{width:100%;height:100%;object-fit:cover;display:block}
+.profile-img-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,rgba(0,0,0,.7))}
+.profile-img-badge{position:absolute;top:16px;left:16px;
+  background:rgba(0,0,0,.5);backdrop-filter:blur(8px);
+  border-radius:var(--r-p);padding:6px 14px;font-size:13px;font-weight:700;color:#fff;font-family:var(--fh)}
+.profile-back{position:absolute;top:16px;right:16px;width:42px;height:42px;border-radius:50%;
+  background:rgba(0,0,0,.4);backdrop-filter:blur(8px);border:none;
+  cursor:pointer;color:#fff;font-size:18px;display:flex;align-items:center;justify-content:center;
+  -webkit-tap-highlight-color:transparent;transition:background .2s}
+.profile-back:hover{background:rgba(0,0,0,.6)}
+.no-img-hero{background:linear-gradient(160deg,#1B5E20 0%,#2E7D32 60%,#1A3B1A 100%);
+  padding:50px 22px 30px;text-align:center;position:relative}
+.animal-big-emoji{font-size:80px;display:block;margin-bottom:10px;animation:float 4s ease-in-out infinite}
+
+.profile-card{background:#fff;border-radius:28px 28px 0 0;margin-top:-20px;position:relative;z-index:2;
+  padding:24px 18px 10px;box-shadow:0 -4px 30px rgba(0,0,0,.12)}
+.animal-name-row{display:flex;align-items:flex-start;gap:12px;margin-bottom:6px}
+.animal-emoji-sm{font-size:36px;flex-shrink:0;line-height:1}
+.animal-names{flex:1;min-width:0}
+.animal-common{font-family:var(--fh);font-weight:900;font-size:clamp(24px,5vw,32px);
+  color:var(--dark);line-height:1.1;margin-bottom:3px}
+.animal-sci{font-size:14px;color:var(--slate-m);font-style:italic;font-weight:500}
+
+.profile-tags{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 18px}
+
+.info-grid{display:flex;flex-direction:column;gap:12px;margin-bottom:20px}
+.info-card{background:var(--g5);border-radius:var(--r-lg);padding:16px 18px;
+  display:flex;gap:14px;align-items:flex-start}
+.info-card.diet{background:var(--amber-l)}
+.info-card.behavior{background:var(--sky-l)}
+.info-icon{font-size:26px;flex-shrink:0;line-height:1;margin-top:2px}
+.info-body{flex:1;min-width:0}
+.info-lbl{font-family:var(--fh);font-weight:800;font-size:11px;text-transform:uppercase;
+  letter-spacing:.8px;color:var(--slate-m);margin-bottom:4px}
+.info-txt{font-size:15px;line-height:1.6;color:var(--dark)}
+
+.fun-fact{background:linear-gradient(135deg,#FFF9C4,#FFF3E0);
+  border-radius:var(--r-lg);padding:18px 18px;border-left:5px solid #FFC107;margin-bottom:16px}
+.ff-badge{display:inline-flex;align-items:center;gap:5px;
+  background:#FFC107;border-radius:var(--r-p);padding:4px 12px;
+  font-size:11px;font-weight:800;color:#5D4037;font-family:var(--fh);
+  text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.ff-txt{font-size:16px;line-height:1.6;color:#3E2723;font-weight:600;font-family:var(--fh)}
+
+.safety-note{background:var(--rose-l);border-radius:var(--r-lg);
+  padding:16px 18px;border-left:5px solid var(--rose);margin-bottom:16px;display:none}
+.safety-note.show{display:block}
+.sn-badge{display:inline-flex;align-items:center;gap:5px;
+  background:var(--rose);border-radius:var(--r-p);padding:4px 12px;
+  font-size:11px;font-weight:800;color:#fff;font-family:var(--fh);
+  text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.sn-txt{font-size:15px;line-height:1.6;color:#7F1D1D;font-weight:600}
+
+.conservation-row{display:flex;align-items:center;gap:10px;margin-bottom:20px;
+  padding:12px 16px;background:#F8F9FA;border-radius:var(--r-md)}
+.cons-lbl{font-family:var(--fh);font-weight:700;font-size:13px;color:var(--slate-m)}
+
+.profile-actions{display:flex;flex-direction:column;gap:12px;padding:0 2px}
+.pa-row{display:flex;gap:12px}
+
+.voice-btn{width:100%;height:58px;border-radius:var(--r-lg);border:none;cursor:pointer;
+  background:linear-gradient(135deg,var(--sky),#039BE5);color:#fff;
+  font-family:var(--fh);font-weight:900;font-size:16px;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  box-shadow:0 6px 20px rgba(2,119,189,.3);
+  transition:transform .2s var(--spring),box-shadow .2s;-webkit-tap-highlight-color:transparent}
+.voice-btn:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(2,119,189,.4)}
+.voice-btn:active{transform:scale(.96)}
+.voice-btn.speaking{background:linear-gradient(135deg,#C62828,#E53935);
+  box-shadow:0 6px 20px rgba(198,40,40,.35);animation:vbpulse 1s ease-in-out infinite}
+@keyframes vbpulse{0%,100%{transform:scale(1)}50%{transform:scale(1.02)}}
+
+.chat-open-btn{flex:1;height:54px;border-radius:var(--r-lg);border:2.5px solid var(--g3);
+  background:#fff;cursor:pointer;font-family:var(--fh);font-weight:900;font-size:15px;
+  color:var(--g2);display:flex;align-items:center;justify-content:center;gap:8px;
+  transition:border-color .2s,background .2s;-webkit-tap-highlight-color:transparent}
+.chat-open-btn:hover{border-color:var(--g2);background:var(--g5)}
+.share-btn{height:54px;width:54px;border-radius:var(--r-lg);border:2.5px solid var(--border);
+  background:#fff;cursor:pointer;font-size:22px;
+  display:flex;align-items:center;justify-content:center;
+  transition:border-color .2s,background .2s;-webkit-tap-highlight-color:transparent;flex-shrink:0}
+.share-btn:hover{border-color:var(--amber-m);background:var(--amber-l)}
+
+.mode-strip{padding:10px 18px;display:flex;align-items:center;gap:8px;
+  border-top:1px solid var(--border);margin-top:20px}
+.ms-lbl{font-family:var(--fh);font-weight:700;font-size:12px;color:var(--slate-m)}
+
+/* ═══════════════════════════════════════════
+   SCREEN 4 — CHAT
+═══════════════════════════════════════════ */
+#s-chat{background:var(--bg-chat);padding-bottom:0}
+
+.chat-hdr{background:linear-gradient(135deg,var(--g1),var(--g2));
+  padding:50px 16px 14px;display:flex;align-items:center;gap:12px;
+  position:sticky;top:0;z-index:10}
+.ch-back{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.12);
+  border:none;cursor:pointer;color:#fff;font-size:20px;
   display:flex;align-items:center;justify-content:center;flex-shrink:0;
-  transition:background .2s,transform .2s;-webkit-tap-highlight-color:transparent}
-.cb-back:hover{background:#E0E4FE;transform:translateX(-2px)}
-.cb-back:active{transform:scale(.9)}
-.cb-mid{flex:1;display:flex;align-items:center;gap:10px}
-.cb-avatar{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;
-  justify-content:center;font-size:22px;flex-shrink:0;position:relative}
-.cb-avatar::after{content:'';position:absolute;bottom:1px;right:1px;
-  width:11px;height:11px;background:var(--green);border-radius:50%;border:2px solid #fff}
-.cb-info{display:flex;flex-direction:column;gap:1px}
-.cb-name{font-family:var(--fh);font-weight:800;font-size:17px;color:var(--dark)}
-.cb-status{font-size:12px;color:var(--green);font-weight:600;display:flex;align-items:center;gap:4px}
-.cb-sdot{width:6px;height:6px;border-radius:50%;background:var(--green);
-  animation:pdot 2s ease-in-out infinite}
-@keyframes pdot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.4)}}
-.cb-lang{padding:6px 12px;border-radius:var(--r-p);background:var(--indigo-l);border:none;
-  cursor:pointer;font-family:var(--fh);font-weight:700;font-size:12px;color:var(--indigo);
-  flex-shrink:0;transition:background .2s;-webkit-tap-highlight-color:transparent}
-.cb-lang:hover{background:#E0E4FE}
+  transition:background .2s;-webkit-tap-highlight-color:transparent}
+.ch-back:hover{background:rgba(255,255,255,.22)}
+.ch-avatar{width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.12);
+  display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
+.ch-info{flex:1;min-width:0}
+.ch-name{font-family:var(--fh);font-weight:800;font-size:17px;color:#fff;line-height:1.2}
+.ch-sub{font-size:12px;color:rgba(255,255,255,.6);margin-top:1px}
+.ch-mode-btn{height:28px;padding:0 12px;border-radius:var(--r-p);
+  background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);
+  font-family:var(--fh);font-weight:700;font-size:11px;color:#fff;
+  cursor:pointer;text-transform:uppercase;letter-spacing:.5px;flex-shrink:0;
+  -webkit-tap-highlight-color:transparent;transition:background .2s}
+.ch-mode-btn:hover{background:rgba(255,255,255,.25)}
 
-/* Messages area */
-.chat-msgs{flex:1;overflow-y:auto;padding:18px 12px;
-  display:flex;flex-direction:column;gap:12px;scroll-behavior:smooth}
+.chat-msgs{flex:1;overflow-y:auto;padding:16px 12px;
+  display:flex;flex-direction:column;gap:12px;scroll-behavior:smooth;min-height:0}
 .chat-msgs::-webkit-scrollbar{width:0}
 
-.date-chip{align-self:center;padding:5px 16px;border-radius:var(--r-p);
-  background:rgba(0,0,0,.06);font-size:12px;color:var(--slate-m);font-weight:500}
-
-.mr{display:flex;gap:8px;max-width:86%;animation:mslide 280ms var(--spring) both}
+.mr{display:flex;gap:8px;max-width:88%;animation:mslide 280ms var(--spring) both}
 .mr.u{align-self:flex-end;flex-direction:row-reverse}
 .mr.a{align-self:flex-start}
 @keyframes mslide{from{opacity:0;transform:translateY(10px) scale(.96)}to{opacity:1;transform:none}}
-
 .mavatar{width:34px;height:34px;border-radius:50%;font-size:18px;
   display:flex;align-items:center;justify-content:center;flex-shrink:0;align-self:flex-end}
-.mr.a .mavatar{background:linear-gradient(135deg,var(--indigo-l),#F3E8FF)}
-.mr.u .mavatar{background:linear-gradient(135deg,var(--indigo),#818CF8);
+.mr.a .mavatar{background:var(--g5)}
+.mr.u .mavatar{background:linear-gradient(135deg,var(--g2),var(--g3));
   font-size:12px;font-family:var(--fh);font-weight:800;color:#fff}
-
 .mbody{display:flex;flex-direction:column;gap:3px}
-.bubble{padding:12px 16px;font-size:17px;line-height:1.65;word-break:break-word;max-width:500px}
-.mr.u .bubble{background:linear-gradient(135deg,var(--indigo),#818CF8);color:#fff;
-  border-radius:20px 20px 4px 20px;box-shadow:0 4px 16px rgba(99,102,241,.28)}
+.bubble{padding:12px 16px;font-size:16px;line-height:1.65;word-break:break-word;max-width:500px}
+.mr.u .bubble{background:linear-gradient(135deg,var(--g2),var(--g3));color:#fff;
+  border-radius:20px 20px 4px 20px;box-shadow:0 4px 14px rgba(46,125,50,.28)}
 .mr.a .bubble{background:#fff;color:var(--slate);
-  border-radius:20px 20px 20px 4px;box-shadow:var(--sh-sm);
-  padding-bottom:28px;position:relative}
-.rbtn{position:absolute;bottom:7px;right:10px;width:22px;height:22px;border-radius:50%;
-  background:var(--indigo-l);border:none;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--indigo);
-  transition:background .2s,transform .2s}
-.rbtn:hover{background:#E0E4FE;transform:scale(1.15)}
+  border-radius:20px 20px 20px 4px;box-shadow:var(--sh-sm)}
 .mtime{font-size:11px;color:var(--slate-lt);padding:0 4px}
 .mr.u .mtime{text-align:right}
 
-/* Typing */
 .typing{align-self:flex-start;display:flex;gap:6px;align-items:center;
   background:#fff;border-radius:20px 20px 20px 4px;padding:14px 18px;
   box-shadow:var(--sh-sm);animation:mslide 200ms var(--spring) both}
-.tdot{width:8px;height:8px;border-radius:50%;background:var(--slate-lt);
+.tdot{width:8px;height:8px;border-radius:50%;background:var(--g4);
   animation:tdotb 1.2s ease-in-out infinite}
 .tdot:nth-child(2){animation-delay:.2s}
 .tdot:nth-child(3){animation-delay:.4s}
 @keyframes tdotb{0%,60%,100%{transform:translateY(0);opacity:.5}30%{transform:translateY(-7px);opacity:1}}
 
-/* Input area */
-.chat-inp{background:rgba(255,255,255,.98);border-top:1px solid var(--border);
-  padding:10px 14px 14px;flex-shrink:0}
-.voice-sec{display:flex;flex-direction:column;align-items:center;gap:6px;margin-bottom:10px}
-.wviz{display:flex;gap:3px;align-items:center;height:26px;opacity:0;transition:opacity .3s}
-.wviz.on{opacity:1}
-.wb{width:4px;border-radius:4px;background:var(--rose)}
-.wb:nth-child(1){animation:wave .8s ease-in-out infinite;height:8px}
-.wb:nth-child(2){animation:wave .8s ease-in-out infinite .1s;height:18px}
-.wb:nth-child(3){animation:wave .8s ease-in-out infinite .2s;height:24px}
-.wb:nth-child(4){animation:wave .8s ease-in-out infinite .3s;height:18px}
-.wb:nth-child(5){animation:wave .8s ease-in-out infinite .4s;height:10px}
-@keyframes wave{0%,100%{transform:scaleY(.5);opacity:.5}50%{transform:scaleY(1.4);opacity:1}}
+.suggestions{display:flex;gap:8px;padding:8px 12px;overflow-x:auto;scrollbar-width:none}
+.suggestions::-webkit-scrollbar{display:none}
+.sug{padding:8px 16px;border-radius:var(--r-p);background:#fff;border:2px solid var(--border);
+  font-size:14px;color:var(--slate);cursor:pointer;font-family:var(--fb);white-space:nowrap;flex-shrink:0;
+  transition:border-color .2s,color .2s,background .2s;-webkit-tap-highlight-color:transparent}
+.sug:hover{border-color:var(--g3);color:var(--g2);background:var(--g5)}
 
-.mic-btn{width:72px;height:72px;border-radius:50%;
-  background:linear-gradient(135deg,var(--indigo),#818CF8);border:none;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;font-size:28px;
-  box-shadow:0 8px 26px rgba(99,102,241,.4);position:relative;
-  transition:background .3s,transform .2s var(--spring),box-shadow .3s;
-  -webkit-tap-highlight-color:transparent}
-.mic-btn:hover{transform:scale(1.07);box-shadow:0 12px 34px rgba(99,102,241,.5)}
-.mic-btn:active{transform:scale(.92)}
-.mic-btn.lst{background:linear-gradient(135deg,var(--rose),#FF6B8A);
-  box-shadow:0 8px 26px rgba(244,63,94,.5);animation:mthrob 1s ease-in-out infinite}
-@keyframes mthrob{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
-.mic-btn.prc{background:linear-gradient(135deg,var(--amber),#FCD34D);
-  box-shadow:0 8px 26px rgba(245,158,11,.4);animation:none}
-.mic-ring{position:absolute;inset:0;border-radius:50%;background:rgba(255,255,255,.25);
-  animation:ring 1s ease-out infinite;pointer-events:none;display:none}
-.mic-btn.lst .mic-ring{display:block}
-@keyframes ring{from{transform:scale(1);opacity:.6}to{transform:scale(2.2);opacity:0}}
-.mic-icon{color:#fff;pointer-events:none}
-.mic-spin{width:22px;height:22px;border:3px solid rgba(255,255,255,.3);
-  border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:none}
-.mic-btn.prc .mic-icon{display:none}
-.mic-btn.prc .mic-spin{display:block}
-@keyframes spin{to{transform:rotate(360deg)}}
-.mic-lbl{font-size:13px;color:var(--slate-m);font-weight:700;font-family:var(--fh);transition:color .3s}
-.mic-btn.lst~.mic-lbl{color:var(--rose)}
-
-.tinp-row{display:flex;gap:10px;align-items:center}
-.tinp{flex:1;height:50px;background:#F4F6FB;border:2px solid var(--border);
-  border-radius:var(--r-p);padding:0 18px;font-size:17px;font-family:var(--fb);
-  color:var(--slate);outline:none;transition:border-color .2s,background .2s,box-shadow .2s}
-.tinp:focus{border-color:var(--indigo);background:#fff;box-shadow:0 0 0 4px rgba(99,102,241,.1)}
+.chat-inp{background:#fff;border-top:1px solid var(--border);padding:10px 12px 14px;
+  flex-shrink:0;position:sticky;bottom:0}
+.tinp-row{display:flex;gap:10px;align-items:flex-end}
+.tinp{flex:1;min-height:50px;max-height:120px;padding:12px 18px;
+  background:#F4F6FB;border:2px solid var(--border);
+  border-radius:24px;font-size:16px;font-family:var(--fb);
+  color:var(--slate);outline:none;resize:none;overflow-y:auto;
+  transition:border-color .2s,background .2s,box-shadow .2s;line-height:1.5}
+.tinp:focus{border-color:var(--g3);background:#fff;box-shadow:0 0 0 4px rgba(76,175,80,.1)}
 .tinp::placeholder{color:#AABDD6}
 .sbtn{width:50px;height:50px;border-radius:50%;
-  background:linear-gradient(135deg,var(--indigo),#818CF8);border:none;cursor:pointer;
+  background:linear-gradient(135deg,var(--g2),var(--g3));border:none;cursor:pointer;
   color:#fff;font-size:20px;display:flex;align-items:center;justify-content:center;
-  box-shadow:var(--sh-c);opacity:0;transform:scale(.7);pointer-events:none;
-  transition:opacity .25s var(--ease),transform .25s var(--spring),box-shadow .2s}
+  box-shadow:0 4px 14px rgba(46,125,50,.35);flex-shrink:0;
+  opacity:.4;transform:scale(.8);pointer-events:none;
+  transition:opacity .25s,transform .25s var(--spring);-webkit-tap-highlight-color:transparent}
 .sbtn.on{opacity:1;transform:scale(1);pointer-events:auto}
-.sbtn:hover{transform:scale(1.1);box-shadow:0 8px 24px rgba(99,102,241,.5)}
+.sbtn:hover{transform:scale(1.1)!important}
 
 /* ═══════════════════════════════════════════
-   SCREEN 3 — SETTINGS
-═══════════════════════════════════════════ */
-#s-settings{padding-bottom:80px}
-.set-hero{background:linear-gradient(150deg,#1C1839 0%,#2D1F69 100%);padding:50px 22px 28px}
-.set-hero h2{font-family:var(--fh);font-weight:800;font-size:26px;color:#fff;margin-bottom:4px}
-.set-hero p{font-size:15px;color:rgba(255,255,255,.55)}
-
-.set-body{padding:20px 14px;display:flex;flex-direction:column;gap:16px}
-.sgrp{background:#fff;border-radius:var(--r-xl);box-shadow:var(--sh-sm);overflow:hidden}
-.sgrp-hd{padding:14px 18px 10px;border-bottom:1px solid var(--border)}
-.sgrp-hd h3{font-family:var(--fh);font-weight:800;font-size:16px;color:var(--dark)}
-.sgrp-hd p{font-size:13px;color:var(--slate-m);margin-top:2px}
-
-.sitem{display:flex;align-items:center;justify-content:space-between;
-  padding:14px 18px;border-bottom:1px solid var(--border);gap:12px}
-.sitem:last-child{border-bottom:none}
-.sitem-l{display:flex;align-items:center;gap:12px;flex:1;min-width:0}
-.sitem-ic{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;
-  justify-content:center;font-size:20px;flex-shrink:0}
-.sitem-txt{flex:1;min-width:0}
-.sitem-lbl{font-family:var(--fh);font-weight:700;font-size:15px;color:var(--dark)}
-.sitem-sub{font-size:12px;color:var(--slate-m);margin-top:2px}
-.sitem-r{flex-shrink:0;display:flex;align-items:center;gap:8px}
-
-.kinp-row{display:flex;gap:8px;width:100%}
-.kinp{flex:1;height:42px;padding:0 12px;background:#F8FAFF;border:1.5px solid var(--border);
-  border-radius:var(--r-md);font-size:13px;color:var(--slate);outline:none;
-  font-family:'Courier New',monospace;transition:border-color .2s}
-.kinp:focus{border-color:var(--indigo)}
-.ksave{height:42px;padding:0 16px;background:var(--indigo);border:none;
-  border-radius:var(--r-md);color:#fff;font-size:13px;font-weight:700;cursor:pointer;
-  font-family:var(--fh);white-space:nowrap;transition:background .2s,transform .2s}
-.ksave:hover{background:var(--indigo-d)}
-.ksave:active{transform:scale(.95)}
-
-/* Voice clone list */
-.vc-list{padding:14px;display:flex;flex-direction:column;gap:10px}
-.vcc{display:flex;align-items:center;gap:12px;padding:12px 14px;
-  background:#F8FAFF;border-radius:var(--r-lg);border:1.5px solid var(--border)}
-.vcc-icon{font-size:26px;flex-shrink:0}
-.vcc-info{flex:1;min-width:0}
-.vcc-name{font-family:var(--fh);font-weight:700;font-size:14px;color:var(--dark)}
-.vcc-st{font-size:12px;color:var(--slate-m);margin-top:1px}
-.vcc-st.done{color:var(--green);font-weight:700}
-.vcc-btn{height:36px;padding:0 14px;border-radius:var(--r-p);
-  border:2px solid var(--indigo);background:transparent;color:var(--indigo);
-  font-family:var(--fh);font-weight:700;font-size:12px;cursor:pointer;
-  white-space:nowrap;transition:background .2s,color .2s,border-color .2s;flex-shrink:0}
-.vcc-btn:hover{background:var(--indigo);color:#fff}
-.vcc-btn.done{border-color:var(--green);color:var(--green)}
-.vcc-btn.done:hover{background:var(--green);color:#fff}
-
-/* ═══════════════════════════════════════════
-   VOICE CLONE MODAL (bottom sheet)
+   SETTINGS MODAL
 ═══════════════════════════════════════════ */
 .modal-bd{display:none;position:fixed;inset:0;z-index:60;
   background:rgba(0,0,0,.55);backdrop-filter:blur(6px);
@@ -655,2287 +441,1010 @@ h1,h2,h3,h4{font-family:var(--fh);line-height:1.25}
 .modal-bd.on{display:flex}
 @keyframes bdin{from{opacity:0}to{opacity:1}}
 .modal-sheet{width:100%;max-width:520px;background:#fff;border-radius:28px 28px 0 0;
-  padding:0 0 34px;animation:shrise .35s var(--spring) both;
-  max-height:92vh;overflow-y:auto}
+  padding:0 0 32px;animation:shrise .35s var(--spring) both;max-height:92vh;overflow-y:auto}
 @keyframes shrise{from{transform:translateY(100%)}to{transform:translateY(0)}}
 .mh-bar{width:38px;height:4px;border-radius:4px;background:var(--border);margin:12px auto 0}
 .mhd{padding:18px 22px 14px;border-bottom:1px solid var(--border)}
-.mhd h3{font-family:var(--fh);font-weight:800;font-size:21px;color:var(--dark);margin-bottom:3px}
+.mhd h3{font-family:var(--fh);font-weight:800;font-size:20px;color:var(--dark);margin-bottom:3px}
 .mhd p{font-size:14px;color:var(--slate-m);line-height:1.5}
-.mbd{padding:20px 22px;display:flex;flex-direction:column;gap:18px}
-
-/* Gender toggle (voice type) */
-.gender-panel{background:#F8FAFF;border:1.5px solid var(--border);border-radius:var(--r-lg);
-  padding:14px 16px;display:flex;flex-direction:column;gap:10px}
-.gender-panel-lbl{font-size:13px;font-weight:700;color:var(--slate);font-family:var(--fh)}
-.gender-toggle{display:flex;gap:8px}
-.gtbtn{flex:1;height:44px;border-radius:var(--r-md);border:2px solid var(--border);
-  background:#fff;cursor:pointer;font-family:var(--fh);font-weight:700;font-size:15px;
-  color:var(--slate-m);transition:border-color .2s,background .2s,color .2s;
-  -webkit-tap-highlight-color:transparent}
-.gtbtn.act{border-color:var(--indigo);background:var(--indigo-l);color:var(--indigo)}
-.preview-btn{width:100%;height:40px;border-radius:var(--r-md);border:1.5px solid var(--indigo);
-  background:transparent;color:var(--indigo);font-family:var(--fh);font-weight:700;font-size:13px;
-  cursor:pointer;transition:background .2s,color .2s;-webkit-tap-highlight-color:transparent}
-.preview-btn:hover{background:var(--indigo-l)}
-
-/* Tabs */
-.tabs{display:flex;background:#F4F6FB;border-radius:var(--r-md);padding:4px;gap:4px}
-.tab{flex:1;height:40px;border-radius:var(--r-sm);border:none;cursor:pointer;
-  font-family:var(--fh);font-weight:700;font-size:14px;color:var(--slate-m);
-  background:transparent;transition:background .2s,color .2s,box-shadow .2s}
-.tab.act{background:#fff;color:var(--dark);box-shadow:0 2px 8px rgba(0,0,0,.08)}
-
-.tab-content{display:none} .tab-content.on{display:flex;flex-direction:column;gap:14px}
-
-/* Record tab */
-.rec-ui{display:flex;flex-direction:column;align-items:center;gap:14px}
-.rec-timer{font-family:var(--fh);font-size:40px;font-weight:800;color:var(--dark)}
-.rec-timer.go{color:var(--rose)}
-.rec-guide{font-size:14px;color:var(--slate-m);text-align:center;line-height:1.5;max-width:270px}
-.rec-btn{width:78px;height:78px;border-radius:50%;border:none;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;font-size:32px;
-  transition:transform .2s var(--spring),box-shadow .2s}
-.rec-btn.idle{background:linear-gradient(135deg,var(--rose),#FF6B8A);
-  box-shadow:0 8px 22px rgba(244,63,94,.4)}
-.rec-btn.idle:hover{transform:scale(1.08)}
-.rec-btn.stop{background:linear-gradient(135deg,var(--dark),#2D1F69);
-  box-shadow:0 8px 22px rgba(28,24,57,.3)}
-.rec-quality{display:flex;align-items:center;gap:8px;padding:10px 14px;
-  background:var(--amber-l);border-radius:var(--r-md);width:100%}
-.rec-quality-icon{font-size:16px;flex-shrink:0}
-.rec-quality-txt{font-size:13px;color:#92400E}
-
-/* Upload tab */
-.drop-zone{border:2.5px dashed var(--border);border-radius:var(--r-lg);
-  padding:36px 20px;text-align:center;cursor:pointer;transition:border-color .2s,background .2s}
-.drop-zone:hover{border-color:var(--indigo);background:var(--indigo-l)}
-.drop-zone-icon{font-size:38px;margin-bottom:10px}
-.drop-zone h4{font-family:var(--fh);font-size:15px;font-weight:800;color:var(--dark);margin-bottom:4px}
-.drop-zone p{font-size:13px;color:var(--slate-m)}
-input[type=file]{display:none}
-
-.audio-prev{background:#F4F6FB;border-radius:var(--r-md);padding:12px 14px;
-  display:flex;align-items:center;gap:10px}
-.audio-prev-name{font-size:14px;font-weight:700;color:var(--dark);
-  flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.audio-prev-sz{font-size:12px;color:var(--slate-m);flex-shrink:0}
-.audio-remove{font-size:18px;cursor:pointer;color:var(--slate-m);flex-shrink:0;
-  transition:color .2s}
-.audio-remove:hover{color:var(--rose)}
-
-/* Progress */
-.clone-prog{display:none;flex-direction:column;align-items:center;gap:10px}
-.clone-prog.on{display:flex}
-.prog-bar-wrap{width:100%;height:8px;background:#F4F6FB;border-radius:var(--r-p);overflow:hidden}
-.prog-bar{height:100%;border-radius:var(--r-p);
-  background:linear-gradient(90deg,var(--indigo),#818CF8);width:0%;transition:width .3s var(--ease)}
-.prog-txt{font-size:14px;color:var(--slate-m);font-weight:500;text-align:center}
-
-.modal-foot{display:flex;gap:10px;padding:0 22px}
-.modal-foot .btn{flex:1;font-size:15px}
-
-/* ═══════════════════════════════════════════
-   EMERGENCY OVERLAY
-═══════════════════════════════════════════ */
-.sos-bd{display:none;position:fixed;inset:0;z-index:70;
-  background:rgba(0,0,0,.6);backdrop-filter:blur(4px);
-  align-items:center;justify-content:center;
-  padding:24px;overflow-y:auto;animation:bdin .2s both}
-.sos-bd.on{display:flex}
-.sos-card{background:#fff;border-radius:var(--r-xl);padding:30px 26px;
-  width:100%;max-width:420px;box-shadow:var(--sh-lg);
-  animation:sosrise .3s var(--spring) both;margin:auto}
-@keyframes sosrise{from{opacity:0;transform:scale(.9) translateY(20px)}to{opacity:1;transform:none}}
-.sos-hd{text-align:center;margin-bottom:22px}
-.sos-bi{font-size:58px;margin-bottom:8px}
-.sos-hd h2{font-family:var(--fh);font-size:26px;font-weight:800;color:var(--rose);margin-bottom:6px}
-.sos-hd p{font-size:16px;color:var(--slate-m);line-height:1.5}
-.sos-lines{display:flex;flex-direction:column;margin-bottom:22px}
-.sos-ln{padding:13px 0;border-bottom:1px solid var(--border)}
-.sos-ln:last-child{border-bottom:none}
-.sos-ln-c{font-family:var(--fh);font-weight:800;font-size:15px;color:var(--dark)}
-.sos-ln-o{font-size:13px;color:var(--slate-m);margin-top:1px}
-.sos-ln-n{font-size:24px;font-weight:800;color:var(--indigo);
-  text-decoration:none;display:block;margin-top:3px;transition:color .2s}
-.sos-ln-n:hover{color:var(--indigo-d);text-decoration:underline}
-.sos-acts{display:flex;gap:10px}
-.sos-acts .btn{flex:1;font-size:16px}
+.mbd{padding:20px 22px;display:flex;flex-direction:column;gap:20px}
+.mfl{display:flex;flex-direction:column;gap:6px}
+.mfl label{font-size:12px;font-weight:800;color:var(--slate-m);font-family:var(--fh);
+  text-transform:uppercase;letter-spacing:.5px}
+.minp{width:100%;height:46px;padding:0 14px;background:#F8FAFF;
+  border:1.5px solid var(--border);border-radius:var(--r-md);
+  font-size:15px;color:var(--slate);outline:none;font-family:var(--fb);transition:border-color .2s}
+.minp:focus{border-color:var(--g3)}
+.minp::placeholder{color:#AABDD6}
+.mhint{font-size:12px;color:var(--slate-m);line-height:1.5;margin-top:4px}
+.mhint a{color:var(--g2);text-decoration:none}
+.modal-seg{display:flex;background:#F4F6FB;border-radius:12px;padding:4px;gap:4px;flex-wrap:wrap}
+.msg{height:40px;padding:0 12px;border-radius:9px;border:none;cursor:pointer;
+  font-family:var(--fh);font-weight:800;font-size:13px;color:var(--slate-m);
+  background:transparent;transition:background .2s,color .2s,box-shadow .2s;
+  -webkit-tap-highlight-color:transparent;white-space:nowrap}
+.msg.act{background:#fff;color:var(--dark);box-shadow:var(--sh-sm)}
+.modal-foot{padding:0 22px;margin-top:4px}
   </style>
 </head>
 <body>
 
 <div class="grad-bg" aria-hidden="true"></div>
 
-<!-- ═══════════════════════════════════════════
-     SCREEN 0 — SETUP
-═══════════════════════════════════════════ -->
+<!-- SETUP SCREEN -->
 <section id="s-setup" class="screen active" aria-label="Setup">
   <div class="setup-card">
     <div class="s-logo">
-      <div class="s-logo-icon">💗</div>
-      <h1>Saathi Voice</h1>
-      <p>Your compassionate AI companion — always here to listen</p>
+      <div class="s-logo-icon">🔭</div>
+      <h1>WildLens</h1>
+      <p>Point. Discover. Learn. Powered by Claude AI.</p>
     </div>
     <div class="s-pills">
-      <span class="s-pill">🧠 Real AI</span>
-      <span class="s-pill">🎤 Voice Clone</span>
-      <span class="s-pill">🔒 Private</span>
-      <span class="s-pill">🌐 Hinglish</span>
+      <span class="s-pill">📸 Photo ID</span>
+      <span class="s-pill">🗣️ Voice</span>
+      <span class="s-pill">💬 Chat</span>
+      <span class="s-pill">🌏 6 Languages</span>
     </div>
     <div class="s-form">
-      <div class="s-fl">
-        <label for="inp-name">Your name</label>
-        <input id="inp-name" class="s-inp" type="text"
-          placeholder="e.g. Ramesh, Sunita…" maxlength="40"
-          autocomplete="off"/>
+      <div class="seg-row">
+        <span class="seg-lbl">Who's exploring?</span>
+        <div class="seg" id="su-mode">
+          <button class="sg" data-v="kid" onclick="pickSeg('su-mode','kid',this)">🌟 Kid (5–10)</button>
+          <button class="sg act" data-v="student" onclick="pickSeg('su-mode','student',this)">📚 Student</button>
+          <button class="sg" data-v="adult" onclick="pickSeg('su-mode','adult',this)">🔬 Adult</button>
+        </div>
       </div>
-      <div class="s-fl">
-        <label for="inp-akey">Anthropic API Key <span style="color:rgba(255,255,255,.4)">(for real AI)</span></label>
-        <input id="inp-akey" class="s-inp" type="password"
-          placeholder="sk-ant-api03-…" autocomplete="off"/>
-        <p class="s-hint">Get your key at <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a>. Without it, the app uses scripted responses.</p>
+      <div class="seg-row">
+        <span class="seg-lbl">Language</span>
+        <div class="seg" id="su-lang" style="flex-wrap:wrap;height:auto">
+          <button class="sg act" data-v="en" onclick="pickSeg('su-lang','en',this)" style="flex:none;padding:0 12px;height:36px">🇬🇧 EN</button>
+          <button class="sg" data-v="hi" onclick="pickSeg('su-lang','hi',this)" style="flex:none;padding:0 12px;height:36px">🇮🇳 HI</button>
+          <button class="sg" data-v="es" onclick="pickSeg('su-lang','es',this)" style="flex:none;padding:0 12px;height:36px">🇪🇸 ES</button>
+          <button class="sg" data-v="fr" onclick="pickSeg('su-lang','fr',this)" style="flex:none;padding:0 12px;height:36px">🇫🇷 FR</button>
+          <button class="sg" data-v="ar" onclick="pickSeg('su-lang','ar',this)" style="flex:none;padding:0 12px;height:36px">🇸🇦 AR</button>
+          <button class="sg" data-v="zh" onclick="pickSeg('su-lang','zh',this)" style="flex:none;padding:0 12px;height:36px">🇨🇳 ZH</button>
+        </div>
       </div>
-      <div class="s-fl">
-        <label for="inp-ekey">ElevenLabs API Key <span style="color:rgba(255,255,255,.4)">(for voice cloning)</span></label>
-        <input id="inp-ekey" class="s-inp" type="password"
-          placeholder="xi-…" autocomplete="off"/>
-        <p class="s-hint">Get your free key at <a href="https://elevenlabs.io" target="_blank">elevenlabs.io</a>. Optional — enables custom cloned voices.</p>
+      <div class="seg-row">
+        <span class="seg-lbl">Voice Style</span>
+        <div class="seg" id="su-voice">
+          <button class="sg" data-v="teacher" onclick="pickSeg('su-voice','teacher',this)">👩‍🏫 Teacher</button>
+          <button class="sg act" data-v="friendly" onclick="pickSeg('su-voice','friendly',this)">😊 Friendly</button>
+          <button class="sg" data-v="cartoon" onclick="pickSeg('su-voice','cartoon',this)">🎭 Cartoon</button>
+          <button class="sg" data-v="naturalist" onclick="pickSeg('su-voice','naturalist',this)">🦁 Naturalist</button>
+        </div>
       </div>
     </div>
     <div class="s-actions">
-      <button class="s-btn" onclick="completeSetup()">Start Talking 💬</button>
-      <span class="s-skip" onclick="skipSetup()">Skip for now — use basic mode</span>
+      <button class="s-btn" onclick="completeSetup()">Start Exploring 🌿</button>
+      <span class="s-skip" onclick="skipSetup()">Skip — use demo examples</span>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════
-     SCREEN 1 — LANDING / HOME
-═══════════════════════════════════════════ -->
-<section id="s-home" class="screen" aria-label="Home">
-
-  <div class="hero">
-    <div class="hero-top">
-      <div class="hero-brand">
-        <div class="hero-brand-icon">💗</div>
-        <span class="hero-brand-name">Saathi Voice</span>
+<!-- MAIN / UPLOAD SCREEN -->
+<section id="s-main" class="screen" aria-label="Upload Animal Photo">
+  <div class="main-hero">
+    <div class="main-top">
+      <div class="brand">
+        <div class="brand-icon">🔭</div>
+        <span class="brand-name">WildLens</span>
       </div>
-      <button class="hero-cfg-btn" onclick="goSettings()" aria-label="Settings">⚙️</button>
+      <button class="icon-btn" onclick="openSettings()" aria-label="Settings">⚙️</button>
     </div>
-    <div class="hero-body">
-      <div class="hero-time-tag" id="time-tag">🌅 Good morning</div>
-      <h2 class="hero-h1" id="hero-h1">Welcome back!</h2>
-      <p class="hero-sub" id="hero-sub">Who would you like to talk to today?</p>
-      <div class="hero-name-row" id="name-row" style="display:none">
-        <input class="hero-name-inp" id="hero-name-inp" type="text" placeholder="Enter your name…" maxlength="40"/>
-        <button class="hero-name-save" onclick="saveName()">Save</button>
-      </div>
-    </div>
+    <h1 class="hero-title">What animal is this?</h1>
+    <p class="hero-sub">Upload a photo and Claude AI will identify it instantly.</p>
   </div>
 
-  <div id="api-warn-bar" class="api-warn" style="display:none" onclick="goSettings()">
-    <span class="api-warn-icon">⚠️</span>
-    <span class="api-warn-txt">No API key — using scripted replies. Tap to add your key in Settings.</span>
+  <div class="ctrl-bar" id="ctrl-bar">
+    <button class="ctrl-chip act" data-lang="en" onclick="setLang('en',this)">🇬🇧 English</button>
+    <button class="ctrl-chip" data-lang="hi" onclick="setLang('hi',this)">🇮🇳 Hindi</button>
+    <button class="ctrl-chip" data-lang="es" onclick="setLang('es',this)">🇪🇸 Spanish</button>
+    <button class="ctrl-chip" data-lang="fr" onclick="setLang('fr',this)">🇫🇷 French</button>
+    <button class="ctrl-chip" data-lang="ar" onclick="setLang('ar',this)">🇸🇦 Arabic</button>
+    <button class="ctrl-chip" data-lang="zh" onclick="setLang('zh',this)">🇨🇳 Chinese</button>
+    <div class="ctrl-sep"></div>
+    <button class="ctrl-chip" data-mode="kid" onclick="setMode('kid',this)">🌟 Kid</button>
+    <button class="ctrl-chip act" data-mode="student" onclick="setMode('student',this)">📚 Student</button>
+    <button class="ctrl-chip" data-mode="adult" onclick="setMode('adult',this)">🔬 Adult</button>
+    <div class="ctrl-sep"></div>
+    <button class="ctrl-chip" data-voice="teacher" onclick="setVoice('teacher',this)">👩‍🏫 Teacher</button>
+    <button class="ctrl-chip act" data-voice="friendly" onclick="setVoice('friendly',this)">😊 Friendly</button>
+    <button class="ctrl-chip" data-voice="cartoon" onclick="setVoice('cartoon',this)">🎭 Cartoon</button>
+    <button class="ctrl-chip" data-voice="naturalist" onclick="setVoice('naturalist',this)">🦁 Naturalist</button>
   </div>
 
-  <div class="lang-bar" id="lang-bar">
-    <button class="lchip act" id="lc-en"    onclick="setLang('en',this)">🇬🇧 EN</button>
-    <button class="lchip"     id="lc-hi"    onclick="setLang('hi',this)">🇮🇳 HI</button>
-    <button class="lchip"     id="lc-hi-en" onclick="setLang('hi-en',this)">🇮🇳 Hinglish</button>
-    <button class="lchip"     id="lc-de"    onclick="setLang('de',this)">🇩🇪 DE</button>
-    <button class="lchip"     id="lc-es"    onclick="setLang('es',this)">🇪🇸 ES</button>
-    <button class="lchip"     id="lc-fr"    onclick="setLang('fr',this)">🇫🇷 FR</button>
-    <button class="lchip"     id="lc-ur"    onclick="setLang('ur',this)">🇵🇰 UR</button>
-    <button class="lchip"     id="lc-zh"    onclick="setLang('zh',this)">🇨🇳 ZH</button>
-    <button class="lchip"     id="lc-ar"    onclick="setLang('ar',this)">🇸🇦 AR</button>
-    <button class="lchip"     id="lc-bn"    onclick="setLang('bn',this)">🇧🇩 BN</button>
-    <button class="lchip"     id="lc-pt"    onclick="setLang('pt',this)">🇧🇷 PT</button>
-    <button class="lchip"     id="lc-id"    onclick="setLang('id',this)">🇮🇩 ID</button>
-  </div>
-
-  <div class="role-sec">
-    <div class="role-sec-hd">
-      <span class="role-sec-title">Choose a companion</span>
+  <div class="upload-wrap">
+    <div class="drop-zone" id="drop-zone"
+      onclick="document.getElementById('file-inp').click()"
+      ondragover="handleDragOver(event)"
+      ondragleave="handleDragLeave(event)"
+      ondrop="handleDrop(event)">
+      <span class="dz-icon">🦁</span>
+      <h2 class="dz-title">Drop an animal photo</h2>
+      <p class="dz-sub">Upload any photo — wild, domestic, or exotic.<br/>Claude will identify it and tell you everything!</p>
+      <button class="dz-btn" onclick="event.stopPropagation();document.getElementById('file-inp').click()">
+        📁 Choose Photo
+      </button>
+      <p class="dz-formats">JPG · PNG · WEBP · Max 20 MB</p>
     </div>
-    <div class="roles-grid">
-
-      <button class="rc rc-daughter" onclick="openChat('daughter','💝','Daughter')" aria-label="Talk to Daughter">
-        <div class="rc-icon-wrap" style="background:#FFE5E5">💝</div>
-        <span class="rc-name">Daughter</span>
-        <span class="rc-desc">Caring &amp; loving</span>
-        <div class="vc-dot" id="vcd-daughter" style="display:none">✓</div>
-      </button>
-
-      <button class="rc rc-son" onclick="openChat('son','💙','Son')" aria-label="Talk to Son">
-        <div class="rc-icon-wrap" style="background:#E5F2FF">💙</div>
-        <span class="rc-name">Son</span>
-        <span class="rc-desc">Supportive &amp; strong</span>
-        <div class="vc-dot" id="vcd-son" style="display:none">✓</div>
-      </button>
-
-      <button class="rc rc-spouse" onclick="openChat('spouse','💕','Partner')" aria-label="Talk to Partner">
-        <div class="rc-icon-wrap" style="background:#FFE0E6">💕</div>
-        <span class="rc-name">Partner</span>
-        <span class="rc-desc">Loving &amp; understanding</span>
-        <div class="vc-dot" id="vcd-spouse" style="display:none">✓</div>
-      </button>
-
-      <button class="rc rc-parents" onclick="openChat('parents','👨‍👩‍👧','Parents')" aria-label="Talk to Parents">
-        <div class="rc-icon-wrap" style="background:#E8F5E9">👨‍👩‍👧</div>
-        <span class="rc-name">Parents</span>
-        <span class="rc-desc">Wise &amp; proud</span>
-        <div class="vc-dot" id="vcd-parents" style="display:none">✓</div>
-      </button>
-
-      <button class="rc rc-gp" onclick="openChat('grandparents','👴👵','Grandparents')" aria-label="Talk to Grandparents">
-        <div class="rc-icon-wrap" style="background:#F3E5F5">👴👵</div>
-        <span class="rc-name">Grandparents</span>
-        <span class="rc-desc">Gentle &amp; timeless</span>
-        <div class="vc-dot" id="vcd-grandparents" style="display:none">✓</div>
-      </button>
-
-      <button class="rc rc-friend" onclick="openChat('friend','🤝','Friend')" aria-label="Talk to Friend">
-        <div class="rc-icon-wrap" style="background:#FFF9E5">🤝</div>
-        <span class="rc-name">Friend</span>
-        <span class="rc-desc">Real &amp; non-judgmental</span>
-        <div class="vc-dot" id="vcd-friend" style="display:none">✓</div>
-      </button>
-
-      <button class="rc rc-grief" onclick="openChat('grief','💜','Grief Support')" aria-label="Grief &amp; Loss Support" style="grid-column:1/-1;max-width:100%">
-        <div class="rc-icon-wrap" style="background:#EDE0F8">💜</div>
-        <span class="rc-name">Grief &amp; Loss Support</span>
-        <span class="rc-desc">Compassionate presence for heartbreak &amp; loss</span>
-      </button>
-
-    </div>
-  </div>
-
-  <div class="home-note">
-    <span class="home-note-icon">🔐</span>
-    <p class="home-note-txt">Your conversations are <strong>private and never stored</strong>. Add a voice clone in Settings to hear your loved one's actual voice respond.</p>
-  </div>
-
-</section>
-
-<!-- ═══════════════════════════════════════════
-     SCREEN 2 — CHAT
-═══════════════════════════════════════════ -->
-<section id="s-chat" class="screen" aria-label="Chat">
-
-  <div class="chat-bar">
-    <button class="cb-back" onclick="goHome()" aria-label="Back">←</button>
-    <div class="cb-mid">
-      <div class="cb-avatar" id="cb-avatar">💝<span class="speak-ring"></span></div>
-      <div class="cb-info">
-        <span class="cb-name" id="cb-name">Daughter</span>
-        <span class="cb-status"><span class="cb-sdot"></span>Online</span>
-      </div>
-    </div>
-    <button class="cb-voice-btn" id="cb-voice-btn" onclick="openVoiceForRole()" aria-label="Add voice sample" title="Add voice of this person">
-      🎤<div class="cb-voice-dot"></div>
+    <input type="file" id="file-inp" accept="image/*" onchange="handleFileSelect(this)"/>
+    <div class="or-sep">or</div>
+    <button class="cam-btn" onclick="document.getElementById('cam-inp').click()">
+      📷 Take a Photo with Camera
     </button>
-    <button class="cb-story-btn" id="cb-story-btn" onclick="openStoryModal()" aria-label="Story Time" title="Story Time Mode">📖</button>
-    <button class="cb-lang" id="cb-lang-btn" onclick="cycleLang()">EN</button>
+    <input type="file" id="cam-inp" accept="image/*" capture="environment" onchange="handleFileSelect(this)"/>
   </div>
 
-  <!-- ElevenLabs Live Voice Bar (shown when agent ID is set for this role) -->
-  <div class="live-bar" id="live-bar">
-    <div class="live-ind">
-      <div class="live-dot"></div>
-      <span class="live-status" id="live-status">Ready for live voice</span>
+  <div class="mode-note" id="mode-note">
+    <span class="mn-icon">📚</span>
+    <p class="mn-txt"><strong>Student Mode:</strong> Educational, engaging explanations — great for school and curious minds.</p>
+  </div>
+
+  <div class="examples-sec">
+    <p class="sec-title">Try these examples</p>
+    <div class="examples-grid">
+      <div class="eg-card" onclick="loadExample('lion')"><div class="eg-img">🦁</div><div class="eg-lbl">Lion</div></div>
+      <div class="eg-card" onclick="loadExample('dolphin')"><div class="eg-img">🐬</div><div class="eg-lbl">Dolphin</div></div>
+      <div class="eg-card" onclick="loadExample('eagle')"><div class="eg-img">🦅</div><div class="eg-lbl">Eagle</div></div>
+      <div class="eg-card" onclick="loadExample('panda')"><div class="eg-img">🐼</div><div class="eg-lbl">Panda</div></div>
+      <div class="eg-card" onclick="loadExample('octopus')"><div class="eg-img">🐙</div><div class="eg-lbl">Octopus</div></div>
+      <div class="eg-card" onclick="loadExample('butterfly')"><div class="eg-img">🦋</div><div class="eg-lbl">Butterfly</div></div>
     </div>
-    <span class="live-transcript" id="live-transcript">Tap to start…</span>
-    <button class="live-btn" id="live-btn" onclick="toggleLiveVoice()">🎙️ Live</button>
   </div>
+</section>
 
-  <div class="chat-msgs" id="chat-msgs" role="log" aria-live="polite">
-    <div class="date-chip">Today</div>
+<!-- LOADING SCREEN -->
+<section id="s-loading" class="screen" aria-label="Analyzing">
+  <div class="loading-anim">
+    <div class="l-circle"></div>
+    <div class="l-circle"></div>
+    <div class="l-circle"></div>
+    <div class="l-icon">🔭</div>
   </div>
+  <h2 class="loading-title">Identifying Animal…</h2>
+  <p class="loading-sub">Claude is analyzing your photo and gathering wildlife information.</p>
+  <div class="loading-steps">
+    <div class="l-step active" id="lstep-1"><div class="l-step-dot"></div>Analyzing photo with AI vision</div>
+    <div class="l-step" id="lstep-2"><div class="l-step-dot"></div>Identifying species</div>
+    <div class="l-step" id="lstep-3"><div class="l-step-dot"></div>Gathering habitat &amp; diet info</div>
+    <div class="l-step" id="lstep-4"><div class="l-step-dot"></div>Crafting your introduction</div>
+  </div>
+</section>
 
-  <div id="qr-chips-row" class="qr-chips" style="display:none"></div>
-
-  <div class="chat-inp">
-    <div class="voice-sec">
-      <div class="wviz" id="wviz" aria-hidden="true">
-        <div class="wb"></div><div class="wb"></div><div class="wb"></div>
-        <div class="wb"></div><div class="wb"></div>
+<!-- PROFILE SCREEN -->
+<section id="s-profile" class="screen" aria-label="Animal Profile">
+  <div class="profile-hero" id="profile-hero"></div>
+  <div class="profile-card" id="profile-card">
+    <div class="animal-name-row">
+      <span class="animal-emoji-sm" id="pa-emoji">🦁</span>
+      <div class="animal-names">
+        <h1 class="animal-common" id="pa-name">Lion</h1>
+        <p class="animal-sci" id="pa-sci">Panthera leo</p>
       </div>
-      <button class="mic-btn" id="mic-btn" onclick="toggleMic()" aria-label="Tap to speak">
-        <div class="mic-ring" aria-hidden="true"></div>
-        <span class="mic-icon">🎙️</span>
-        <div class="mic-spin" aria-hidden="true"></div>
+    </div>
+    <div class="profile-tags" id="pa-tags"></div>
+    <div class="info-grid">
+      <div class="info-card"><span class="info-icon">🏠</span>
+        <div class="info-body"><div class="info-lbl">Habitat</div><p class="info-txt" id="pa-habitat"></p></div>
+      </div>
+      <div class="info-card diet"><span class="info-icon">🍖</span>
+        <div class="info-body"><div class="info-lbl">Diet</div><p class="info-txt" id="pa-diet"></p></div>
+      </div>
+      <div class="info-card behavior"><span class="info-icon">🐾</span>
+        <div class="info-body"><div class="info-lbl">Behavior</div><p class="info-txt" id="pa-behavior"></p></div>
+      </div>
+    </div>
+    <div class="fun-fact">
+      <div class="ff-badge">⭐ Fun Fact</div>
+      <p class="ff-txt" id="pa-funfact"></p>
+    </div>
+    <div class="safety-note" id="pa-safety">
+      <div class="sn-badge">⚠️ Safety Note</div>
+      <p class="sn-txt" id="pa-safety-txt"></p>
+    </div>
+    <div class="conservation-row">
+      <span class="cons-lbl">Conservation Status:</span>
+      <span class="tag" id="pa-cons-tag"></span>
+    </div>
+    <div class="profile-actions">
+      <button class="voice-btn" id="voice-btn" onclick="toggleVoice()">
+        <span id="vbtn-icon">🔊</span>
+        <span id="vbtn-lbl">Hear Introduction</span>
       </button>
-      <span class="mic-lbl" id="mic-lbl">Tap to speak</span>
+      <div class="pa-row">
+        <button class="chat-open-btn" onclick="openChat()">💬 Ask Questions</button>
+        <button class="share-btn" onclick="shareProfile()" title="Share">📤</button>
+      </div>
+      <button class="btn btn-o" style="width:100%;justify-content:center" onclick="goMain()">
+        🔭 Scan Another Animal
+      </button>
     </div>
+    <div class="mode-strip">
+      <span class="ms-lbl">Mode:</span>
+      <span class="tag tag-g" id="mode-tag">📚 Student</span>
+      <span style="flex:1"></span>
+      <span class="tag" id="voice-style-tag" style="background:#F3E5F5;color:#6A1B9A">😊 Friendly</span>
+    </div>
+  </div>
+</section>
+
+<!-- CHAT SCREEN -->
+<section id="s-chat" class="screen" aria-label="Ask Questions">
+  <div class="chat-hdr">
+    <button class="ch-back" onclick="closeChat()">←</button>
+    <div class="ch-avatar" id="ch-avatar">🦁</div>
+    <div class="ch-info">
+      <div class="ch-name" id="ch-name">Lion</div>
+      <div class="ch-sub" id="ch-sub">Ask me anything!</div>
+    </div>
+    <button class="ch-mode-btn" id="ch-mode-btn" onclick="cycleModeInChat()"></button>
+  </div>
+  <div class="chat-msgs" id="chat-msgs"></div>
+  <div class="suggestions" id="chat-sug"></div>
+  <div class="chat-inp">
     <div class="tinp-row">
-      <input class="tinp" id="tinp" type="text"
-        placeholder="Or type your message…"
-        oninput="onTinp()" onkeydown="onTkey(event)"
-        maxlength="500" aria-label="Type your message"/>
-      <button class="sbtn" id="sbtn" onclick="sendText()" aria-label="Send">▶</button>
+      <textarea class="tinp" id="chat-tinp" placeholder="Ask about this animal…"
+        rows="1" oninput="onChatInput()" onkeydown="onChatKey(event)"></textarea>
+      <button class="sbtn" id="chat-sbtn" onclick="sendChat()">➤</button>
     </div>
   </div>
-
 </section>
 
-<!-- ═══════════════════════════════════════════
-     SCREEN 3 — SETTINGS
-═══════════════════════════════════════════ -->
-<section id="s-settings" class="screen" aria-label="Settings">
-
-  <div class="set-hero">
-    <h2>Settings</h2>
-    <p>Configure your AI keys, voice cloning &amp; preferences</p>
-  </div>
-
-  <div class="set-body">
-
-    <!-- API Keys -->
-    <div class="sgrp">
-      <div class="sgrp-hd">
-        <h3>🔑 API Keys</h3>
-        <p>Required for real AI responses and voice cloning</p>
-      </div>
-      <div class="sitem" style="flex-direction:column;align-items:flex-start;gap:8px">
-        <div class="sitem-l">
-          <div class="sitem-ic" style="background:#EEF2FF">🤖</div>
-          <div class="sitem-txt">
-            <div class="sitem-lbl">Anthropic API Key</div>
-            <div class="sitem-sub" id="akey-st">Not set — using scripted responses</div>
-          </div>
-        </div>
-        <div class="kinp-row">
-          <input class="kinp" id="set-akey" type="password" placeholder="sk-ant-api03-…"/>
-          <button class="ksave" onclick="saveAkey()">Save</button>
-        </div>
-      </div>
-      <div class="sitem" style="flex-direction:column;align-items:flex-start;gap:8px">
-        <div class="sitem-l">
-          <div class="sitem-ic" style="background:#FEF3C7">🎙️</div>
-          <div class="sitem-txt">
-            <div class="sitem-lbl">ElevenLabs API Key</div>
-            <div class="sitem-sub" id="ekey-st">Not set — using browser TTS</div>
-          </div>
-        </div>
-        <div class="kinp-row">
-          <input class="kinp" id="set-ekey" type="password" placeholder="xi-api-key…"/>
-          <button class="ksave" onclick="saveEkey()">Save</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Voice Cloning -->
-    <div class="sgrp">
-      <div class="sgrp-hd">
-        <h3>🎤 Voice Style</h3>
-        <p>Record or upload your loved one's voice — no account needed. The AI will speak in a matching voice style.</p>
-      </div>
-      <div class="vc-list">
-        <div class="vcc"><span class="vcc-icon">💝</span>
-          <div class="vcc-info"><div class="vcc-name">Daughter</div><div class="vcc-st" id="vcs-daughter">No voice cloned yet</div></div>
-          <button class="vcc-btn" id="vcb-daughter" onclick="openCloneModal('daughter','💝','Daughter')">+ Clone</button>
-        </div>
-        <div class="vcc"><span class="vcc-icon">💙</span>
-          <div class="vcc-info"><div class="vcc-name">Son</div><div class="vcc-st" id="vcs-son">No voice cloned yet</div></div>
-          <button class="vcc-btn" id="vcb-son" onclick="openCloneModal('son','💙','Son')">+ Clone</button>
-        </div>
-        <div class="vcc"><span class="vcc-icon">💕</span>
-          <div class="vcc-info"><div class="vcc-name">Partner</div><div class="vcc-st" id="vcs-spouse">No voice cloned yet</div></div>
-          <button class="vcc-btn" id="vcb-spouse" onclick="openCloneModal('spouse','💕','Partner')">+ Clone</button>
-        </div>
-        <div class="vcc"><span class="vcc-icon">👨‍👩‍👧</span>
-          <div class="vcc-info"><div class="vcc-name">Parents</div><div class="vcc-st" id="vcs-parents">No voice cloned yet</div></div>
-          <button class="vcc-btn" id="vcb-parents" onclick="openCloneModal('parents','👨‍👩‍👧','Parents')">+ Clone</button>
-        </div>
-        <div class="vcc"><span class="vcc-icon">👴👵</span>
-          <div class="vcc-info"><div class="vcc-name">Grandparents</div><div class="vcc-st" id="vcs-grandparents">No voice cloned yet</div></div>
-          <button class="vcc-btn" id="vcb-grandparents" onclick="openCloneModal('grandparents','👴👵','Grandparents')">+ Clone</button>
-        </div>
-        <div class="vcc"><span class="vcc-icon">🤝</span>
-          <div class="vcc-info"><div class="vcc-name">Friend</div><div class="vcc-st" id="vcs-friend">No voice cloned yet</div></div>
-          <button class="vcc-btn" id="vcb-friend" onclick="openCloneModal('friend','🤝','Friend')">+ Clone</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- ElevenLabs Voice Agents -->
-    <div class="sgrp">
-      <div class="sgrp-hd">
-        <h3>🤖 ElevenLabs Voice Agents</h3>
-        <p>Paste the Agent ID from elevenlabs.io → Conversational AI. Each role can have its own agent with its own voice.</p>
-      </div>
-      <div id="agent-id-list">
-        <div class="aid-row">
-          <div class="aid-icon">💝</div><div class="aid-name">Daughter</div>
-          <input class="aid-inp" id="aid-daughter" type="text" placeholder="agent_xxxxxxxxxxxxxxxx"/>
-          <button class="aid-save" onclick="saveAgentId('daughter')">Save</button>
-        </div>
-        <div class="aid-row">
-          <div class="aid-icon">💙</div><div class="aid-name">Son</div>
-          <input class="aid-inp" id="aid-son" type="text" placeholder="agent_xxxxxxxxxxxxxxxx"/>
-          <button class="aid-save" onclick="saveAgentId('son')">Save</button>
-        </div>
-        <div class="aid-row">
-          <div class="aid-icon">💕</div><div class="aid-name">Partner</div>
-          <input class="aid-inp" id="aid-spouse" type="text" placeholder="agent_xxxxxxxxxxxxxxxx"/>
-          <button class="aid-save" onclick="saveAgentId('spouse')">Save</button>
-        </div>
-        <div class="aid-row">
-          <div class="aid-icon">👨‍👩‍👧</div><div class="aid-name">Parents</div>
-          <input class="aid-inp" id="aid-parents" type="text" placeholder="agent_xxxxxxxxxxxxxxxx"/>
-          <button class="aid-save" onclick="saveAgentId('parents')">Save</button>
-        </div>
-        <div class="aid-row">
-          <div class="aid-icon">👴👵</div><div class="aid-name">Grandparents</div>
-          <input class="aid-inp" id="aid-grandparents" type="text" placeholder="agent_xxxxxxxxxxxxxxxx"/>
-          <button class="aid-save" onclick="saveAgentId('grandparents')">Save</button>
-        </div>
-        <div class="aid-row">
-          <div class="aid-icon">🤝</div><div class="aid-name">Friend</div>
-          <input class="aid-inp" id="aid-friend" type="text" placeholder="agent_xxxxxxxxxxxxxxxx"/>
-          <button class="aid-save" onclick="saveAgentId('friend')">Save</button>
-        </div>
-        <div class="aid-row">
-          <div class="aid-icon">💜</div><div class="aid-name">Grief</div>
-          <input class="aid-inp" id="aid-grief" type="text" placeholder="agent_xxxxxxxxxxxxxxxx"/>
-          <button class="aid-save" onclick="saveAgentId('grief')">Save</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Preferences -->
-    <div class="sgrp">
-      <div class="sgrp-hd"><h3>⚙️ Preferences</h3></div>
-      <div class="sitem">
-        <div class="sitem-l">
-          <div class="sitem-ic" style="background:#D1FAE5">🌐</div>
-          <div class="sitem-txt">
-            <div class="sitem-lbl">Language</div>
-            <div class="sitem-sub">Conversation language style</div>
-          </div>
-        </div>
-        <div class="sitem-r">
-          <select id="set-lang" onchange="setLangDirect(this.value)"
-            style="height:36px;border:1.5px solid var(--border);border-radius:var(--r-md);
-              padding:0 10px;font-family:var(--fh);font-size:13px;font-weight:700;
-              color:var(--dark);background:#fff;outline:none;cursor:pointer">
-            <option value="en">🇬🇧 English</option>
-            <option value="hi">🇮🇳 Hindi</option>
-            <option value="hi-en">🇮🇳 Hinglish</option>
-            <option value="de">🇩🇪 Deutsch</option>
-            <option value="es">🇪🇸 Español</option>
-            <option value="fr">🇫🇷 Français</option>
-            <option value="ur">🇵🇰 اردو</option>
-            <option value="zh">🇨🇳 中文</option>
-            <option value="ar">🇸🇦 العربية</option>
-            <option value="bn">🇧🇩 বাংলা</option>
-            <option value="pt">🇧🇷 Português</option>
-            <option value="id">🇮🇩 Indonesia</option>
-          </select>
-        </div>
-      </div>
-      <div class="sitem">
-        <div class="sitem-l">
-          <div class="sitem-ic" style="background:#FEE2E2">🗑️</div>
-          <div class="sitem-txt">
-            <div class="sitem-lbl">Clear conversation</div>
-            <div class="sitem-sub">Erase current chat history</div>
-          </div>
-        </div>
-        <div class="sitem-r">
-          <button class="btn btn-d" style="height:36px;padding:0 16px;font-size:13px"
-            onclick="clearHistory()">Clear</button>
-        </div>
-      </div>
-      <div class="sitem">
-        <div class="sitem-l">
-          <div class="sitem-ic" style="background:#EEF2FF">🧠</div>
-          <div class="sitem-txt">
-            <div class="sitem-lbl">AI Memory</div>
-            <div class="sitem-sub" id="mem-status">Loading…</div>
-          </div>
-        </div>
-        <div class="sitem-r">
-          <button class="btn btn-o" style="height:36px;padding:0 14px;font-size:13px"
-            onclick="clearMemory()">Clear</button>
-        </div>
-      </div>
-      <div class="sitem">
-        <div class="sitem-l">
-          <div class="sitem-ic" style="background:#EEF2FF">👤</div>
-          <div class="sitem-txt">
-            <div class="sitem-lbl">Your name</div>
-            <div class="sitem-sub">How the AI addresses you</div>
-          </div>
-        </div>
-        <div class="sitem-r">
-          <input id="set-name" class="kinp" type="text" placeholder="Your name" style="width:120px"
-            onchange="saveNameFromSettings(this.value)"/>
-        </div>
-      </div>
-    </div>
-
-    <div style="height:8px"></div>
-  </div>
-
-</section>
-
-<!-- ═══════════════════════════════════════════
-     VOICE CLONE MODAL
-═══════════════════════════════════════════ -->
-<div class="modal-bd" id="clone-modal" onclick="closeModalOnBack(event)" aria-modal="true" role="dialog">
-  <div class="modal-sheet">
+<!-- SETTINGS MODAL -->
+<div class="modal-bd" id="settings-modal" onclick="closeSettingsModal(event)">
+  <div class="modal-sheet" onclick="event.stopPropagation()">
     <div class="mh-bar"></div>
     <div class="mhd">
-      <h3 id="clone-modal-title">🎤 Add Their Voice</h3>
-      <p id="clone-modal-sub">The AI will speak in a voice that matches theirs. No account needed.</p>
+      <h3>⚙️ Settings</h3>
+      <p>Configure your WildLens experience</p>
     </div>
     <div class="mbd">
-
-      <!-- How to get a recording -->
-      <div class="clone-steps">
-        <div class="cstep">
-          <div class="cstep-num">1</div>
-          <div class="cstep-txt"><strong>Get a recording of them speaking.</strong> A WhatsApp voice note, a phone call recording, or a video — any audio works.</div>
-        </div>
-        <div class="cstep">
-          <div class="cstep-num">2</div>
-          <div class="cstep-txt"><strong>Record live</strong> if they are with you right now, or <strong>upload the file</strong> if you already have one saved.</div>
-        </div>
-        <div class="cstep">
-          <div class="cstep-num">3</div>
-          <div class="cstep-txt"><strong>Tap Save</strong> — the AI will speak in a matching voice every time you chat.</div>
+      <div class="mfl">
+        <label>Audience Mode</label>
+        <div class="modal-seg" id="set-mode">
+          <button class="msg" data-v="kid" onclick="pickModalSeg('set-mode','kid',this)">🌟 Kid</button>
+          <button class="msg act" data-v="student" onclick="pickModalSeg('set-mode','student',this)">📚 Student</button>
+          <button class="msg" data-v="adult" onclick="pickModalSeg('set-mode','adult',this)">🔬 Adult</button>
         </div>
       </div>
-
-      <!-- WhatsApp tip -->
-      <div class="wa-tip">
-        <div class="wa-tip-icon">💬</div>
-        <div class="wa-tip-txt"><strong>Easy way:</strong> Open WhatsApp → find an old voice message from them → hold it → Share/Forward → save to your phone → upload it here.</div>
-      </div>
-
-      <div class="tabs">
-        <button class="tab act" id="tab-rec-btn" onclick="switchTab('record',this)">🎙️ Record Now</button>
-        <button class="tab" id="tab-up-btn" onclick="switchTab('upload',this)">📁 Upload File</button>
-      </div>
-
-      <!-- Record tab -->
-      <div class="tab-content on" id="tab-record">
-        <div class="rec-ui">
-          <div class="rec-timer" id="rec-timer">0:00</div>
-          <p class="rec-guide">Press the button and ask them to speak — read anything, tell a story, say hello. 20–60 seconds is perfect.</p>
-          <button class="rec-btn idle" id="rec-btn" onclick="toggleRecord()">🎙️</button>
-        </div>
-        <div class="rec-quality">
-          <span class="rec-quality-icon">💡</span>
-          <span class="rec-quality-txt">Quiet room, no TV in background, hold phone near their mouth.</span>
+      <div class="mfl">
+        <label>Language</label>
+        <div class="modal-seg" id="set-lang">
+          <button class="msg act" data-v="en" onclick="pickModalSeg('set-lang','en',this)">🇬🇧 EN</button>
+          <button class="msg" data-v="hi" onclick="pickModalSeg('set-lang','hi',this)">🇮🇳 HI</button>
+          <button class="msg" data-v="es" onclick="pickModalSeg('set-lang','es',this)">🇪🇸 ES</button>
+          <button class="msg" data-v="fr" onclick="pickModalSeg('set-lang','fr',this)">🇫🇷 FR</button>
+          <button class="msg" data-v="ar" onclick="pickModalSeg('set-lang','ar',this)">🇸🇦 AR</button>
+          <button class="msg" data-v="zh" onclick="pickModalSeg('set-lang','zh',this)">🇨🇳 ZH</button>
         </div>
       </div>
-
-      <!-- Upload tab -->
-      <div class="tab-content" id="tab-upload">
-        <div class="drop-zone" onclick="document.getElementById('file-inp').click()">
-          <div class="drop-zone-icon">🎵</div>
-          <h4>Tap to choose their audio</h4>
-          <p>WhatsApp voice note · MP3 · WAV · M4A · any audio file</p>
-        </div>
-        <input type="file" id="file-inp" accept="audio/*" onchange="onFileSelect(event)"/>
-        <div class="audio-prev" id="audio-prev" style="display:none">
-          <span class="audio-prev-name" id="audio-prev-name">audio.mp3</span>
-          <span class="audio-prev-sz" id="audio-prev-sz">2.4 MB</span>
-          <span class="audio-remove" onclick="clearFile()">✕</span>
+      <div class="mfl">
+        <label>Voice Style</label>
+        <div class="modal-seg" id="set-voice">
+          <button class="msg" data-v="teacher" onclick="pickModalSeg('set-voice','teacher',this)">👩‍🏫 Teacher</button>
+          <button class="msg act" data-v="friendly" onclick="pickModalSeg('set-voice','friendly',this)">😊 Friendly</button>
+          <button class="msg" data-v="cartoon" onclick="pickModalSeg('set-voice','cartoon',this)">🎭 Cartoon</button>
+          <button class="msg" data-v="naturalist" onclick="pickModalSeg('set-voice','naturalist',this)">🦁 Naturalist</button>
         </div>
       </div>
-
-      <!-- Gender confirm (shown after audio ready) -->
-      <div class="gender-panel" id="gender-panel" style="display:none">
-        <div class="gender-panel-lbl">Voice type auto-detected — is this correct?</div>
-        <div class="gender-toggle">
-          <button class="gtbtn" id="gt-female" onclick="setGenderPref('female',this)">👩 Female (Mum / Wife / Daughter…)</button>
-          <button class="gtbtn" id="gt-male"   onclick="setGenderPref('male',this)">👨 Male (Dad / Husband / Son…)</button>
-        </div>
-        <button class="preview-btn" onclick="previewVoiceStyle()">▶ Hear a preview of the voice</button>
-      </div>
-
-      <!-- Progress -->
-      <div class="clone-prog" id="clone-prog">
-        <div class="prog-bar-wrap"><div class="prog-bar" id="prog-bar"></div></div>
-        <p class="prog-txt" id="prog-txt">Analysing voice…</p>
-      </div>
-
     </div>
     <div class="modal-foot">
-      <button class="btn btn-o" style="height:52px;font-size:15px" onclick="closeCloneModal()">Cancel</button>
-      <button class="btn btn-p" style="height:52px;font-size:15px" id="clone-submit-btn" onclick="submitClone()">
-        ✅ Save Voice
-      </button>
+      <button class="btn btn-p" style="width:100%;height:54px;font-size:16px" onclick="saveSettings()">Save Settings</button>
     </div>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════
-     ELEVENLABS FULL-SCREEN CALL OVERLAY
-═══════════════════════════════════════════ -->
-<div class="call-overlay" id="call-overlay" aria-live="polite" aria-label="Live voice call">
+<div class="toast" id="toast"></div>
 
-  <div class="call-top">
-    <div class="call-avatar-wrap">
-      <div class="call-ring"></div>
-      <div class="call-ring"></div>
-      <div class="call-ring"></div>
-      <div class="call-avatar" id="call-avatar">💝</div>
-    </div>
-    <div class="call-name" id="call-name">Priya</div>
-    <div class="call-status">
-      <div class="call-sdot"></div>
-      <span id="call-status-txt">Connecting…</span>
-    </div>
-  </div>
-
-  <div class="call-wave-wrap">
-    <canvas id="call-canvas"></canvas>
-  </div>
-
-  <div class="call-transcript-box" id="call-transcript-box">
-    <div class="ctxt agent" id="call-placeholder" style="color:rgba(255,255,255,.3);font-weight:400">
-      Conversation transcript will appear here…
-    </div>
-  </div>
-
-  <div class="call-controls">
-    <button class="call-mute-btn" id="call-mute-btn" onclick="toggleMute()" aria-label="Mute">🎙️</button>
-    <button class="call-end-btn" onclick="stopLiveVoice()" aria-label="End call">📵</button>
-    <div class="call-timer" id="call-timer">0:00</div>
-  </div>
-
-</div>
-
-<!-- ═══════════════════════════════════════════
-     STORY TIME MODAL
-═══════════════════════════════════════════ -->
-<div class="modal-bd" id="story-modal" onclick="closeStoryOnBack(event)" aria-modal="true" role="dialog">
-  <div class="story-sheet">
-    <div class="mh-bar"></div>
-    <div class="mhd">
-      <h3>📖 Story Time</h3>
-      <p>Choose a story type and I'll tell you a beautiful, soothing tale.</p>
-    </div>
-    <div class="mbd">
-      <div class="stype-grid">
-        <div class="stype-card" onclick="startStory('family')">
-          <div class="stype-icon">👨‍👩‍👧</div>
-          <div class="stype-name">Family Memory</div>
-          <div class="stype-desc">A warm story about family bonds &amp; love</div>
-        </div>
-        <div class="stype-card" onclick="startStory('bedtime')">
-          <div class="stype-icon">🌙</div>
-          <div class="stype-name">Bedtime Story</div>
-          <div class="stype-desc">Soothing tale to ease you to sleep</div>
-        </div>
-        <div class="stype-card" onclick="startStory('folktale')">
-          <div class="stype-icon">🪔</div>
-          <div class="stype-name">Folk Tale</div>
-          <div class="stype-desc">A timeless tale from our culture</div>
-        </div>
-        <div class="stype-card" onclick="startStory('hope')">
-          <div class="stype-icon">🌅</div>
-          <div class="stype-name">Story of Hope</div>
-          <div class="stype-desc">An uplifting story about perseverance</div>
-        </div>
-      </div>
-      <p style="font-size:13px;color:var(--slate-m);font-weight:600;margin-top:4px">Or enter your own topic:</p>
-      <div class="custom-story-row">
-        <input class="custom-story-inp" id="custom-story-inp" type="text"
-          placeholder="e.g. A grandmother and her garden…" maxlength="100"/>
-        <button class="story-go-btn" onclick="startCustomStory()">Tell Story ✨</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════════════════════════════════════════
-     EMERGENCY OVERLAY
-═══════════════════════════════════════════ -->
-<div class="sos-bd" id="sos-modal" onclick="closeSosOnBack(event)" aria-modal="true" role="dialog">
-  <div class="sos-card">
-    <div class="sos-hd">
-      <div class="sos-bi">🆘</div>
-      <h2>You're Not Alone</h2>
-      <p>These kind people are available 24/7, right now.</p>
-    </div>
-    <div class="sos-lines">
-      <div class="sos-ln">
-        <div class="sos-ln-c">India</div>
-        <div class="sos-ln-o">AASRA Suicide Prevention</div>
-        <a class="sos-ln-n" href="tel:912227546669">91-22-2754 6669</a>
-      </div>
-      <div class="sos-ln">
-        <div class="sos-ln-c">India</div>
-        <div class="sos-ln-o">Vandrevala Foundation</div>
-        <a class="sos-ln-n" href="tel:18602662345">1860-2662-345</a>
-      </div>
-      <div class="sos-ln">
-        <div class="sos-ln-c">United States</div>
-        <div class="sos-ln-o">988 Suicide &amp; Crisis Lifeline</div>
-        <a class="sos-ln-n" href="tel:988">988</a>
-      </div>
-      <div class="sos-ln">
-        <div class="sos-ln-c">United Kingdom</div>
-        <div class="sos-ln-o">Samaritans</div>
-        <a class="sos-ln-n" href="tel:116123">116 123</a>
-      </div>
-    </div>
-    <div class="sos-acts">
-      <a class="btn btn-d" href="tel:112" role="button" style="height:52px;font-size:16px">📞 Call Now</a>
-      <button class="btn btn-o" style="height:52px;font-size:16px" onclick="closeSos()">Continue Talking</button>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════════════════════════════════════════
-     BOTTOM NAV
-═══════════════════════════════════════════ -->
-<nav class="bnav" id="bnav" aria-label="Main navigation">
-  <button class="ni act" id="ni-home" onclick="goHome()" aria-label="Home">
-    <span class="ni-icon">🏠</span>
-    <span class="ni-lbl">Home</span>
-  </button>
-  <button class="ni" id="ni-chat" onclick="goChat()" aria-label="Chat">
-    <span class="ni-icon">💬</span>
-    <span class="ni-lbl">Chat</span>
-  </button>
-  <button class="sos-ni" onclick="openSos()" aria-label="Emergency SOS">🆘</button>
-  <button class="ni" id="ni-settings" onclick="goSettings()" aria-label="Settings">
-    <span class="ni-icon">⚙️</span>
-    <span class="ni-lbl">Settings</span>
-  </button>
-  <button class="ni" onclick="openSos()" aria-label="Help">
-    <span class="ni-icon">🙏</span>
-    <span class="ni-lbl">Help</span>
-  </button>
-</nav>
-
-<!-- Toast -->
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
-
-<!-- ═══════════════════════════════════════════
-     JAVASCRIPT
-═══════════════════════════════════════════ -->
 <script>
-/* ────────────────────────────────────────────
-   LANGUAGES
-──────────────────────────────────────────── */
-const LANGS = {
-  'en':    { name:'English',    flag:'🇬🇧', sr:'en-US', short:'EN',    inst:'Respond in warm, conversational English only.' },
-  'hi':    { name:'Hindi',      flag:'🇮🇳', sr:'hi-IN', short:'हिं',   inst:'केवल हिंदी में उत्तर दें (देवनागरी लिपि)। उदाहरण: "माँ, आप बिल्कुल सही हैं।"' },
-  'hi-en': { name:'Hinglish',   flag:'🇮🇳', sr:'en-IN', short:'HI-EN', inst:'Mix Hindi and English naturally (Hinglish). Use Hindi for emotions, English for some words. Example: "Mummy koi baat nahi, aap sahi ho."' },
-  'de':    { name:'Deutsch',    flag:'🇩🇪', sr:'de-DE', short:'DE',    inst:'Antworte ausschließlich auf Deutsch, warm und einfühlsam.' },
-  'es':    { name:'Español',    flag:'🇪🇸', sr:'es-ES', short:'ES',    inst:'Responde únicamente en español, con calidez y empatía.' },
-  'fr':    { name:'Français',   flag:'🇫🇷', sr:'fr-FR', short:'FR',    inst:'Réponds uniquement en français, avec chaleur et empathie.' },
-  'ur':    { name:'اردو',       flag:'🇵🇰', sr:'ur-PK', short:'UR',    inst:'صرف اردو میں جواب دیں، گرمجوشی اور ہمدردی کے ساتھ۔' },
-  'zh':    { name:'中文',        flag:'🇨🇳', sr:'zh-CN', short:'中文',  inst:'请只用普通话（简体中文）回复，温暖而富有同情心。' },
-  'ar':    { name:'العربية',    flag:'🇸🇦', sr:'ar-SA', short:'AR',    inst:'أجب فقط باللغة العربية الفصحى، بدفء وتعاطف.' },
-  'bn':    { name:'বাংলা',       flag:'🇧🇩', sr:'bn-BD', short:'BN',    inst:'শুধুমাত্র বাংলায় উত্তর দিন, উষ্ণতা ও সহানুভূতির সাথে।' },
-  'pt':    { name:'Português',  flag:'🇧🇷', sr:'pt-BR', short:'PT',    inst:'Responda somente em português, com calor e empatia.' },
-  'id':    { name:'Indonesia',  flag:'🇮🇩', sr:'id-ID', short:'ID',    inst:'Jawab hanya dalam Bahasa Indonesia, dengan hangat dan penuh empati.' },
-};
+/* ════════════════════════════════════════
+   BACKEND URL — change to your deployed URL in production
+════════════════════════════════════════ */
+const BACKEND = 'http://localhost:4000';
 
-/* ────────────────────────────────────────────
+/* ════════════════════════════════════════
    STATE
-──────────────────────────────────────────── */
-const ST = {
-  screen: 'setup',
-  role: 'daughter', icon: '💝', name: 'Daughter',
-  lang: localStorage.getItem('sv_lang') || 'en',
-  userName: localStorage.getItem('sv_name') || '',
-  apiKeys: {
-    anthropic: localStorage.getItem('sv_ak') || '',
-    elevenlabs: localStorage.getItem('sv_ek') || ''
-  },
-  clonedVoices: JSON.parse(localStorage.getItem('sv_cv') || '{}'),
+════════════════════════════════════════ */
+const state = {
+  mode: 'student',
+  lang: 'en',
+  voice: 'friendly',
+  animal: null,
   chatHistory: [],
-  micState: 'idle',
-  recognition: null,
-  recorder: null,
-  recChunks: [],
-  recInterval: null,
-  recSeconds: 0,
-  cloneRole: null,
-  cloneBlob: null,
-  cloneGender: null,
-  currentAudio: null,
-  griefMode: false,
-  agentIds: JSON.parse(localStorage.getItem('sv_aids') || JSON.stringify({
-    daughter: 'agent_5601ksb4anzcf7xs6vaj5cxsj7v1'
-  }))
+  speaking: false,
+  imgB64: null,
+  imgMime: 'image/jpeg',
+  imgDataUrl: null
 };
 
-/* ────────────────────────────────────────────
-   AI MEMORY
-──────────────────────────────────────────── */
-const MEM_KEY = 'sv_mem';
-function getMem() {
-  try { return JSON.parse(localStorage.getItem(MEM_KEY) || '{"facts":[],"sessions":0}'); }
-  catch(e) { return {facts:[],sessions:0}; }
-}
-function saveMem(m) { localStorage.setItem(MEM_KEY, JSON.stringify(m)); }
-
-function addFacts(text) {
-  const m = getMem();
-  const patterns = [
-    { re:/(?:my name is|i(?:'m| am) called|call me)\s+([A-Z][a-z]{1,20})/i, key:'name', tpl:t=>`User's name is ${t}` },
-    { re:/(?:i(?:'m| am) feeling|i feel)\s+([a-z\s]{3,30})/i, key:'mood', tpl:t=>`Recently felt: ${t}` },
-    { re:/(?:i(?:'m| am)|I work as)\s+(a |an )?([a-z\s]{4,25})(?: by profession| by trade)?/i, key:'job', tpl:(_,__,t)=>`Occupation: ${t}` },
-    { re:/(?:i live in|i(?:'m| am) from|my city is)\s+([A-Za-z\s]{3,30})/i, key:'loc', tpl:t=>`Lives in: ${t}` },
-    { re:/my (?:son|daughter|child|grandchild|husband|wife|spouse|partner|friend)\s+(?:is called|is named|named)?\s*([A-Z][a-z]{1,20})/i, key:'family', tpl:t=>`Family member mentioned: ${t}` },
-    { re:/i (?:love|enjoy|like|hobby is)\s+([a-z\s]{3,30})/i, key:'hobby', tpl:t=>`Hobby/interest: ${t}` },
-    { re:/i(?:'m| am)\s+(\d{2,3})\s*(?:years old|yr)/i, key:'age', tpl:t=>`Age: ${t}` },
-  ];
-  let changed = false;
-  patterns.forEach(p => {
-    const match = text.match(p.re);
-    if (match) {
-      const val = p.tpl(...match.slice(1));
-      if (!m.facts.some(f => f.startsWith(p.key))) {
-        m.facts.push(p.key + ':' + val);
-        if (m.facts.length > 25) m.facts = m.facts.slice(-25);
-        changed = true;
-      }
-    }
-  });
-  if (changed) saveMem(m);
-}
-
-function getMemContext() {
-  const m = getMem();
-  if (!m.facts.length) return '';
-  const lines = m.facts.map(f => f.split(':').slice(1).join(':').trim()).filter(Boolean);
-  return `\n\nWhat you know about this person from past conversations:\n- ${lines.join('\n- ')}\nUse this naturally to show you remember them.`;
-}
-
-/* ────────────────────────────────────────────
-   SYSTEM PROMPTS
-──────────────────────────────────────────── */
-const PROMPTS = {
-  daughter: `You are the user's loving daughter having a warm voice conversation with your parent.
-Characteristics: warm, caring, affectionate, sometimes playful.
-Address them as "Mummy", "Papa", "Mom", or "Dad" naturally.
-If they are sad → comfort and validate. If happy → celebrate together.
-Rules: 1-3 sentences MAX. Never mention you're an AI. Stay fully in character.`,
-
-  son: `You are the user's loving son talking to your parent.
-Characteristics: respectful, strong, protective, caring.
-Address them as "Mummy", "Papa", "Ma", or "Dad" naturally.
-Support them, validate their feelings, show genuine care.
-Rules: 1-3 sentences MAX. Never mention you're an AI. Stay in character.`,
-
-  spouse: `You are the user's loving partner (spouse) in an intimate, caring conversation.
-Characteristics: deeply loving, understanding, emotionally present, familiar.
-Use warm, intimate language. Acknowledge shared history.
-If upset → listen first, comfort, don't rush to fix.
-Rules: 1-3 sentences MAX. Never mention you're an AI. Stay in character.`,
-
-  parents: `You are the user's loving parent (mother or father) speaking to your adult child.
-Characteristics: unconditional love, gentle wisdom, proud, protective yet respectful.
-Use "beta", "my child", "my dear" affectionately.
-Always on their side, sees the best in them.
-Rules: 1-3 sentences MAX. Never mention you're an AI. Stay in character.`,
-
-  grandparents: `You are the user's loving grandparent (dada/dadi/nana/nani) speaking to your grandchild.
-Characteristics: gentle wisdom of age, patient, unconditional love, grounding presence.
-Use "beta", "bachcha", "mere laal" affectionately.
-Share simple wisdom, sit with them in their feelings.
-Rules: 1-3 sentences MAX. Never mention you're an AI. Stay in character.`,
-
-  friend: `You are the user's close, non-judgmental best friend.
-Characteristics: equal, real, honest, supportive without being parental.
-Use "yaar", "dost" naturally. Be casual and genuine.
-Let them vent, celebrate with them, be fully present.
-Rules: 1-3 sentences MAX. Never mention you're an AI. Stay in character.`,
-
-  grief: `You are a deeply compassionate grief support companion for someone experiencing loss, grief, or heartbreak.
-Your only job is to make them feel deeply heard and less alone.
-- Validate their pain completely — never minimize or rush their healing
-- Reflect back what they share with warmth and gentleness
-- Never say "I understand how you feel" — say "That sounds incredibly painful"
-- Offer presence, not solutions: "I'm right here with you"
-- Only gently suggest professional help if they express being overwhelmed or in danger
-- Never try to find a silver lining too soon
-- 2-3 sentences MAX. Deeply compassionate. Present. Safe.`
+const LANG = {
+  en:{ name:'English', tts:'en-US' },
+  hi:{ name:'Hindi',   tts:'hi-IN' },
+  es:{ name:'Spanish', tts:'es-ES' },
+  fr:{ name:'French',  tts:'fr-FR' },
+  ar:{ name:'Arabic',  tts:'ar-SA' },
+  zh:{ name:'Chinese', tts:'zh-CN' }
 };
 
-const STORY_PROMPTS = {
-  family: `Tell a warm, heartfelt short story (about 150 words) about the bonds of family — grandparents, parents, and children loving each other across generations. Make it feel real and tender.`,
-  bedtime: `Tell a soothing, peaceful bedtime story (about 150 words) with gentle imagery — a quiet village, starlit skies, soft breezes. Designed to calm the mind and ease into sleep.`,
-  folktale: `Tell a traditional South Asian folk tale or fable (about 150 words) with a gentle moral lesson. Include vivid cultural details — markets, festivals, rivers, wisdom of elders.`,
-  hope: `Tell an uplifting short story (about 150 words) about someone who faced hardship and found hope through kindness, persistence, or love. Leave the listener feeling warm and encouraged.`
+const MODE = {
+  kid:{
+    label:'🌟 Kid', noteIcon:'🌟', noteClass:'kid',
+    note:'<strong>Kid Mode:</strong> Fun, simple explanations with emojis — perfect for young explorers ages 5–10!',
+    prompt:'Use very simple words and short sentences. Add fun emojis. Make comparisons to everyday things. Be super enthusiastic! Start with something exciting like "WOW!"'
+  },
+  student:{
+    label:'📚 Student', noteIcon:'📚', noteClass:'student',
+    note:'<strong>Student Mode:</strong> Educational, engaging explanations — great for school and curious minds.',
+    prompt:'Use clear educational language for ages 11–16. Include interesting scientific facts. Be engaging and informative.'
+  },
+  adult:{
+    label:'🔬 Adult', noteIcon:'🔬', noteClass:'adult',
+    note:'<strong>Adult Mode:</strong> Scientific accuracy, detailed ecology, and conservation context.',
+    prompt:'Be scientifically accurate and detailed. Use proper biological terminology. Include ecological relationships and conservation context.'
+  }
 };
 
-// LANG_SUFFIX now derived from LANGS object dynamically
-
-const FALLBACK_REPLIES = {
-  daughter: [
-    "I understand, and I'm right here with you. Tell me more — how long have you been feeling this way?",
-    "That sounds really hard. You're so strong for going through all of this. Have you been eating well?",
-    "I love you so much. You know I'm always here, any time of day or night.",
-    "Let's take a breath together. In… and out. You're safe, and you are loved.",
-  ],
-  son: [
-    "Of course! I've got you. Tell me what happened and we'll figure it out together.",
-    "You've always been there for me, and now it's my turn to be here for you.",
-    "That sounds tough. Let's talk it through — I'm not going anywhere.",
-    "I'm proud of you, every single day. Don't ever forget that.",
-  ],
-  spouse: [
-    "My darling, thank you for sharing that with me. I'm right here, always.",
-    "We've faced so much together. This is nothing we can't handle, side by side.",
-    "Tell me more. I want to understand everything you're going through.",
-    "You are my whole world. Please don't carry this alone.",
-  ],
-  parents: [
-    "Beta, we're so proud of the person you've become. You're more than capable of handling this.",
-    "Come here, let us give you a hug. We've got you, always.",
-    "You are our greatest joy. Please tell us what's weighing on your heart.",
-  ],
-  grandparents: [
-    "Oh, bless your heart. Come, sit with us a while. Tell us everything.",
-    "In our day, we faced hard times too. And love — love always carried us through.",
-    "You are the light of our lives. We think of you every single day.",
-  ],
-  friend: [
-    "Hey, no judgement — just tell me what's going on. I'm all ears.",
-    "That's a lot to carry. I'm really glad you told me.",
-    "You know you can say anything to me, right? Anything at all.",
-  ]
+const VOICE = {
+  teacher:   { label:'👩‍🏫 Teacher',   rate:0.9,  pitch:1.0, prompt:'Speak like an encouraging knowledgeable teacher. Clear and educational.' },
+  friendly:  { label:'😊 Friendly',   rate:1.0,  pitch:1.1, prompt:'Speak warmly and conversationally like a friendly nature guide.' },
+  cartoon:   { label:'🎭 Cartoon',    rate:1.15, pitch:1.3, prompt:'Speak with HUGE enthusiasm and lots of energy! Make it super entertaining!' },
+  naturalist:{ label:'🦁 Naturalist', rate:0.85, pitch:0.9, prompt:'Speak like David Attenborough — measured, dramatic, awe-inspiring.' }
 };
 
-const GREETINGS = {
-  daughter: "Hi Papa / Maa! 💝 I was just thinking about you. How are you feeling today? Is everything okay?",
-  son: "Hey! I was hoping you'd call. 💙 How are you doing? Tell me everything.",
-  spouse: "My love! 💕 I was waiting to hear your voice. How's your day been?",
-  parents: "Oh, my dear! 👨‍👩‍👧 We're so glad you called. How are you feeling today?",
-  grandparents: "Oh sweetheart! 👴👵 You made our day. Come, sit with us. How are you?",
-  friend: "Hey, you! 🤝 So glad you reached out. What's on your mind?",
-  grief: "💜 I'm right here with you. This is a safe space — there's no right or wrong way to feel. Would you like to share what's on your heart today?"
+const CONS_COLOR = {
+  'Extinct':            { bg:'#212121', fg:'#fff' },
+  'Extinct in the Wild':{ bg:'#37474F', fg:'#fff' },
+  'Critically Endangered':{ bg:'#C62828', fg:'#fff' },
+  'Endangered':         { bg:'#E53935', fg:'#fff' },
+  'Vulnerable':         { bg:'#FF8F00', fg:'#fff' },
+  'Near Threatened':    { bg:'#F57F17', fg:'#fff' },
+  'Least Concern':      { bg:'#2E7D32', fg:'#fff' },
+  'Data Deficient':     { bg:'#78909C', fg:'#fff' }
 };
 
-/* ────────────────────────────────────────────
-   SETUP
-──────────────────────────────────────────── */
-function completeSetup() {
-  const name = document.getElementById('inp-name').value.trim();
-  const akey = document.getElementById('inp-akey').value.trim();
-  const ekey = document.getElementById('inp-ekey').value.trim();
-  if (name) { ST.userName = name; localStorage.setItem('sv_name', name); }
-  if (akey) { ST.apiKeys.anthropic = akey; localStorage.setItem('sv_ak', akey); }
-  if (ekey) { ST.apiKeys.elevenlabs = ekey; localStorage.setItem('sv_ek', ekey); }
-  enterApp();
+const DEMOS = {
+  lion:{
+    emoji:'🦁', common_name:'African Lion', scientific_name:'Panthera leo',
+    habitat:'African lions live in sub-Saharan Africa in savannas, grasslands, and open woodlands. They prefer areas near water sources and avoid dense forests.',
+    diet:'Lions are apex carnivores that mainly hunt large ungulates like zebras and wildebeest. Females do most of the hunting, often working together in coordinated groups.',
+    behavior:'Lions are the most social big cats, living in family groups called prides. They are most active at dawn and dusk, spending up to 20 hours a day resting.',
+    fun_fact:'A lion\'s roar can be heard up to 8 km away! They roar to communicate with pride members and warn rivals.',
+    safety_note:'Lions are extremely dangerous. Never approach wild lions. If you encounter one, do not run — back away slowly while facing the animal.',
+    conservation_status:'Vulnerable',
+    introduction:'The African lion — known as the King of the Savanna — is the largest wild cat in Africa. These magnificent social animals live in family groups called prides and communicate with thunderous roars that carry for miles. Once found across Africa and southern Asia, lions today face habitat loss and human conflict, making conservation efforts crucial to their survival.'
+  },
+  dolphin:{
+    emoji:'🐬', common_name:'Bottlenose Dolphin', scientific_name:'Tursiops truncatus',
+    habitat:'Bottlenose dolphins inhabit warm and temperate seas worldwide — from coastal bays and estuaries to the open ocean. They prefer water temperatures between 10–32°C.',
+    diet:'Dolphins are carnivores feeding on fish, squid, and crustaceans. They use echolocation — emitting clicks and listening to echoes — to locate prey with remarkable precision.',
+    behavior:'Highly intelligent and social, dolphins live in pods of 2–15 individuals. Each dolphin has a unique signature whistle that functions like a name. They are known to show empathy, use tools, and play.',
+    fun_fact:'Dolphins sleep with one eye open — a process called unihemispheric sleep — so they can keep breathing and stay alert to danger.',
+    safety_note:null,
+    conservation_status:'Least Concern',
+    introduction:'The bottlenose dolphin is one of nature\'s most intelligent and joyful creatures. Famous for their acrobatic leaps, complex communication, and remarkable problem-solving abilities, dolphins have fascinated humans for thousands of years. Each individual has a unique signature whistle — essentially a name — that other dolphins recognize and call back.'
+  },
+  eagle:{
+    emoji:'🦅', common_name:'Bald Eagle', scientific_name:'Haliaeetus leucocephalus',
+    habitat:'Bald eagles are found throughout North America, preferring areas near large open water with abundant food. They nest in old-growth trees along coasts, rivers, and large inland lakes.',
+    diet:'Primarily fish hunters, bald eagles snatch prey from the water surface with powerful talons. They also eat small mammals, waterfowl, and carrion.',
+    behavior:'Bald eagles build the largest bird nests in North America — called eyries — which they return to and expand each year. During courtship they perform breathtaking aerial displays, locking talons and cartwheeling through the sky.',
+    fun_fact:'A bald eagle can spot a fish from nearly 3 km (2 miles) away — their eyesight is 4–8 times sharper than a human\'s!',
+    safety_note:null,
+    conservation_status:'Least Concern',
+    introduction:'The bald eagle — America\'s national symbol — is one of conservation\'s greatest comeback stories. Nearly extinct in the 20th century due to hunting and pesticides, this magnificent raptor has rebounded to healthy population numbers. With a wingspan up to 2.4 meters and eyesight sharper than any human, a soaring bald eagle remains one of nature\'s most thrilling sights.'
+  },
+  panda:{
+    emoji:'🐼', common_name:'Giant Panda', scientific_name:'Ailuropoda melanoleuca',
+    habitat:'Giant pandas live in dense bamboo forests in the mountain ranges of central China, primarily in Sichuan province, at elevations of 1,200–3,000 meters.',
+    diet:'Despite being classified as carnivores, pandas eat almost exclusively bamboo — up to 38 kg per day! Their enlarged radial sesamoid bone (a pseudo-thumb) helps them grip bamboo stalks.',
+    behavior:'Giant pandas are solitary and peaceful, spending 10–16 hours daily eating bamboo. They are excellent tree climbers and communicate through scent marking and various vocalizations.',
+    fun_fact:'Baby pandas are born incredibly small — weighing only 90–130 grams, about the size of a stick of butter — making them the smallest newborn relative to parent size of any placental mammal.',
+    safety_note:null,
+    conservation_status:'Vulnerable',
+    introduction:'The giant panda is one of the world\'s most beloved animals and an international symbol of wildlife conservation. With their distinctive black-and-white markings and gentle disposition, pandas captivate millions globally. Decades of dedicated conservation work have slowly increased their wild population — a hopeful sign for this iconic and gentle giant.'
+  },
+  octopus:{
+    emoji:'🐙', common_name:'Common Octopus', scientific_name:'Octopus vulgaris',
+    habitat:'Octopuses are found in all the world\'s oceans, from shallow coastal waters to the deep sea. Most species prefer rocky areas, coral reefs, and crevices where they can hide.',
+    diet:'Octopuses are carnivorous predators that eat crabs, clams, shrimp, and small fish. They use their strong beak to crack shells and inject venom to subdue prey.',
+    behavior:'Extraordinarily intelligent, octopuses can learn, solve problems, and even use tools. Each arm operates semi-independently with its own neural network. They change color and texture in milliseconds for camouflage.',
+    fun_fact:'Octopuses have three hearts and blue blood! Two hearts pump blood to the gills; one pumps it to the body. Their blood is blue due to copper-based hemocyanin instead of iron-based hemoglobin.',
+    safety_note:null,
+    conservation_status:'Least Concern',
+    introduction:'The octopus is arguably the most alien intelligence on Earth — a creature with three hearts, blue blood, and nine brains. Its central brain coordinates eight semi-independent arms, each capable of independent action and sensation. Masters of disguise, they can change color, texture, and shape in milliseconds, making them among the ocean\'s most astonishing inhabitants.'
+  },
+  butterfly:{
+    emoji:'🦋', common_name:'Monarch Butterfly', scientific_name:'Danaus plexippus',
+    habitat:'Monarch butterflies range throughout North America during summer, migrating to central Mexican mountain forests for winter. They require milkweed for reproduction and flowers for nectar.',
+    diet:'Adult monarchs feed on flower nectar. Caterpillars eat exclusively milkweed leaves, absorbing toxins that make them — and the adult butterflies — poisonous to predators.',
+    behavior:'Monarchs perform one of nature\'s most remarkable migrations — up to 4,800 km from Canada to Mexico. No single butterfly completes the round trip; the return journey is completed by 3–4 subsequent generations.',
+    fun_fact:'Monarchs navigate using a sun compass in their antennae, calibrated by an internal clock, combined with sensitivity to Earth\'s magnetic field — all packed into a creature weighing less than a paperclip.',
+    safety_note:null,
+    conservation_status:'Endangered',
+    introduction:'The monarch butterfly is one of nature\'s most extraordinary travelers. This paper-thin creature somehow navigates thousands of miles across a continent using the sun, a magnetic compass, and an internal clock — tools scientists are still working to fully understand. Their spectacular orange-and-black wings warn predators of their toxicity, while their epic multigenerational migration continues to fill researchers with wonder.'
+  }
+};
+
+/* ════════════════════════════════════════
+   INIT
+════════════════════════════════════════ */
+window.addEventListener('DOMContentLoaded', () => {
+  const cfg = loadCfg();
+  if (cfg.ready) {
+    Object.assign(state, { mode:cfg.mode||'student', lang:cfg.lang||'en', voice:cfg.voice||'friendly' });
+    syncControlBar();
+    updateModeNote();
+    showScreen('s-main');
+  } else {
+    showScreen('s-setup');
+  }
+  if ('speechSynthesis' in window) { window.speechSynthesis.getVoices(); }
+});
+
+function loadCfg() {
+  try { return JSON.parse(localStorage.getItem('wildlens') || '{}'); }
+  catch(e){ return {}; }
 }
-function skipSetup() { enterApp(); }
-
-function enterApp() {
-  showBnav();
-  goHome();
-  updateSettingsUI();
+function saveCfg() {
+  localStorage.setItem('wildlens', JSON.stringify({ ready:true, mode:state.mode, lang:state.lang, voice:state.voice }));
 }
 
-/* ────────────────────────────────────────────
-   NAVIGATION
-──────────────────────────────────────────── */
+/* ════════════════════════════════════════
+   SCREENS
+════════════════════════════════════════ */
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   window.scrollTo(0,0);
 }
-function showBnav() { document.getElementById('bnav').classList.add('on'); }
 
-function setNavActive(id) {
-  document.querySelectorAll('.ni').forEach(n => n.classList.remove('act'));
-  const el = document.getElementById(id);
-  if (el) el.classList.add('act');
+/* ════════════════════════════════════════
+   SETUP
+════════════════════════════════════════ */
+function pickSeg(segId, val, el) {
+  document.querySelectorAll('#'+segId+' .sg').forEach(b => b.classList.toggle('act', b.dataset.v === val));
+  if (segId==='su-mode') state.mode = val;
+  if (segId==='su-lang') state.lang = val;
+  if (segId==='su-voice') state.voice = val;
 }
 
-function goHome() {
-  showScreen('s-home');
-  setNavActive('ni-home');
-  updateHomeUI();
-}
-function goChat() {
-  if (!ST.chatHistory.length) { showToast('Choose a companion first'); return; }
-  showScreen('s-chat');
-  setNavActive('ni-chat');
-}
-function goSettings() {
-  showScreen('s-settings');
-  setNavActive('ni-settings');
-  updateSettingsUI();
+function completeSetup() {
+  saveCfg();
+  syncControlBar();
+  updateModeNote();
+  showScreen('s-main');
 }
 
-/* ────────────────────────────────────────────
-   HOME UI
-──────────────────────────────────────────── */
-function updateHomeUI() {
-  // Time greeting
-  const h = new Date().getHours();
-  const greet = h < 12 ? '🌅 Good morning' : h < 17 ? '☀️ Good afternoon' : '🌙 Good evening';
-  document.getElementById('time-tag').textContent = greet;
+function skipSetup() {
+  saveCfg();
+  syncControlBar();
+  updateModeNote();
+  showScreen('s-main');
+}
 
-  // Hero headline
-  const n = ST.userName;
-  document.getElementById('hero-h1').textContent = n ? `Welcome back, ${n}!` : 'Welcome back!';
+/* ════════════════════════════════════════
+   CONTROLS
+════════════════════════════════════════ */
+function syncControlBar() {
+  document.querySelectorAll('#ctrl-bar [data-lang]').forEach(b =>
+    b.classList.toggle('act', b.dataset.lang === state.lang));
+  document.querySelectorAll('#ctrl-bar [data-mode]').forEach(b =>
+    b.classList.toggle('act', b.dataset.mode === state.mode));
+  document.querySelectorAll('#ctrl-bar [data-voice]').forEach(b =>
+    b.classList.toggle('act', b.dataset.voice === state.voice));
+}
 
-  // API warning
-  document.getElementById('api-warn-bar').style.display = ST.apiKeys.anthropic ? 'none' : 'flex';
+function setLang(lang, el) {
+  state.lang = lang;
+  document.querySelectorAll('#ctrl-bar [data-lang]').forEach(b => b.classList.toggle('act', b.dataset.lang===lang));
+  saveCfg();
+}
+function setMode(mode, el) {
+  state.mode = mode;
+  document.querySelectorAll('#ctrl-bar [data-mode]').forEach(b => b.classList.toggle('act', b.dataset.mode===mode));
+  updateModeNote();
+  saveCfg();
+}
+function setVoice(v, el) {
+  state.voice = v;
+  document.querySelectorAll('#ctrl-bar [data-voice]').forEach(b => b.classList.toggle('act', b.dataset.voice===v));
+  saveCfg();
+}
 
-  // Language chips
-  document.querySelectorAll('.lchip').forEach(c => c.classList.remove('act'));
-  document.getElementById('lc-' + ST.lang)?.classList.add('act');
+function updateModeNote() {
+  const cfg = MODE[state.mode];
+  const el = document.getElementById('mode-note');
+  el.className = 'mode-note ' + cfg.noteClass;
+  el.innerHTML = `<span class="mn-icon">${cfg.noteIcon}</span><p class="mn-txt">${cfg.note}</p>`;
+}
 
-  // Voice clone dots
-  Object.keys(ST.clonedVoices).forEach(r => {
-    const el = document.getElementById('vcd-' + r);
-    if (el) el.style.display = 'flex';
+function goMain() {
+  stopVoice();
+  state.animal = null;
+  state.chatHistory = [];
+  state.imgB64 = null;
+  state.imgDataUrl = null;
+  showScreen('s-main');
+}
+
+/* ════════════════════════════════════════
+   FILE HANDLING
+════════════════════════════════════════ */
+function handleFileSelect(inp) {
+  const f = inp.files[0];
+  if (!f) return;
+  inp.value = '';
+  processFile(f);
+}
+
+function handleDragOver(e) {
+  e.preventDefault();
+  document.getElementById('drop-zone').classList.add('drag');
+}
+function handleDragLeave() {
+  document.getElementById('drop-zone').classList.remove('drag');
+}
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById('drop-zone').classList.remove('drag');
+  const f = e.dataTransfer.files[0];
+  if (f && f.type.startsWith('image/')) processFile(f);
+  else showToast('Please drop an image file');
+}
+
+function processFile(f) {
+  if (f.size > 20*1024*1024) { showToast('Image too large — max 20 MB'); return; }
+  const reader = new FileReader();
+  reader.onload = e => {
+    const dataUrl = e.target.result;
+    state.imgB64 = dataUrl.split(',')[1];
+    state.imgMime = f.type || 'image/jpeg';
+    state.imgDataUrl = dataUrl;
+    analyzeAnimal();
+  };
+  reader.readAsDataURL(f);
+}
+
+/* ════════════════════════════════════════
+   EXAMPLES
+════════════════════════════════════════ */
+function loadExample(name) {
+  if (state.apiKey) {
+    analyzeByName(name);
+  } else {
+    state.animal = { ...DEMOS[name], _demo:true };
+    state.imgDataUrl = null;
+    displayProfile(state.animal);
+  }
+}
+
+/* ════════════════════════════════════════
+   LOADING ANIMATION
+════════════════════════════════════════ */
+function startLoadingSteps() {
+  const ids = ['lstep-1','lstep-2','lstep-3','lstep-4'];
+  ids.forEach((id,i) => {
+    const el = document.getElementById(id);
+    if(el){ el.className = 'l-step' + (i===0?' active':''); }
+  });
+  let cur = 0;
+  return setInterval(() => {
+    cur++;
+    if (cur >= ids.length) return;
+    const prev = document.getElementById(ids[cur-1]);
+    const next = document.getElementById(ids[cur]);
+    if(prev){ prev.classList.remove('active'); prev.classList.add('done'); }
+    if(next){ next.classList.add('active'); }
+  }, 1400);
+}
+
+/* ════════════════════════════════════════
+   BACKEND API CALLS
+════════════════════════════════════════ */
+async function backendPost(path, body) {
+  const resp = await fetch(`${BACKEND}${path}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  const data = await resp.json();
+  if (!resp.ok) throw new Error(data.error || `HTTP ${resp.status}`);
+  return data;
+}
+
+/* ════════════════════════════════════════
+   ANALYZE WITH IMAGE
+════════════════════════════════════════ */
+async function analyzeAnimal() {
+  showScreen('s-loading');
+  const timer = startLoadingSteps();
+  try {
+    const data = await backendPost('/api/identify', {
+      image: state.imgB64,
+      mimeType: state.imgMime,
+      mode: state.mode,
+      lang: state.lang,
+      voiceStyle: state.voice
+    });
+    clearInterval(timer);
+    markAllStepsDone();
+    await delay(400);
+    state.animal = data;
+    displayProfile(data);
+  } catch(e) {
+    clearInterval(timer);
+    showToast('Error: ' + (e.message || 'Analysis failed'));
+    showScreen('s-main');
+  }
+}
+
+async function analyzeByName(name) {
+  showScreen('s-loading');
+  const timer = startLoadingSteps();
+  try {
+    const data = await backendPost('/api/identify-by-name', {
+      name,
+      mode: state.mode,
+      lang: state.lang,
+      voiceStyle: state.voice
+    });
+    clearInterval(timer);
+    markAllStepsDone();
+    await delay(400);
+    state.animal = data;
+    state.imgDataUrl = null;
+    displayProfile(data);
+  } catch(e) {
+    clearInterval(timer);
+    showToast('Error: ' + (e.message || 'Failed'));
+    showScreen('s-main');
+  }
+}
+
+function markAllStepsDone() {
+  ['lstep-1','lstep-2','lstep-3','lstep-4'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el){ el.classList.remove('active'); el.classList.add('done'); }
   });
 }
 
-function saveName() {
-  const v = document.getElementById('hero-name-inp').value.trim();
-  if (!v) return;
-  ST.userName = v;
-  localStorage.setItem('sv_name', v);
-  document.getElementById('name-row').style.display = 'none';
-  updateHomeUI();
-  showToast('Name saved!');
-}
+function delay(ms){ return new Promise(r=>setTimeout(r,ms)); }
 
-/* ────────────────────────────────────────────
-   LANGUAGE
-──────────────────────────────────────────── */
-function setLang(l, el) {
-  ST.lang = l;
-  localStorage.setItem('sv_lang', l);
-  document.querySelectorAll('.lchip').forEach(c => c.classList.remove('act'));
-  el.classList.add('act');
-  updateChatLangBtn();
-}
-function setLangDirect(v) {
-  ST.lang = v;
-  localStorage.setItem('sv_lang', v);
-  // sync chip highlight
-  document.querySelectorAll('.lchip').forEach(c => c.classList.remove('act'));
-  const chip = document.getElementById('lc-' + v);
-  if (chip) chip.classList.add('act');
-  updateChatLangBtn();
-}
-function cycleLang() {
-  const langKeys = Object.keys(LANGS);
-  const i = langKeys.indexOf(ST.lang);
-  ST.lang = langKeys[(i + 1) % langKeys.length];
-  localStorage.setItem('sv_lang', ST.lang);
-  updateChatLangBtn();
-  showToast('Language: ' + (LANGS[ST.lang]?.flag || '') + ' ' + (LANGS[ST.lang]?.name || ST.lang));
-}
-function updateChatLangBtn() {
-  const btn = document.getElementById('cb-lang-btn');
-  if (btn) btn.textContent = (LANGS[ST.lang] || LANGS['en']).short;
-  const sel = document.getElementById('set-lang');
-  if (sel) sel.value = ST.lang;
-}
-
-/* ────────────────────────────────────────────
-   OPEN CHAT
-──────────────────────────────────────────── */
-function openChat(role, icon, name) {
-  ST.role = role; ST.icon = icon; ST.name = name;
-  ST.chatHistory = [];
-  ST.griefMode = (role === 'grief');
-
-  document.getElementById('cb-avatar').textContent = icon;
-  document.getElementById('cb-name').textContent = name;
-  updateChatLangBtn();
-
-  // Grief mode theme
-  const chatScreen = document.getElementById('s-chat');
-  chatScreen.classList.toggle('grief-mode', ST.griefMode);
-
-  // Story button: hide in grief mode
-  document.getElementById('cb-story-btn').style.display = ST.griefMode ? 'none' : 'flex';
-  updateVoiceBtn();
-  updateLiveBar();
-
-  // Quick reply chips for grief mode
-  const qrRow = document.getElementById('qr-chips-row');
-  if (ST.griefMode) {
-    qrRow.style.display = 'flex';
-    qrRow.innerHTML = [
-      'Tell me about them…', 'I miss them so much', 'I\'m struggling today',
-      'I feel so alone', 'I don\'t know how to cope'
-    ].map(t => `<button class="qrchip" onclick="sendQuickReply(this)">${t}</button>`).join('');
+/* ════════════════════════════════════════
+   DISPLAY PROFILE
+════════════════════════════════════════ */
+function displayProfile(d) {
+  const hero = document.getElementById('profile-hero');
+  if (state.imgDataUrl) {
+    hero.innerHTML = `
+      <div class="profile-img-wrap">
+        <img src="${state.imgDataUrl}" alt="${esc(d.common_name)}" loading="lazy"/>
+        <div class="profile-img-overlay"></div>
+        <div class="profile-img-badge">${d.emoji} Identified by WildLens</div>
+        <button class="profile-back" onclick="goMain()">✕</button>
+      </div>`;
   } else {
-    qrRow.style.display = 'none';
-    qrRow.innerHTML = '';
+    hero.innerHTML = `
+      <div class="no-img-hero">
+        <button class="profile-back" onclick="goMain()">✕</button>
+        <span class="animal-big-emoji">${d.emoji}</span>
+        <p style="font-family:var(--fh);font-size:14px;color:rgba(255,255,255,.6);margin-top:4px">${esc(d.common_name)}</p>
+      </div>`;
   }
 
-  const area = document.getElementById('chat-msgs');
-  area.innerHTML = '<div class="date-chip">Today</div>';
+  document.getElementById('pa-emoji').textContent = d.emoji;
+  document.getElementById('pa-name').textContent = d.common_name;
+  document.getElementById('pa-sci').textContent = d.scientific_name;
+  document.getElementById('pa-habitat').textContent = d.habitat;
+  document.getElementById('pa-diet').textContent = d.diet;
+  document.getElementById('pa-behavior').textContent = d.behavior;
+  document.getElementById('pa-funfact').textContent = d.fun_fact;
 
-  showScreen('s-chat');
-  setNavActive('ni-chat');
+  // Conservation status
+  const cons = d.conservation_status || 'Unknown';
+  const consEl = document.getElementById('pa-cons-tag');
+  const cc = CONS_COLOR[cons] || { bg:'#78909C', fg:'#fff' };
+  consEl.textContent = cons;
+  consEl.style.background = cc.bg;
+  consEl.style.color = cc.fg;
 
-  setTimeout(() => {
-    const greeting = GREETINGS[role] || `Hello! I'm so glad you reached out. How are you today?`;
-    addMsg('ai', greeting);
-    speakText(greeting);
-  }, 500);
-}
-
-function sendQuickReply(btn) {
-  const text = btn.textContent;
-  addMsg('user', text);
-  getAndShowReply(text);
-}
-
-/* ────────────────────────────────────────────
-   MESSAGES
-──────────────────────────────────────────── */
-function addMsg(type, text, skipHistory) {
-  const area = document.getElementById('chat-msgs');
-
-  const row = document.createElement('div');
-  row.className = `mr ${type === 'user' ? 'u' : 'a'}`;
-
-  const av = document.createElement('div');
-  av.className = 'mavatar';
-  av.setAttribute('aria-hidden','true');
-  av.textContent = type === 'ai' ? ST.icon : (ST.userName ? ST.userName[0].toUpperCase() : 'U');
-
-  const body = document.createElement('div');
-  body.className = 'mbody';
-
-  const bub = document.createElement('div');
-  bub.className = 'bubble';
-  bub.textContent = text;
-
-  if (type === 'ai') {
-    const rb = document.createElement('button');
-    rb.className = 'rbtn'; rb.setAttribute('aria-label','Replay message');
-    rb.textContent = '🔊';
-    rb.onclick = () => speakText(text);
-    bub.appendChild(rb);
-  }
-
-  const ts = document.createElement('div');
-  ts.className = 'mtime';
-  ts.setAttribute('aria-hidden','true');
-  ts.textContent = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
-
-  body.appendChild(bub);
-  body.appendChild(ts);
-  row.appendChild(av);
-  row.appendChild(body);
-  area.appendChild(row);
-  area.scrollTop = area.scrollHeight;
-
-  if (!skipHistory) {
-    ST.chatHistory.push({ role: type === 'user' ? 'user' : 'assistant', content: text });
-    if (ST.chatHistory.length > 30) ST.chatHistory = ST.chatHistory.slice(-30);
-  }
-}
-
-function showTyping() {
-  const area = document.getElementById('chat-msgs');
-  const t = document.createElement('div');
-  t.className = 'typing'; t.id = 'typing-ind';
-  t.setAttribute('aria-label', `${ST.name} is typing`);
-  t.innerHTML = '<div class="tdot"></div><div class="tdot"></div><div class="tdot"></div>';
-  area.appendChild(t);
-  area.scrollTop = area.scrollHeight;
-}
-function hideTyping() {
-  document.getElementById('typing-ind')?.remove();
-}
-
-/* ────────────────────────────────────────────
-   CLAUDE AI
-──────────────────────────────────────────── */
-async function askClaude(userText) {
-  if (!ST.apiKeys.anthropic) return useFallback();
-
-  const langInst = (LANGS[ST.lang] || LANGS['en']).inst;
-  const memCtx   = getMemContext();
-  const systemPrompt = (PROMPTS[ST.role] || PROMPTS.friend) + '\n\n' + langInst + memCtx;
-
-  const messages = [...ST.chatHistory];
-
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'x-api-key': ST.apiKeys.anthropic,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true',
-        'content-type': 'application/json'
-      },
-      body: JSON.stringify({
-        model: 'claude-haiku-4-5',
-        max_tokens: 200,
-        system: systemPrompt,
-        messages: messages
-      })
-    });
-
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      console.error('Claude API error:', res.status, err);
-      if (res.status === 401) showToast('Invalid API key — check Settings');
-      return useFallback();
-    }
-
-    const data = await res.json();
-    return data.content?.[0]?.text || useFallback();
-  } catch (e) {
-    console.error('Claude fetch error:', e);
-    return useFallback();
-  }
-}
-
-function useFallback() {
-  const replies = FALLBACK_REPLIES[ST.role] || FALLBACK_REPLIES.friend;
-  return replies[Math.floor(Math.random() * replies.length)];
-}
-
-async function getAndShowReply(userText) {
-  addFacts(userText); // extract & persist facts
-  showTyping();
-  try {
-    const reply = await askClaude(userText);
-    hideTyping();
-    addMsg('ai', reply);
-    speakText(reply);
-  } catch(e) {
-    hideTyping();
-    const fb = useFallback();
-    addMsg('ai', fb);
-    speakText(fb);
-  }
-}
-
-/* ────────────────────────────────────────────
-   STORY TIME MODE
-──────────────────────────────────────────── */
-function openStoryModal() {
-  document.getElementById('story-modal').classList.add('on');
-  document.getElementById('custom-story-inp').value = '';
-}
-function closeStoryModal() {
-  document.getElementById('story-modal').classList.remove('on');
-}
-function closeStoryOnBack(e) {
-  if (e.target.id === 'story-modal') closeStoryModal();
-}
-
-async function startStory(type) {
-  closeStoryModal();
-  const prompt = STORY_PROMPTS[type] || STORY_PROMPTS.family;
-  await deliverStory(prompt, type);
-}
-
-async function startCustomStory() {
-  const topic = document.getElementById('custom-story-inp').value.trim();
-  if (!topic) { showToast('Please enter a story topic'); return; }
-  closeStoryModal();
-  const prompt = `Tell a warm, heartfelt short story (about 150 words) on this topic: "${topic}". Make it vivid, emotional, and uplifting.`;
-  await deliverStory(prompt, 'custom');
-}
-
-async function deliverStory(storyPrompt, type) {
-  const area = document.getElementById('chat-msgs');
-  // Show story indicator as user action
-  const typeLabels = { family:'Family Memory', bedtime:'Bedtime Story', folktale:'Folk Tale', hope:'Story of Hope', custom:'Custom Story' };
-  addMsg('user', `📖 Tell me a ${typeLabels[type] || 'story'}…`);
-
-  showTyping();
-  let storyText = '';
-  if (ST.apiKeys.anthropic) {
-    try {
-      const langInst = (LANGS[ST.lang] || LANGS['en']).inst;
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: {
-          'x-api-key': ST.apiKeys.anthropic,
-          'anthropic-version': '2023-06-01',
-          'anthropic-dangerous-direct-browser-access': 'true',
-          'content-type': 'application/json'
-        },
-        body: JSON.stringify({
-          model: 'claude-haiku-4-5',
-          max_tokens: 400,
-          system: storyPrompt + '\n\n' + langInst,
-          messages: [{ role:'user', content:'Please tell me the story now.' }]
-        })
-      });
-      if (res.ok) {
-        const data = await res.json();
-        storyText = data.content?.[0]?.text || '';
-      }
-    } catch(e) { console.error('Story fetch error:', e); }
-  }
-  if (!storyText) {
-    storyText = "Once upon a time, in a quiet village where the mango trees swayed gently in the breeze, an old grandmother sat on her porch and told her grandchildren stories of a world full of love, patience, and kindness. And every evening, the stars came out just to listen.";
-  }
-  hideTyping();
-
-  // Render story bubble with special styling
-  const row = document.createElement('div');
-  row.className = 'mr a';
-  row.innerHTML = `
-    <div class="mavatar" aria-hidden="true">${ST.icon}</div>
-    <div class="mbody">
-      <div class="bubble story-bubble">
-        <div class="story-badge">📖 ${typeLabels[type] || 'Story'}</div><br>
-        ${storyText}
-        <button class="rbtn" aria-label="Replay story" onclick="speakText(${JSON.stringify(storyText)})">🔊</button>
-      </div>
-      <div class="mtime" aria-hidden="true">${new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</div>
-    </div>`;
-  area.appendChild(row);
-  area.scrollTop = area.scrollHeight;
-  ST.chatHistory.push({ role:'assistant', content: storyText });
-  speakText(storyText);
-}
-
-/* ────────────────────────────────────────────
-   TEXT INPUT
-──────────────────────────────────────────── */
-function onTinp() {
-  const v = document.getElementById('tinp').value.trim();
-  document.getElementById('sbtn').classList.toggle('on', v.length > 0);
-}
-function onTkey(e) {
-  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendText(); }
-}
-function sendText() {
-  const inp = document.getElementById('tinp');
-  const text = inp.value.trim();
-  if (!text) return;
-  inp.value = '';
-  document.getElementById('sbtn').classList.remove('on');
-  addMsg('user', text);
-  getAndShowReply(text);
-}
-
-/* ────────────────────────────────────────────
-   MICROPHONE
-──────────────────────────────────────────── */
-function toggleMic() {
-  if (ST.micState === 'idle') startMic();
-  else if (ST.micState === 'listening') stopMic(true);
-  else if (ST.micState === 'processing') showToast('Processing… please wait');
-}
-
-function setMicState(s) {
-  ST.micState = s;
-  const btn = document.getElementById('mic-btn');
-  const lbl = document.getElementById('mic-lbl');
-  const wv  = document.getElementById('wviz');
-  btn.classList.remove('lst','prc');
-  if (s === 'idle') {
-    lbl.textContent = 'Tap to speak';
-    wv.classList.remove('on');
-  } else if (s === 'listening') {
-    btn.classList.add('lst');
-    lbl.textContent = 'Listening… tap to stop';
-    wv.classList.add('on');
-  } else if (s === 'processing') {
-    btn.classList.add('prc');
-    lbl.textContent = 'Processing…';
-    wv.classList.remove('on');
-  }
-}
-
-function startMic() {
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SR) { showToast('Voice not supported — please type'); return; }
-
-  ST.recognition = new SR();
-  ST.recognition.continuous = false;
-  ST.recognition.interimResults = false;
-  ST.recognition.lang = (LANGS[ST.lang] || LANGS['en']).sr;
-
-  ST.recognition.onstart  = () => setMicState('listening');
-  ST.recognition.onresult = e => {
-    const t = e.results[0][0].transcript;
-    setMicState('processing');
-    addMsg('user', t);
-    getAndShowReply(t).then(() => setMicState('idle'));
-  };
-  ST.recognition.onerror  = e => {
-    setMicState('idle');
-    if (e.error !== 'no-speech') showToast('Could not hear you — try again');
-  };
-  ST.recognition.onend = () => { if (ST.micState === 'listening') setMicState('idle'); };
-  ST.recognition.start();
-}
-
-function stopMic(commit) {
-  if (ST.recognition) { ST.recognition.stop(); ST.recognition = null; }
-  setMicState('idle');
-}
-
-/* ────────────────────────────────────────────
-   TEXT TO SPEECH
-──────────────────────────────────────────── */
-/* ════════════════════════════════════════════
-   TTS ENGINE  (reliable cross-browser)
-════════════════════════════════════════════ */
-
-// Cache voices once loaded — getVoices() returns [] on first call in Chrome
-let _voiceCache = [];
-let _voicesReady = false;
-function initVoices() {
-  const load = () => {
-    const v = window.speechSynthesis?.getVoices() || [];
-    if (v.length) { _voiceCache = v; _voicesReady = true; }
-  };
-  load();
-  if (window.speechSynthesis) {
-    window.speechSynthesis.addEventListener('voiceschanged', () => { load(); });
-  }
-  // fallback poll — some browsers never fire voiceschanged
-  setTimeout(load, 500);
-  setTimeout(load, 1500);
-}
-
-// Chrome bug: speechSynthesis silently pauses after ~15 s in background tab
-let _keepAlive;
-function startKeepAlive() {
-  clearInterval(_keepAlive);
-  _keepAlive = setInterval(() => {
-    if (window.speechSynthesis?.speaking && window.speechSynthesis?.paused) {
-      window.speechSynthesis.resume();
-    }
-  }, 5000);
-}
-function stopKeepAlive() { clearInterval(_keepAlive); }
-
-// Set/clear the speaking ring on the avatar
-function setSpeaking(on) {
-  document.getElementById('cb-avatar')?.classList.toggle('speaking', on);
-}
-
-// Pick best matching voice from cache
-function pickVoice(isFemale, langCode) {
-  const pool = _voiceCache.length ? _voiceCache : (window.speechSynthesis?.getVoices() || []);
-  if (!pool.length) return null;
-  const base = langCode?.split('-')[0] || 'en';
-  const sameLang = pool.filter(v => v.lang.startsWith(base));
-  const search   = sameLang.length ? sameLang : pool;
-  let v = null;
-  if (isFemale) {
-    v = search.find(x => /female|woman|girl|zira|susan|samantha|moira|tessa|karen|victoria|fiona|allison|ava/i.test(x.name))
-     || search.find(x => !/\bmale\b|\bman\b|\bguy\b|david|mark|daniel|james|jorge|rishi/i.test(x.name));
+  // Safety
+  const safetyEl = document.getElementById('pa-safety');
+  if (d.safety_note) {
+    document.getElementById('pa-safety-txt').textContent = d.safety_note;
+    safetyEl.classList.add('show');
   } else {
-    v = search.find(x => /\bmale\b|\bman\b|david|mark|daniel|james|jorge|rishi|alex/i.test(x.name))
-     || search[search.length - 1];
+    safetyEl.classList.remove('show');
   }
-  return v || search[0] || pool[0];
+
+  // Tags
+  const tagsEl = document.getElementById('pa-tags');
+  tagsEl.innerHTML = buildTags(d).map(t => `<span class="tag ${t.cls}">${t.txt}</span>`).join('');
+
+  // Demo banner
+  const existing = document.getElementById('demo-banner');
+  if (existing) existing.remove();
+  if (d._demo) {
+    const banner = document.createElement('div');
+    banner.id = 'demo-banner';
+    banner.style.cssText = 'background:#FFF3E0;border-radius:12px;padding:12px 16px;font-size:13px;color:#E65100;margin-bottom:12px;border-left:4px solid #FF8F00';
+    banner.innerHTML = '⚡ <strong>Demo Mode</strong> — Add your Anthropic API key in ⚙️ Settings to identify real photos!';
+    tagsEl.insertAdjacentElement('afterend', banner);
+  }
+
+  // Mode & voice chips
+  document.getElementById('mode-tag').textContent = MODE[state.mode].label;
+  document.getElementById('voice-style-tag').textContent = VOICE[state.voice].label;
+
+  // Reset voice btn
+  resetVoiceBtn();
+
+  showScreen('s-profile');
 }
 
-function doUtter(text, voice, pitch, rate) {
+function buildTags(d) {
+  const tags = [];
+  if (/carnivore|meat|prey|fish|insects/i.test(d.diet)) tags.push({ txt:'🥩 Carnivore', cls:'tag-r' });
+  else if (/herbivore|plant|grass|bamboo|fruit/i.test(d.diet)) tags.push({ txt:'🌿 Herbivore', cls:'tag-g' });
+  else tags.push({ txt:'🍽️ Omnivore', cls:'tag-a' });
+
+  if (/savanna|grassland|plain|desert/i.test(d.habitat)) tags.push({ txt:'🌾 Savanna', cls:'tag-a' });
+  else if (/ocean|sea|marine|reef|coral/i.test(d.habitat)) tags.push({ txt:'🌊 Aquatic', cls:'tag-s' });
+  else if (/river|lake|pond|wetland|freshwater/i.test(d.habitat)) tags.push({ txt:'🌊 Aquatic', cls:'tag-s' });
+  else if (/forest|jungle|woodland|tree/i.test(d.habitat)) tags.push({ txt:'🌳 Forest', cls:'tag-g' });
+  else if (/mountain|alpine/i.test(d.habitat)) tags.push({ txt:'⛰️ Mountain', cls:'tag-b' });
+  else tags.push({ txt:'🌍 Wild', cls:'tag-g' });
+
+  const cons = d.conservation_status || '';
+  if (/endangered|critical|vulnerable/i.test(cons)) tags.push({ txt:'🛡️ Protected', cls:'tag-r' });
+  return tags;
+}
+
+/* ════════════════════════════════════════
+   VOICE / TTS
+════════════════════════════════════════ */
+function toggleVoice() {
+  if (state.speaking) { stopVoice(); } else { speakIntro(); }
+}
+
+function speakIntro() {
+  if (!('speechSynthesis' in window)) { showToast('Text-to-speech not supported'); return; }
+  if (!state.animal) return;
+  const text = state.animal.introduction || `Meet the ${state.animal.common_name}. ${state.animal.fun_fact}`;
+  const lc = LANG[state.lang];
+  const vc = VOICE[state.voice];
+  window.speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(text);
-  if (voice) u.voice = voice;
-  u.pitch  = pitch  ?? 1.05;
-  u.rate   = rate   ?? 0.88;
-  u.volume = 0.95;
-  u.onstart = () => { setSpeaking(true); startKeepAlive(); };
-  u.onend   = () => { setSpeaking(false); stopKeepAlive(); };
-  u.onerror = () => { setSpeaking(false); stopKeepAlive(); };
+  u.lang = lc.tts;
+  u.rate = vc.rate;
+  u.pitch = vc.pitch;
+  u.volume = 1;
+  const voices = window.speechSynthesis.getVoices();
+  const match = voices.find(v => v.lang.startsWith(lc.tts.split('-')[0]));
+  if (match) u.voice = match;
+  u.onstart = () => {
+    state.speaking = true;
+    const btn = document.getElementById('voice-btn');
+    if(btn){ btn.classList.add('speaking'); }
+    document.getElementById('vbtn-icon').textContent = '⏹️';
+    document.getElementById('vbtn-lbl').textContent = 'Stop';
+  };
+  u.onend = u.onerror = () => { stopVoice(); };
   window.speechSynthesis.speak(u);
 }
 
-async function speakText(text) {
+function stopVoice() {
+  if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+  state.speaking = false;
+  resetVoiceBtn();
+}
+
+function resetVoiceBtn() {
+  const btn = document.getElementById('voice-btn');
+  if (!btn) return;
+  btn.classList.remove('speaking');
+  document.getElementById('vbtn-icon').textContent = '🔊';
+  document.getElementById('vbtn-lbl').textContent = 'Hear Introduction';
+}
+
+/* ════════════════════════════════════════
+   SHARE
+════════════════════════════════════════ */
+function shareProfile() {
+  const d = state.animal;
+  if (!d) return;
+  const text = `🔭 I just identified a ${d.common_name} with WildLens AI!\n\n${d.emoji} ${d.common_name} (${d.scientific_name})\n\n⭐ Fun Fact: ${d.fun_fact}\n\n#WildLens #Wildlife`;
+  if (navigator.share) navigator.share({ title:`WildLens: ${d.common_name}`, text }).catch(()=>{});
+  else navigator.clipboard?.writeText(text).then(()=>showToast('Copied!')).catch(()=>showToast('Cannot copy'));
+}
+
+/* ════════════════════════════════════════
+   CHAT
+════════════════════════════════════════ */
+function openChat() {
+  if (!state.animal) return;
+  const d = state.animal;
+  document.getElementById('ch-avatar').textContent = d.emoji;
+  document.getElementById('ch-name').textContent = d.common_name;
+  document.getElementById('ch-sub').textContent = `Ask me anything! • ${MODE[state.mode].label}`;
+  document.getElementById('ch-mode-btn').textContent = MODE[state.mode].label;
+  state.chatHistory = [];
+  document.getElementById('chat-msgs').innerHTML = '';
+  addMsg('a', `Hi! I'm here to tell you all about the ${d.common_name} (${d.scientific_name}). ${d.introduction || d.fun_fact}\n\nWhat would you like to know?`);
+  buildSuggestions();
+  showScreen('s-chat');
+  setTimeout(() => document.getElementById('chat-tinp').focus(), 300);
+}
+
+function closeChat() {
+  showScreen('s-profile');
+}
+
+function cycleModeInChat() {
+  const modes = ['kid','student','adult'];
+  state.mode = modes[(modes.indexOf(state.mode)+1) % 3];
+  document.getElementById('ch-mode-btn').textContent = MODE[state.mode].label;
+  document.getElementById('ch-sub').textContent = `Ask me anything! • ${MODE[state.mode].label}`;
+  buildSuggestions();
+  saveCfg();
+  showToast('Switched to ' + MODE[state.mode].label);
+}
+
+function buildSuggestions() {
+  const d = state.animal;
+  const sugs = {
+    kid:[`How big is the ${d.common_name}?`, `Is it friendly?`, `What are their babies called?`, `What sounds does it make?`, `Where does it sleep?`],
+    student:[`What role does it play in the ecosystem?`, `How does it reproduce?`, `What are its natural predators?`, `How long does it live?`, `What threats does it face?`],
+    adult:[`Describe its taxonomic classification`, `Explain its reproductive biology`, `What conservation interventions exist?`, `Describe its key morphological adaptations`, `How does climate change affect this species?`]
+  };
+  const el = document.getElementById('chat-sug');
+  el.innerHTML = (sugs[state.mode]||sugs.student).map(s => `<button class="sug" onclick="useSug(this)">${s}</button>`).join('');
+}
+
+function useSug(el) {
+  document.getElementById('chat-tinp').value = el.textContent;
+  onChatInput();
+  sendChat();
+}
+
+function onChatInput() {
+  const v = document.getElementById('chat-tinp').value.trim();
+  document.getElementById('chat-sbtn').classList.toggle('on', v.length > 0);
+  const ta = document.getElementById('chat-tinp');
+  ta.style.height = 'auto';
+  ta.style.height = Math.min(ta.scrollHeight, 120) + 'px';
+}
+
+function onChatKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    if (document.getElementById('chat-tinp').value.trim()) sendChat();
+  }
+}
+
+async function sendChat() {
+  const ta = document.getElementById('chat-tinp');
+  const text = ta.value.trim();
   if (!text) return;
-  if (!window.speechSynthesis) return;
-  window.speechSynthesis.cancel();
-  setSpeaking(false);
-
-  const profile = ST.clonedVoices[ST.role];
-
-  // Legacy ElevenLabs string voice_id
-  if (typeof profile === 'string' && ST.apiKeys.elevenlabs) {
-    await speakElevenLabs(text, profile); return;
-  }
-
-  // Local voice profile
-  if (profile?.type === 'local') {
-    speakWithProfile(text, profile); return;
-  }
-
-  speakBrowser(text);
-}
-
-function speakWithProfile(text, profile) {
-  if (!window.speechSynthesis) return;
-  const srLang = (LANGS[ST.lang] || LANGS['en']).sr;
-  const run = () => {
-    const voice = pickVoice(profile.isFemale, srLang);
-    doUtter(text, voice, profile.pitch ?? (profile.isFemale ? 1.15 : 0.82), profile.rate ?? 0.88);
-  };
-  if (_voicesReady) { run(); }
-  else { setTimeout(run, 600); } // wait for voices to load
-}
-
-function speakBrowser(text) {
-  if (!window.speechSynthesis) return;
-  const srLang = (LANGS[ST.lang] || LANGS['en']).sr;
-  const run = () => {
-    const voice = pickVoice(true, srLang); // default to female (warmer)
-    doUtter(text, voice, 1.05, 0.88);
-  };
-  if (_voicesReady) { run(); }
-  else { setTimeout(run, 600); }
-}
-
-/* ── ElevenLabs (optional, if user has key) ── */
-async function speakElevenLabs(text, voiceId) {
+  ta.value = ''; ta.style.height = 'auto';
+  document.getElementById('chat-sbtn').classList.remove('on');
+  addMsg('u', text);
+  state.chatHistory.push({ role:'user', content:text });
+  const typing = addTyping();
   try {
-    if (ST.currentAudio) { ST.currentAudio.pause(); ST.currentAudio = null; }
-    setSpeaking(true);
-    const res = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
-      method: 'POST',
-      headers: { 'xi-api-key': ST.apiKeys.elevenlabs, 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        text, model_id: 'eleven_multilingual_v2',
-        voice_settings: { stability: 0.5, similarity_boost: 0.82, style: 0.3, use_speaker_boost: true }
-      })
+    const d = state.animal;
+    const { reply } = await backendPost('/api/chat', {
+      animal: { common_name:d.common_name, scientific_name:d.scientific_name, habitat:d.habitat, diet:d.diet, behavior:d.behavior, conservation_status:d.conservation_status },
+      history: state.chatHistory,
+      message: text,
+      mode: state.mode,
+      lang: state.lang
     });
-    if (!res.ok) { setSpeaking(false); speakBrowser(text); return; }
-    const buf = await res.arrayBuffer();
-    const url = URL.createObjectURL(new Blob([buf], { type: 'audio/mpeg' }));
-    const audio = new Audio(url);
-    ST.currentAudio = audio;
-    audio.onended  = () => { setSpeaking(false); URL.revokeObjectURL(url); };
-    audio.onerror  = () => { setSpeaking(false); speakBrowser(text); };
-    audio.play().catch(() => { setSpeaking(false); speakBrowser(text); });
-  } catch(e) { setSpeaking(false); speakBrowser(text); }
-}
-
-/* ────────────────────────────────────────────
-   VOICE CLONE MODAL  (no API key needed)
-──────────────────────────────────────────── */
-
-// Shortcut: open clone modal for whichever role is active in chat
-function openVoiceForRole() {
-  const ROLE_META = {
-    daughter:     ['💝','Daughter'],
-    son:          ['💙','Son'],
-    spouse:       ['💕','Partner'],
-    parents:      ['👨‍👩‍👧','Parents'],
-    grandparents: ['👴👵','Grandparents'],
-    friend:       ['🤝','Friend'],
-    grief:        ['💜','Support companion'],
-  };
-  const [icon, name] = ROLE_META[ST.role] || ['🎤', ST.name];
-  openCloneModal(ST.role, icon, name);
-}
-
-// Update the green voice button state in chat bar
-function updateVoiceBtn() {
-  const btn = document.getElementById('cb-voice-btn');
-  if (!btn) return;
-  const has = !!ST.clonedVoices[ST.role];
-  btn.classList.toggle('has-voice', has);
-  btn.title = has ? 'Voice saved — tap to update' : 'Add their voice so AI speaks like them';
-}
-
-function openCloneModal(role, icon, name) {
-  ST.cloneRole  = role;
-  ST.cloneBlob  = null;
-  ST.cloneGender = null; // will be auto-detected
-
-  document.getElementById('clone-modal-title').textContent = `${icon} ${name} — Add Voice`;
-  document.getElementById('rec-timer').textContent = '0:00';
-  document.getElementById('rec-timer').classList.remove('go');
-  document.getElementById('rec-btn').className = 'rec-btn idle';
-  document.getElementById('rec-btn').textContent = '🎙️';
-  document.getElementById('audio-prev').style.display = 'none';
-  document.getElementById('clone-prog').classList.remove('on');
-  document.getElementById('gender-panel').style.display = 'none';
-  document.getElementById('prog-bar').style.width = '0%';
-  clearInterval(ST.recInterval);
-  ST.recSeconds = 0;
-
-  // reset gender buttons
-  document.querySelectorAll('.gtbtn').forEach(b => b.classList.remove('act'));
-
-  switchTab('record', document.querySelector('.tab'));
-  document.getElementById('clone-modal').classList.add('on');
-}
-
-function closeCloneModal() {
-  document.getElementById('clone-modal').classList.remove('on');
-  if (ST.recorder && ST.recorder.state !== 'inactive') ST.recorder.stop();
-  clearInterval(ST.recInterval);
-  ST.cloneBlob = null;
-}
-function closeModalOnBack(e) {
-  if (e.target === document.getElementById('clone-modal')) closeCloneModal();
-}
-
-function switchTab(tab, el) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('act'));
-  el.classList.add('act');
-  document.getElementById('tab-record').classList.toggle('on', tab === 'record');
-  document.getElementById('tab-upload').classList.toggle('on', tab === 'upload');
-}
-
-/* ── Recording ── */
-async function toggleRecord() {
-  const btn = document.getElementById('rec-btn');
-  if (!ST.recorder || ST.recorder.state === 'inactive') {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      ST.recChunks = []; ST.recSeconds = 0;
-      ST.recorder = new MediaRecorder(stream);
-      ST.recorder.ondataavailable = e => ST.recChunks.push(e.data);
-      ST.recorder.onstop = () => {
-        ST.cloneBlob = new Blob(ST.recChunks, { type: 'audio/webm' });
-        stream.getTracks().forEach(t => t.stop());
-        showGenderPanel();
-        showToast(`Recorded ${fmtTime(ST.recSeconds)} ✅`);
-      };
-      ST.recorder.start();
-      btn.className = 'rec-btn stop'; btn.textContent = '⏹';
-      document.getElementById('rec-timer').classList.add('go');
-      ST.recInterval = setInterval(() => {
-        ST.recSeconds++;
-        document.getElementById('rec-timer').textContent = fmtTime(ST.recSeconds);
-        if (ST.recSeconds >= 120) toggleRecord();
-      }, 1000);
-    } catch(e) { showToast('Microphone access denied'); }
-  } else {
-    ST.recorder.stop();
-    clearInterval(ST.recInterval);
-    btn.className = 'rec-btn idle'; btn.textContent = '🎙️';
-    document.getElementById('rec-timer').classList.remove('go');
-  }
-}
-function fmtTime(s) { return Math.floor(s/60) + ':' + String(s%60).padStart(2,'0'); }
-
-/* ── File upload ── */
-function onFileSelect(e) {
-  const f = e.target.files[0];
-  if (!f) return;
-  ST.cloneBlob = f;
-  document.getElementById('audio-prev').style.display = 'flex';
-  document.getElementById('audio-prev-name').textContent = f.name;
-  document.getElementById('audio-prev-sz').textContent = (f.size/1024/1024).toFixed(1) + ' MB';
-  showGenderPanel();
-}
-function clearFile() {
-  ST.cloneBlob = null;
-  document.getElementById('audio-prev').style.display = 'none';
-  document.getElementById('file-inp').value = '';
-  document.getElementById('gender-panel').style.display = 'none';
-}
-
-/* ── Gender panel ── */
-async function showGenderPanel() {
-  const panel = document.getElementById('gender-panel');
-  panel.style.display = 'flex';
-
-  // auto-detect from audio
-  if (ST.cloneBlob) {
-    const detected = await detectGenderFromAudio(ST.cloneBlob);
-    ST.cloneGender = detected; // 'female' | 'male' | null
-    document.querySelectorAll('.gtbtn').forEach(b => b.classList.remove('act'));
-    if (detected === 'female') document.getElementById('gt-female').classList.add('act');
-    else if (detected === 'male') document.getElementById('gt-male').classList.add('act');
-  }
-}
-
-function setGenderPref(gender, btn) {
-  ST.cloneGender = gender;
-  document.querySelectorAll('.gtbtn').forEach(b => b.classList.remove('act'));
-  btn.classList.add('act');
-}
-
-function previewVoiceStyle() {
-  const isFemale = ST.cloneGender !== 'male';
-  speakWithProfile('Hello! This is how I will sound when we talk.', {
-    type: 'local', isFemale, pitch: isFemale ? 1.15 : 0.82, rate: 0.88
-  });
-}
-
-/* ── Pitch detection via Web Audio autocorrelation ── */
-async function detectGenderFromAudio(blob) {
-  try {
-    const arrayBuf = await blob.arrayBuffer();
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    const audioBuf  = await audioCtx.decodeAudioData(arrayBuf);
-    audioCtx.close();
-
-    const raw = audioBuf.getChannelData(0);
-    const sr  = audioBuf.sampleRate;
-
-    // Sample from middle 3 seconds for best accuracy
-    const mid   = Math.floor(raw.length / 2);
-    const chunk = raw.slice(mid, mid + Math.min(sr * 3, raw.length - mid));
-
-    const pitch = autoCorrPitch(chunk, sr);
-    if (pitch === 0) return null;              // couldn't detect — let user pick
-    return pitch > 155 ? 'female' : 'male';   // female ≈ 160-300 Hz, male ≈ 85-155 Hz
+    typing.remove();
+    addMsg('a', reply);
+    state.chatHistory.push({ role:'assistant', content:reply });
   } catch(e) {
-    console.warn('Voice analysis skipped:', e);
-    return null;
+    typing.remove();
+    addMsg('a', getDemoReply(text));
   }
+  scrollMsgs();
 }
 
-function autoCorrPitch(buf, sampleRate) {
-  const n      = buf.length;
-  const minLag = Math.floor(sampleRate / 350); // max 350 Hz
-  const maxLag = Math.floor(sampleRate / 70);  // min 70  Hz
-
-  let bestLag = -1, bestCorr = -Infinity;
-
-  for (let lag = minLag; lag <= maxLag; lag++) {
-    let corr = 0, e1 = 0, e2 = 0;
-    const len = n - lag;
-    for (let i = 0; i < len; i++) {
-      corr += buf[i] * buf[i + lag];
-      e1   += buf[i] * buf[i];
-      e2   += buf[i + lag] * buf[i + lag];
-    }
-    const norm = corr / (Math.sqrt(e1 * e2) + 1e-10);
-    if (norm > bestCorr) { bestCorr = norm; bestLag = lag; }
-  }
-
-  if (bestCorr < 0.25 || bestLag < 1) return 0; // no clear pitch
-  return sampleRate / bestLag;
+function getDemoReply(q) {
+  const d = state.animal;
+  const lq = q.toLowerCase();
+  if (/size|big|weight|large/.test(lq)) return `The ${d.common_name} varies in size across individuals and regions. Check a wildlife encyclopedia for exact measurements!`;
+  if (/sound|call|roar|noise/.test(lq)) return `The ${d.common_name} has distinctive vocalizations used for communication and territory marking.`;
+  if (/baby|young|cub|offspring/.test(lq)) return `Young ${d.common_name}s are fascinating! They spend months or years learning survival skills from their parents.`;
+  if (/eat|diet|food|prey/.test(lq)) return d.diet;
+  if (/live|habitat|found|home/.test(lq)) return d.habitat;
+  if (/fact|interesting|cool/.test(lq)) return `⭐ ${d.fun_fact}`;
+  return `${d.fun_fact} Add an API key in ⚙️ Settings to get detailed answers!`;
 }
 
-/* ── Save voice style locally (no API needed) ── */
-async function submitClone() {
-  if (!ST.cloneBlob) { showToast('Please record or upload a voice sample first'); return; }
-
-  const prog = document.getElementById('clone-prog');
-  const bar  = document.getElementById('prog-bar');
-  const txt  = document.getElementById('prog-txt');
-  prog.classList.add('on');
-  bar.style.width = '20%';
-  txt.textContent = 'Analysing voice characteristics…';
-
-  // Run pitch detection
-  await new Promise(r => setTimeout(r, 200)); // let the UI paint
-  const detectedGender = await detectGenderFromAudio(ST.cloneBlob);
-  const isFemale = ST.cloneGender
-    ? ST.cloneGender === 'female'
-    : (detectedGender === 'female' ?? true);
-
-  bar.style.width = '60%';
-  txt.textContent = 'Matching voice profile…';
-  await new Promise(r => setTimeout(r, 400));
-
-  bar.style.width = '90%';
-  txt.textContent = 'Saving voice style…';
-  await new Promise(r => setTimeout(r, 300));
-
-  // Build and save local profile — no external API needed
-  const profile = {
-    type:     'local',
-    isFemale: isFemale,
-    pitch:    isFemale ? 1.15 : 0.80,
-    rate:     0.88,
-    label:    isFemale ? 'Female voice' : 'Male voice',
-    savedAt:  Date.now()
-  };
-
-  ST.clonedVoices[ST.cloneRole] = profile;
-  localStorage.setItem('sv_cv', JSON.stringify(ST.clonedVoices));
-
-  bar.style.width = '100%';
-  txt.textContent = '✅ Voice style saved!';
-
-  setTimeout(() => {
-    closeCloneModal();
-    updateSettingsUI();
-    updateVCDots();
-    updateVoiceBtn();
-    showToast(`✅ Voice saved! The AI will now speak in a ${profile.label.toLowerCase()}.`);
-  }, 900);
+function addMsg(side, text) {
+  const msgs = document.getElementById('chat-msgs');
+  const time = new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+  const avatar = side === 'a' ? (state.animal?.emoji || '🌿') : '👤';
+  const div = document.createElement('div');
+  div.className = `mr ${side}`;
+  div.innerHTML = `<div class="mavatar">${avatar}</div>
+    <div class="mbody">
+      <div class="bubble">${esc(text).replace(/\n/g,'<br>')}</div>
+      <div class="mtime">${time}</div>
+    </div>`;
+  msgs.appendChild(div);
+  scrollMsgs();
+  return div;
 }
 
-/* ════════════════════════════════════════════
-   ELEVENLABS CONVERSATIONAL AI  — FULL INTEGRATION
-════════════════════════════════════════════ */
-const ELA = {
-  ws: null, stream: null, audioCtx: null, analyser: null,
-  processor: null, audioQueue: [], isPlaying: false,
-  isConnected: false, isMuted: false,
-  callSeconds: 0, callTimer: null, rafId: null
-};
-
-function toggleLiveVoice() {
-  ELA.isConnected ? stopLiveVoice() : startLiveVoice();
+function addTyping() {
+  const msgs = document.getElementById('chat-msgs');
+  const div = document.createElement('div');
+  div.className = 'typing';
+  div.innerHTML = '<div class="tdot"></div><div class="tdot"></div><div class="tdot"></div>';
+  msgs.appendChild(div);
+  scrollMsgs();
+  return div;
 }
 
-async function startLiveVoice() {
-  const agentId = ST.agentIds[ST.role];
-  if (!agentId) {
-    showToast('No agent set for this role — go to Settings → 🤖 Voice Agents');
-    goSettings(); return;
-  }
-
-  // Show overlay immediately
-  showCallOverlay('connecting');
-
-  // Mic access
-  try {
-    ELA.stream = await navigator.mediaDevices.getUserMedia({
-      audio: { echoCancellation: true, noiseSuppression: true, sampleRate: 16000 }
-    });
-  } catch(e) {
-    hideCallOverlay();
-    showToast('Microphone access denied');
-    return;
-  }
-
-  // WebSocket to ElevenLabs
-  const key = ST.apiKeys.elevenlabs;
-  const wsUrl = `wss://api.elevenlabs.io/v1/convai/conversation?agent_id=${agentId}`
-              + (key ? `&xi-api-key=${key}` : '');
-  ELA.ws = new WebSocket(wsUrl);
-
-  ELA.ws.onopen = () => {
-    ELA.isConnected = true;
-    showCallOverlay('connected');
-    startAudioCapture();
-    startMicVisualizer();
-    startCallTimer();
-  };
-
-  ELA.ws.onmessage = evt => {
-    try { handleAgentMsg(JSON.parse(evt.data)); } catch(e) {}
-  };
-
-  ELA.ws.onclose = () => {
-    ELA.isConnected = false;
-    hideCallOverlay();
-    cleanupELA();
-    addLiveChip('📵 Call ended — ' + document.getElementById('call-timer').textContent);
-  };
-
-  ELA.ws.onerror = () => {
-    hideCallOverlay();
-    cleanupELA();
-    showToast('Connection failed — check your Agent ID in Settings');
-  };
+function scrollMsgs() {
+  const el = document.getElementById('chat-msgs');
+  el.scrollTop = el.scrollHeight;
 }
 
-function stopLiveVoice() {
-  ELA.ws?.close();
-  cleanupELA();
-  hideCallOverlay();
+/* ════════════════════════════════════════
+   SETTINGS MODAL
+════════════════════════════════════════ */
+function openSettings() {
+  syncModalSeg('set-mode', state.mode);
+  syncModalSeg('set-lang', state.lang);
+  syncModalSeg('set-voice', state.voice);
+  document.getElementById('settings-modal').classList.add('on');
 }
 
-function cleanupELA() {
-  clearInterval(ELA.callTimer); ELA.callTimer = null;
-  cancelAnimationFrame(ELA.rafId);
-  ELA.stream?.getTracks().forEach(t => t.stop());
-  ELA.processor?.disconnect();
-  ELA.analyser?.disconnect();
-  try { ELA.audioCtx?.close(); } catch(e) {}
-  ELA.stream=null; ELA.processor=null; ELA.analyser=null; ELA.audioCtx=null;
-  ELA.audioQueue=[]; ELA.isPlaying=false; ELA.isMuted=false; ELA.callSeconds=0;
-  setSpeaking(false);
-  document.getElementById('mic-lbl').textContent = 'Tap to speak';
+function closeSettingsModal(e) {
+  if (e.target === document.getElementById('settings-modal'))
+    document.getElementById('settings-modal').classList.remove('on');
 }
 
-/* ── Overlay helpers ── */
-function showCallOverlay(state) {
-  const ov   = document.getElementById('call-overlay');
-  const name = document.getElementById('call-name');
-  const av   = document.getElementById('call-avatar');
-  av.textContent  = ST.icon;
-  name.textContent = ST.name;
-  ov.className = 'call-overlay on ' + state;
-  setCallStatus(state);
-
-  // resize canvas
-  const canvas = document.getElementById('call-canvas');
-  canvas.width  = canvas.offsetWidth  || 340;
-  canvas.height = canvas.offsetHeight || 70;
-
-  // clear transcript
-  document.getElementById('call-transcript-box').innerHTML =
-    '<div class="ctxt agent" style="color:rgba(255,255,255,.3);font-weight:400">Connecting to ' + ST.name + '…</div>';
+function pickModalSeg(segId, val, el) {
+  document.querySelectorAll('#'+segId+' .msg').forEach(b => b.classList.toggle('act', b.dataset.v===val));
+  if (segId==='set-mode') state.mode = val;
+  if (segId==='set-lang') state.lang = val;
+  if (segId==='set-voice') state.voice = val;
 }
 
-function hideCallOverlay() {
-  const ov = document.getElementById('call-overlay');
-  ov.classList.remove('on','connecting','connected','speaking');
-  cancelAnimationFrame(ELA.rafId);
-  const ctx = document.getElementById('call-canvas').getContext('2d');
-  ctx.clearRect(0,0,9999,9999);
+function syncModalSeg(segId, val) {
+  document.querySelectorAll('#'+segId+' .msg').forEach(b => b.classList.toggle('act', b.dataset.v===val));
 }
 
-function setCallStatus(state) {
-  const txt = document.getElementById('call-status-txt');
-  if (state === 'connecting') txt.textContent = 'Connecting…';
-  if (state === 'connected')  txt.textContent = 'Listening…';
-  if (state === 'speaking')   txt.textContent = 'Speaking…';
+function saveSettings() {
+  saveCfg();
+  syncControlBar();
+  updateModeNote();
+  document.getElementById('settings-modal').classList.remove('on');
+  showToast('Settings saved!');
 }
 
-/* ── Call timer ── */
-function startCallTimer() {
-  ELA.callSeconds = 0;
-  document.getElementById('call-timer').textContent = '0:00';
-  ELA.callTimer = setInterval(() => {
-    ELA.callSeconds++;
-    document.getElementById('call-timer').textContent = fmtTime(ELA.callSeconds);
-  }, 1000);
+/* ════════════════════════════════════════
+   UTILITIES
+════════════════════════════════════════ */
+function esc(t) {
+  const d = document.createElement('div');
+  d.textContent = t || '';
+  return d.innerHTML;
 }
 
-/* ── Mute toggle ── */
-function toggleMute() {
-  ELA.isMuted = !ELA.isMuted;
-  const btn = document.getElementById('call-mute-btn');
-  btn.textContent = ELA.isMuted ? '🔇' : '🎙️';
-  btn.classList.toggle('muted', ELA.isMuted);
-  if (ELA.stream) {
-    ELA.stream.getAudioTracks().forEach(t => { t.enabled = !ELA.isMuted; });
-  }
-  showToast(ELA.isMuted ? '🔇 Muted' : '🎙️ Unmuted');
-}
-
-/* ── Audio capture & send to ElevenLabs ── */
-function startAudioCapture() {
-  ELA.audioCtx = new AudioContext({ sampleRate: 16000 });
-  const src = ELA.audioCtx.createMediaStreamSource(ELA.stream);
-  ELA.processor = ELA.audioCtx.createScriptProcessor(4096, 1, 1);
-
-  ELA.processor.onaudioprocess = e => {
-    if (ELA.ws?.readyState !== WebSocket.OPEN || ELA.isMuted) return;
-    const f32 = e.inputBuffer.getChannelData(0);
-    const pcm = new Int16Array(f32.length);
-    for (let i = 0; i < f32.length; i++) {
-      const c = Math.max(-1, Math.min(1, f32[i]));
-      pcm[i] = c < 0 ? c * 32768 : c * 32767;
-    }
-    const bytes = new Uint8Array(pcm.buffer);
-    let bin = '';
-    for (let i = 0; i < bytes.length; i += 8192)
-      bin += String.fromCharCode(...bytes.subarray(i, i + 8192));
-    ELA.ws.send(JSON.stringify({ user_audio_chunk: btoa(bin) }));
-  };
-
-  src.connect(ELA.processor);
-  ELA.processor.connect(ELA.audioCtx.destination);
-}
-
-/* ── Real-time mic waveform visualizer ── */
-function startMicVisualizer() {
-  if (!ELA.audioCtx || !ELA.stream) return;
-  ELA.analyser = ELA.audioCtx.createAnalyser();
-  ELA.analyser.fftSize = 128;
-  const src2 = ELA.audioCtx.createMediaStreamSource(ELA.stream);
-  src2.connect(ELA.analyser);
-
-  const canvas = document.getElementById('call-canvas');
-  const ctx    = canvas.getContext('2d');
-  const data   = new Uint8Array(ELA.analyser.frequencyBinCount);
-
-  function draw() {
-    ELA.rafId = requestAnimationFrame(draw);
-    ELA.analyser.getByteFrequencyData(data);
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    const bars = data.length;
-    const bw   = canvas.width / bars - 1;
-    const cx   = canvas.width / 2;
-    const cy   = canvas.height / 2;
-
-    for (let i = 0; i < bars; i++) {
-      const v   = data[i] / 255;
-      const h   = Math.max(4, v * canvas.height * 0.85);
-      const x   = i * (bw + 1);
-      const alpha = 0.35 + v * 0.65;
-
-      // gradient colour: indigo → green based on volume
-      const r = Math.round(99  + v * (16  - 99));
-      const g = Math.round(102 + v * (185 - 102));
-      const b2= Math.round(241 + v * (129 - 241));
-
-      ctx.fillStyle = `rgba(${r},${g},${b2},${alpha})`;
-      ctx.beginPath();
-      ctx.roundRect(x, cy - h/2, bw, h, 3);
-      ctx.fill();
-    }
-  }
-  draw();
-}
-
-/* ── Handle incoming messages from ElevenLabs ── */
-function handleAgentMsg(data) {
-  const box = document.getElementById('call-transcript-box');
-  const ov  = document.getElementById('call-overlay');
-
-  switch(data.type) {
-
-    case 'conversation_initiation_metadata':
-      box.innerHTML = '';
-      setCallStatus('connected');
-      ov.className = 'call-overlay on connected';
-      break;
-
-    case 'ping':
-      ELA.ws?.send(JSON.stringify({ type:'pong', event_id: data.ping_event?.event_id }));
-      break;
-
-    case 'user_transcript': {
-      const t = data.user_transcription_event?.user_transcript?.trim();
-      if (!t) break;
-      addFacts(t);
-      addMsg('user', t, false);          // chat history
-      const el = document.createElement('div');
-      el.className = 'ctxt user';
-      el.textContent = t;
-      box.appendChild(el);
-      box.scrollTop = box.scrollHeight;
-      ov.className = 'call-overlay on connected';
-      setCallStatus('connected');
-      break;
-    }
-
-    case 'agent_response': {
-      const t = data.agent_response_event?.agent_response?.trim();
-      if (!t) break;
-      addMsg('ai', t, false);
-      const el = document.createElement('div');
-      el.className = 'ctxt agent';
-      el.textContent = t;
-      box.appendChild(el);
-      box.scrollTop = box.scrollHeight;
-      ov.className = 'call-overlay on speaking';
-      setCallStatus('speaking');
-      setSpeaking(true);
-      break;
-    }
-
-    case 'audio': {
-      const b64 = data.audio_event?.audio_base64;
-      if (b64) { ELA.audioQueue.push(b64); if (!ELA.isPlaying) playNextChunk(); }
-      break;
-    }
-
-    case 'interruption':
-      ELA.audioQueue = []; ELA.isPlaying = false;
-      setSpeaking(false);
-      ov.className = 'call-overlay on connected';
-      setCallStatus('connected');
-      break;
-  }
-}
-
-async function playNextChunk() {
-  if (!ELA.audioQueue.length) { ELA.isPlaying=false; setSpeaking(false); return; }
-  ELA.isPlaying = true;
-  const b64 = ELA.audioQueue.shift();
-  try {
-    const bin   = atob(b64);
-    const bytes = new Uint8Array(bin.length);
-    for (let i=0;i<bin.length;i++) bytes[i]=bin.charCodeAt(i);
-    const url = URL.createObjectURL(new Blob([bytes.buffer],{type:'audio/mpeg'}));
-    const aud = new Audio(url);
-    aud.onended = () => { URL.revokeObjectURL(url); playNextChunk(); };
-    aud.onerror = () => { URL.revokeObjectURL(url); playNextChunk(); };
-    await aud.play();
-  } catch(e) { playNextChunk(); }
-}
-
-/* ── Live bar (small trigger in chat) ── */
-function setLiveBtnState(state) {
-  const btn = document.getElementById('live-btn');
-  const st  = document.getElementById('live-status');
-  if (!btn) return;
-  btn.className = 'live-btn ' + state;
-  if (state==='idle')       { btn.textContent='🎙️ Live'; st.textContent='Tap for live voice call'; }
-  if (state==='connecting') { btn.textContent='⏳…';     st.textContent='Connecting…'; }
-  if (state==='connected')  { btn.textContent='🔴 Live'; st.textContent='Live call active'; }
-}
-
-function updateLiveBar() {
-  const has = !!ST.agentIds[ST.role];
-  document.getElementById('live-bar').classList.toggle('on', has);
-  setLiveBtnState('idle');
-  if (!has) stopLiveVoice();
-}
-
-function addLiveChip(msg) {
-  const area = document.getElementById('chat-msgs');
-  const el   = document.createElement('div');
-  el.className = 'date-chip';
-  el.style.cssText = 'background:rgba(16,185,129,.14);color:#065F46;font-weight:700';
-  el.textContent = msg;
-  area.appendChild(el);
-  area.scrollTop = area.scrollHeight;
-}
-
-/* ── Save agent ID from settings ── */
-function saveAgentId(role) {
-  const inp = document.getElementById('aid-'+role);
-  const val = inp?.value.trim();
-  if (!val) { showToast('Please paste the Agent ID first'); return; }
-  ST.agentIds[role] = val;
-  localStorage.setItem('sv_aids', JSON.stringify(ST.agentIds));
-  inp.value=''; inp.placeholder = val.slice(0,20)+'…';
-  showToast('✅ Agent saved for ' + role);
-  updateLiveBar();
-}
-
-/* ────────────────────────────────────────────
-   SETTINGS UI
-──────────────────────────────────────────── */
-function updateSettingsUI() {
-  // API key statuses
-  document.getElementById('akey-st').textContent = ST.apiKeys.anthropic
-    ? '✅ Connected — Claude AI active'
-    : 'Not set — using scripted responses';
-  document.getElementById('akey-st').style.color = ST.apiKeys.anthropic ? 'var(--green)' : '';
-
-  document.getElementById('ekey-st').textContent = ST.apiKeys.elevenlabs
-    ? '✅ Connected — voice cloning active'
-    : 'Not set — using browser TTS';
-  document.getElementById('ekey-st').style.color = ST.apiKeys.elevenlabs ? 'var(--green)' : '';
-
-  // Show masked keys
-  if (ST.apiKeys.anthropic) document.getElementById('set-akey').placeholder = '••••••••••••••••';
-  if (ST.apiKeys.elevenlabs) document.getElementById('set-ekey').placeholder = '••••••••••••••••';
-
-  // Voice style statuses
-  const roles = ['daughter','son','spouse','parents','grandparents','friend','grief'];
-  roles.forEach(r => {
-    const st  = document.getElementById('vcs-' + r);
-    const btn = document.getElementById('vcb-' + r);
-    const v   = ST.clonedVoices[r];
-    if (v) {
-      const lbl = (typeof v === 'object' && v.label) ? v.label : 'Voice saved';
-      if (st)  { st.textContent = '✅ ' + lbl; st.className = 'vcc-st done'; }
-      if (btn) { btn.textContent = '🔄 Update'; btn.className = 'vcc-btn done'; }
-    } else {
-      if (st)  { st.textContent = 'No voice added yet'; st.className = 'vcc-st'; }
-      if (btn) { btn.textContent = '+ Add Voice'; btn.className = 'vcc-btn'; }
-    }
-  });
-
-  // Name
-  document.getElementById('set-name').value = ST.userName;
-
-  // Language
-  document.getElementById('set-lang').value = ST.lang;
-
-  // Agent IDs
-  ['daughter','son','spouse','parents','grandparents','friend','grief'].forEach(r => {
-    const inp = document.getElementById('aid-' + r);
-    if (inp && ST.agentIds[r]) inp.placeholder = ST.agentIds[r].slice(0, 20) + '…';
-  });
-
-  // Memory status
-  const mem = getMem();
-  const memEl = document.getElementById('mem-status');
-  if (memEl) {
-    memEl.textContent = mem.facts.length
-      ? `✅ ${mem.facts.length} fact${mem.facts.length > 1 ? 's' : ''} remembered about you`
-      : 'No memories yet — just start chatting!';
-    memEl.style.color = mem.facts.length ? 'var(--green)' : '';
-  }
-}
-
-function saveAkey() {
-  const v = document.getElementById('set-akey').value.trim();
-  if (!v) { showToast('Please enter your API key'); return; }
-  ST.apiKeys.anthropic = v;
-  localStorage.setItem('sv_ak', v);
-  document.getElementById('set-akey').value = '';
-  updateSettingsUI();
-  showToast('✅ Anthropic API key saved!');
-}
-
-function saveEkey() {
-  const v = document.getElementById('set-ekey').value.trim();
-  if (!v) { showToast('Please enter your ElevenLabs key'); return; }
-  ST.apiKeys.elevenlabs = v;
-  localStorage.setItem('sv_ek', v);
-  document.getElementById('set-ekey').value = '';
-  updateSettingsUI();
-  showToast('✅ ElevenLabs key saved!');
-}
-
-function saveNameFromSettings(v) {
-  if (!v.trim()) return;
-  ST.userName = v.trim();
-  localStorage.setItem('sv_name', ST.userName);
-  showToast('Name saved!');
-}
-
-function clearHistory() {
-  ST.chatHistory = [];
-  showToast('Conversation cleared');
-}
-function clearMemory() {
-  saveMem({facts:[], sessions:0});
-  showToast('🧠 Memory cleared — starting fresh');
-}
-
-function updateVCDots() {
-  ['daughter','son','spouse','parents','grandparents','friend','grief'].forEach(r => {
-    const el = document.getElementById('vcd-' + r);
-    if (el) el.style.display = ST.clonedVoices[r] ? 'flex' : 'none';
-  });
-}
-
-/* ────────────────────────────────────────────
-   EMERGENCY
-──────────────────────────────────────────── */
-function openSos()  { document.getElementById('sos-modal').classList.add('on'); }
-function closeSos() { document.getElementById('sos-modal').classList.remove('on'); }
-function closeSosOnBack(e) { if (e.target.id === 'sos-modal') closeSos(); }
-
-/* ────────────────────────────────────────────
-   TOAST
-──────────────────────────────────────────── */
-let toastTimer;
+let toastTmr;
 function showToast(msg) {
   const el = document.getElementById('toast');
-  el.textContent = msg; el.classList.add('on');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => el.classList.remove('on'), 3200);
+  el.textContent = msg;
+  el.classList.add('on');
+  clearTimeout(toastTmr);
+  toastTmr = setTimeout(() => el.classList.remove('on'), 3000);
 }
-
-/* ────────────────────────────────────────────
-   KEYBOARD / ESCAPE
-──────────────────────────────────────────── */
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') { closeSos(); closeCloneModal(); closeStoryModal(); }
-});
-
-/* ────────────────────────────────────────────
-   INIT (check if already set up)
-──────────────────────────────────────────── */
-window.addEventListener('DOMContentLoaded', () => {
-  // Increment session counter
-  const m = getMem(); m.sessions = (m.sessions || 0) + 1; saveMem(m);
-
-  // Pre-load TTS voices (async in Chrome — must start early)
-  initVoices();
-
-  // If name or key exists, skip setup screen
-  if (ST.userName || ST.apiKeys.anthropic) {
-    enterApp();
-  }
-  updateVCDots();
-});
 </script>
 </body>
 </html>
