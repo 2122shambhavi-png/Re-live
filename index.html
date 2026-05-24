@@ -146,6 +146,86 @@ h1,h2,h3,h4{font-family:var(--fh);line-height:1.25}
 .s-skip:hover{color:rgba(255,255,255,.65)}
 
 /* ═══════════════════════════════════════════
+   ELEVENLABS FULL-SCREEN CALL OVERLAY
+═══════════════════════════════════════════ */
+.call-overlay{
+  display:none;position:fixed;inset:0;z-index:100;
+  background:linear-gradient(160deg,#0F0C29 0%,#1C1839 40%,#24243E 100%);
+  flex-direction:column;align-items:center;justify-content:space-between;
+  padding:60px 24px 50px;
+  animation:callin .35s var(--ease) both}
+.call-overlay.on{display:flex}
+@keyframes callin{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:none}}
+
+/* top section */
+.call-top{display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center}
+.call-avatar-wrap{position:relative;width:120px;height:120px}
+.call-avatar{width:120px;height:120px;border-radius:50%;
+  background:linear-gradient(135deg,rgba(99,102,241,.4),rgba(168,85,247,.4));
+  display:flex;align-items:center;justify-content:center;font-size:54px;
+  position:relative;z-index:2}
+.call-ring{position:absolute;inset:0;border-radius:50%;
+  border:2px solid rgba(99,102,241,.5);
+  animation:callring 2s ease-out infinite;pointer-events:none}
+.call-ring:nth-child(2){animation-delay:.6s;border-color:rgba(99,102,241,.3)}
+.call-ring:nth-child(3){animation-delay:1.2s;border-color:rgba(99,102,241,.15)}
+@keyframes callring{
+  0%{transform:scale(1);opacity:.8}
+  100%{transform:scale(2.2);opacity:0}}
+.call-overlay.speaking .call-ring{border-color:rgba(16,185,129,.6)}
+.call-overlay.speaking .call-ring:nth-child(2){border-color:rgba(16,185,129,.35)}
+.call-overlay.speaking .call-ring:nth-child(3){border-color:rgba(16,185,129,.15)}
+
+.call-name{font-family:var(--fh);font-weight:800;font-size:28px;color:#fff}
+.call-status{font-size:15px;color:rgba(255,255,255,.55);font-weight:500;
+  display:flex;align-items:center;gap:7px}
+.call-sdot{width:8px;height:8px;border-radius:50%;background:#10B981;
+  animation:pdot 1.2s ease-in-out infinite}
+
+/* waveform canvas */
+.call-wave-wrap{width:100%;max-width:340px;height:70px;
+  display:flex;align-items:center;justify-content:center}
+#call-canvas{width:100%;height:70px;border-radius:12px;
+  background:rgba(255,255,255,.04)}
+
+/* live transcript */
+.call-transcript-box{
+  width:100%;max-width:380px;min-height:80px;max-height:130px;
+  overflow-y:auto;border-radius:var(--r-lg);
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.10);
+  padding:14px 16px;display:flex;flex-direction:column;gap:8px}
+.call-transcript-box::-webkit-scrollbar{width:0}
+.ctxt{font-size:14px;line-height:1.55;animation:mslide .25s var(--spring) both}
+.ctxt.user{color:rgba(255,255,255,.7);text-align:right}
+.ctxt.agent{color:#fff;font-weight:500}
+.ctxt.user::before{content:'You: ';color:rgba(255,255,255,.4);font-size:11px}
+.ctxt.agent::before{content:'';font-size:11px}
+
+/* bottom controls */
+.call-controls{display:flex;gap:20px;align-items:center}
+.call-mute-btn{width:58px;height:58px;border-radius:50%;border:none;cursor:pointer;
+  background:rgba(255,255,255,.1);font-size:22px;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .2s,transform .2s;-webkit-tap-highlight-color:transparent}
+.call-mute-btn:hover{background:rgba(255,255,255,.2);transform:scale(1.08)}
+.call-mute-btn.muted{background:rgba(244,63,94,.3)}
+.call-end-btn{width:74px;height:74px;border-radius:50%;border:none;cursor:pointer;
+  background:linear-gradient(135deg,#EF4444,#DC2626);font-size:28px;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 8px 28px rgba(239,68,68,.5);
+  transition:transform .2s var(--spring),box-shadow .2s;
+  -webkit-tap-highlight-color:transparent}
+.call-end-btn:hover{transform:scale(1.1);box-shadow:0 12px 36px rgba(239,68,68,.65)}
+.call-end-btn:active{transform:scale(.92)}
+.call-timer{font-family:var(--fh);font-weight:800;font-size:16px;
+  color:rgba(255,255,255,.5);letter-spacing:.5px;min-width:48px;text-align:center}
+
+/* connecting state */
+.call-overlay.connecting .call-avatar{animation:float 1.5s ease-in-out infinite}
+.call-overlay.connecting .call-sdot{background:var(--amber);
+  animation:pdot .6s ease-in-out infinite}
+
+/* ═══════════════════════════════════════════
    ELEVENLABS LIVE VOICE BAR
 ═══════════════════════════════════════════ */
 .live-bar{
@@ -1192,6 +1272,43 @@ input[type=file]{display:none}
       </button>
     </div>
   </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     ELEVENLABS FULL-SCREEN CALL OVERLAY
+═══════════════════════════════════════════ -->
+<div class="call-overlay" id="call-overlay" aria-live="polite" aria-label="Live voice call">
+
+  <div class="call-top">
+    <div class="call-avatar-wrap">
+      <div class="call-ring"></div>
+      <div class="call-ring"></div>
+      <div class="call-ring"></div>
+      <div class="call-avatar" id="call-avatar">💝</div>
+    </div>
+    <div class="call-name" id="call-name">Priya</div>
+    <div class="call-status">
+      <div class="call-sdot"></div>
+      <span id="call-status-txt">Connecting…</span>
+    </div>
+  </div>
+
+  <div class="call-wave-wrap">
+    <canvas id="call-canvas"></canvas>
+  </div>
+
+  <div class="call-transcript-box" id="call-transcript-box">
+    <div class="ctxt agent" id="call-placeholder" style="color:rgba(255,255,255,.3);font-weight:400">
+      Conversation transcript will appear here…
+    </div>
+  </div>
+
+  <div class="call-controls">
+    <button class="call-mute-btn" id="call-mute-btn" onclick="toggleMute()" aria-label="Mute">🎙️</button>
+    <button class="call-end-btn" onclick="stopLiveVoice()" aria-label="End call">📵</button>
+    <div class="call-timer" id="call-timer">0:00</div>
+  </div>
+
 </div>
 
 <!-- ═══════════════════════════════════════════
@@ -2350,12 +2467,13 @@ async function submitClone() {
 }
 
 /* ════════════════════════════════════════════
-   ELEVENLABS CONVERSATIONAL AI ENGINE
+   ELEVENLABS CONVERSATIONAL AI  — FULL INTEGRATION
 ════════════════════════════════════════════ */
 const ELA = {
-  ws: null, stream: null, audioCtx: null, processor: null,
-  audioQueue: [], isPlaying: false, isConnected: false,
-  currentSource: null
+  ws: null, stream: null, audioCtx: null, analyser: null,
+  processor: null, audioQueue: [], isPlaying: false,
+  isConnected: false, isMuted: false,
+  callSeconds: 0, callTimer: null, rafId: null
 };
 
 function toggleLiveVoice() {
@@ -2365,86 +2483,150 @@ function toggleLiveVoice() {
 async function startLiveVoice() {
   const agentId = ST.agentIds[ST.role];
   if (!agentId) {
-    showToast('Add your ElevenLabs Agent ID in Settings first');
-    goSettings();
-    return;
+    showToast('No agent set for this role — go to Settings → 🤖 Voice Agents');
+    goSettings(); return;
   }
-  setLiveBtnState('connecting');
 
+  // Show overlay immediately
+  showCallOverlay('connecting');
+
+  // Mic access
   try {
     ELA.stream = await navigator.mediaDevices.getUserMedia({
-      audio: { sampleRate: 16000, channelCount: 1, echoCancellation: true, noiseSuppression: true }
+      audio: { echoCancellation: true, noiseSuppression: true, sampleRate: 16000 }
     });
   } catch(e) {
+    hideCallOverlay();
     showToast('Microphone access denied');
-    setLiveBtnState('idle'); return;
+    return;
   }
 
+  // WebSocket to ElevenLabs
+  const key = ST.apiKeys.elevenlabs;
   const wsUrl = `wss://api.elevenlabs.io/v1/convai/conversation?agent_id=${agentId}`
-             + (ST.apiKeys.elevenlabs ? `&xi-api-key=${ST.apiKeys.elevenlabs}` : '');
+              + (key ? `&xi-api-key=${key}` : '');
   ELA.ws = new WebSocket(wsUrl);
 
   ELA.ws.onopen = () => {
     ELA.isConnected = true;
-    setLiveBtnState('connected');
+    showCallOverlay('connected');
     startAudioCapture();
-    // Hide normal mic/text input — agent handles everything
-    document.getElementById('mic-lbl').textContent = '🔴 Live agent active';
+    startMicVisualizer();
+    startCallTimer();
   };
 
-  ELA.ws.onmessage = (evt) => {
+  ELA.ws.onmessage = evt => {
     try { handleAgentMsg(JSON.parse(evt.data)); } catch(e) {}
   };
 
   ELA.ws.onclose = () => {
     ELA.isConnected = false;
-    setLiveBtnState('idle');
+    hideCallOverlay();
     cleanupELA();
-    document.getElementById('live-transcript').textContent = 'Session ended.';
-    document.getElementById('mic-lbl').textContent = 'Tap to speak';
+    addLiveChip('📵 Call ended — ' + document.getElementById('call-timer').textContent);
   };
 
   ELA.ws.onerror = () => {
-    showToast('Connection failed — check Agent ID in Settings');
-    setLiveBtnState('idle');
+    hideCallOverlay();
     cleanupELA();
+    showToast('Connection failed — check your Agent ID in Settings');
   };
 }
 
 function stopLiveVoice() {
   ELA.ws?.close();
   cleanupELA();
-  setLiveBtnState('idle');
+  hideCallOverlay();
 }
 
 function cleanupELA() {
+  clearInterval(ELA.callTimer); ELA.callTimer = null;
+  cancelAnimationFrame(ELA.rafId);
   ELA.stream?.getTracks().forEach(t => t.stop());
   ELA.processor?.disconnect();
+  ELA.analyser?.disconnect();
   try { ELA.audioCtx?.close(); } catch(e) {}
-  ELA.stream = null; ELA.processor = null; ELA.audioCtx = null;
-  ELA.audioQueue = []; ELA.isPlaying = false;
+  ELA.stream=null; ELA.processor=null; ELA.analyser=null; ELA.audioCtx=null;
+  ELA.audioQueue=[]; ELA.isPlaying=false; ELA.isMuted=false; ELA.callSeconds=0;
   setSpeaking(false);
+  document.getElementById('mic-lbl').textContent = 'Tap to speak';
 }
 
+/* ── Overlay helpers ── */
+function showCallOverlay(state) {
+  const ov   = document.getElementById('call-overlay');
+  const name = document.getElementById('call-name');
+  const av   = document.getElementById('call-avatar');
+  av.textContent  = ST.icon;
+  name.textContent = ST.name;
+  ov.className = 'call-overlay on ' + state;
+  setCallStatus(state);
+
+  // resize canvas
+  const canvas = document.getElementById('call-canvas');
+  canvas.width  = canvas.offsetWidth  || 340;
+  canvas.height = canvas.offsetHeight || 70;
+
+  // clear transcript
+  document.getElementById('call-transcript-box').innerHTML =
+    '<div class="ctxt agent" style="color:rgba(255,255,255,.3);font-weight:400">Connecting to ' + ST.name + '…</div>';
+}
+
+function hideCallOverlay() {
+  const ov = document.getElementById('call-overlay');
+  ov.classList.remove('on','connecting','connected','speaking');
+  cancelAnimationFrame(ELA.rafId);
+  const ctx = document.getElementById('call-canvas').getContext('2d');
+  ctx.clearRect(0,0,9999,9999);
+}
+
+function setCallStatus(state) {
+  const txt = document.getElementById('call-status-txt');
+  if (state === 'connecting') txt.textContent = 'Connecting…';
+  if (state === 'connected')  txt.textContent = 'Listening…';
+  if (state === 'speaking')   txt.textContent = 'Speaking…';
+}
+
+/* ── Call timer ── */
+function startCallTimer() {
+  ELA.callSeconds = 0;
+  document.getElementById('call-timer').textContent = '0:00';
+  ELA.callTimer = setInterval(() => {
+    ELA.callSeconds++;
+    document.getElementById('call-timer').textContent = fmtTime(ELA.callSeconds);
+  }, 1000);
+}
+
+/* ── Mute toggle ── */
+function toggleMute() {
+  ELA.isMuted = !ELA.isMuted;
+  const btn = document.getElementById('call-mute-btn');
+  btn.textContent = ELA.isMuted ? '🔇' : '🎙️';
+  btn.classList.toggle('muted', ELA.isMuted);
+  if (ELA.stream) {
+    ELA.stream.getAudioTracks().forEach(t => { t.enabled = !ELA.isMuted; });
+  }
+  showToast(ELA.isMuted ? '🔇 Muted' : '🎙️ Unmuted');
+}
+
+/* ── Audio capture & send to ElevenLabs ── */
 function startAudioCapture() {
   ELA.audioCtx = new AudioContext({ sampleRate: 16000 });
   const src = ELA.audioCtx.createMediaStreamSource(ELA.stream);
   ELA.processor = ELA.audioCtx.createScriptProcessor(4096, 1, 1);
 
-  ELA.processor.onaudioprocess = (e) => {
-    if (ELA.ws?.readyState !== WebSocket.OPEN) return;
+  ELA.processor.onaudioprocess = e => {
+    if (ELA.ws?.readyState !== WebSocket.OPEN || ELA.isMuted) return;
     const f32 = e.inputBuffer.getChannelData(0);
     const pcm = new Int16Array(f32.length);
     for (let i = 0; i < f32.length; i++) {
       const c = Math.max(-1, Math.min(1, f32[i]));
       pcm[i] = c < 0 ? c * 32768 : c * 32767;
     }
-    // base64 encode in chunks to avoid call-stack overflow
     const bytes = new Uint8Array(pcm.buffer);
     let bin = '';
-    for (let i = 0; i < bytes.length; i += 8192) {
+    for (let i = 0; i < bytes.length; i += 8192)
       bin += String.fromCharCode(...bytes.subarray(i, i + 8192));
-    }
     ELA.ws.send(JSON.stringify({ user_audio_chunk: btoa(bin) }));
   };
 
@@ -2452,32 +2634,92 @@ function startAudioCapture() {
   ELA.processor.connect(ELA.audioCtx.destination);
 }
 
+/* ── Real-time mic waveform visualizer ── */
+function startMicVisualizer() {
+  if (!ELA.audioCtx || !ELA.stream) return;
+  ELA.analyser = ELA.audioCtx.createAnalyser();
+  ELA.analyser.fftSize = 128;
+  const src2 = ELA.audioCtx.createMediaStreamSource(ELA.stream);
+  src2.connect(ELA.analyser);
+
+  const canvas = document.getElementById('call-canvas');
+  const ctx    = canvas.getContext('2d');
+  const data   = new Uint8Array(ELA.analyser.frequencyBinCount);
+
+  function draw() {
+    ELA.rafId = requestAnimationFrame(draw);
+    ELA.analyser.getByteFrequencyData(data);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const bars = data.length;
+    const bw   = canvas.width / bars - 1;
+    const cx   = canvas.width / 2;
+    const cy   = canvas.height / 2;
+
+    for (let i = 0; i < bars; i++) {
+      const v   = data[i] / 255;
+      const h   = Math.max(4, v * canvas.height * 0.85);
+      const x   = i * (bw + 1);
+      const alpha = 0.35 + v * 0.65;
+
+      // gradient colour: indigo → green based on volume
+      const r = Math.round(99  + v * (16  - 99));
+      const g = Math.round(102 + v * (185 - 102));
+      const b2= Math.round(241 + v * (129 - 241));
+
+      ctx.fillStyle = `rgba(${r},${g},${b2},${alpha})`;
+      ctx.beginPath();
+      ctx.roundRect(x, cy - h/2, bw, h, 3);
+      ctx.fill();
+    }
+  }
+  draw();
+}
+
+/* ── Handle incoming messages from ElevenLabs ── */
 function handleAgentMsg(data) {
-  switch (data.type) {
+  const box = document.getElementById('call-transcript-box');
+  const ov  = document.getElementById('call-overlay');
+
+  switch(data.type) {
+
     case 'conversation_initiation_metadata':
-      document.getElementById('live-transcript').textContent = 'Listening…';
-      addLiveChip('🟢 Live session started — speak now');
+      box.innerHTML = '';
+      setCallStatus('connected');
+      ov.className = 'call-overlay on connected';
       break;
 
     case 'ping':
-      ELA.ws?.send(JSON.stringify({ type: 'pong', event_id: data.ping_event?.event_id }));
+      ELA.ws?.send(JSON.stringify({ type:'pong', event_id: data.ping_event?.event_id }));
       break;
 
     case 'user_transcript': {
       const t = data.user_transcription_event?.user_transcript?.trim();
-      if (t) {
-        document.getElementById('live-transcript').textContent = '🎤 ' + t;
-        addMsg('user', t, false);
-        addFacts(t);
-      }
+      if (!t) break;
+      addFacts(t);
+      addMsg('user', t, false);          // chat history
+      const el = document.createElement('div');
+      el.className = 'ctxt user';
+      el.textContent = t;
+      box.appendChild(el);
+      box.scrollTop = box.scrollHeight;
+      ov.className = 'call-overlay on connected';
+      setCallStatus('connected');
       break;
     }
 
     case 'agent_response': {
       const t = data.agent_response_event?.agent_response?.trim();
-      if (t) addMsg('ai', t, false);
+      if (!t) break;
+      addMsg('ai', t, false);
+      const el = document.createElement('div');
+      el.className = 'ctxt agent';
+      el.textContent = t;
+      box.appendChild(el);
+      box.scrollTop = box.scrollHeight;
+      ov.className = 'call-overlay on speaking';
+      setCallStatus('speaking');
       setSpeaking(true);
-      document.getElementById('live-transcript').textContent = '💬 ' + (t || '…');
       break;
     }
 
@@ -2488,39 +2730,46 @@ function handleAgentMsg(data) {
     }
 
     case 'interruption':
-      ELA.audioQueue = [];
-      ELA.isPlaying = false;
+      ELA.audioQueue = []; ELA.isPlaying = false;
       setSpeaking(false);
-      document.getElementById('live-transcript').textContent = 'Listening…';
+      ov.className = 'call-overlay on connected';
+      setCallStatus('connected');
       break;
   }
 }
 
 async function playNextChunk() {
-  if (!ELA.audioQueue.length) { ELA.isPlaying = false; setSpeaking(false); return; }
+  if (!ELA.audioQueue.length) { ELA.isPlaying=false; setSpeaking(false); return; }
   ELA.isPlaying = true;
   const b64 = ELA.audioQueue.shift();
   try {
-    const bin = atob(b64);
+    const bin   = atob(b64);
     const bytes = new Uint8Array(bin.length);
-    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
-    const blob = new Blob([bytes.buffer], { type: 'audio/mpeg' });
-    const url  = URL.createObjectURL(blob);
-    const aud  = new Audio(url);
+    for (let i=0;i<bin.length;i++) bytes[i]=bin.charCodeAt(i);
+    const url = URL.createObjectURL(new Blob([bytes.buffer],{type:'audio/mpeg'}));
+    const aud = new Audio(url);
     aud.onended = () => { URL.revokeObjectURL(url); playNextChunk(); };
     aud.onerror = () => { URL.revokeObjectURL(url); playNextChunk(); };
     await aud.play();
   } catch(e) { playNextChunk(); }
 }
 
+/* ── Live bar (small trigger in chat) ── */
 function setLiveBtnState(state) {
   const btn = document.getElementById('live-btn');
   const st  = document.getElementById('live-status');
   if (!btn) return;
   btn.className = 'live-btn ' + state;
-  if (state === 'idle')        { btn.textContent = '🎙️ Live'; st.textContent = 'Ready for live voice'; }
-  if (state === 'connecting')  { btn.textContent = '⏳ Connecting…'; st.textContent = 'Connecting to agent…'; }
-  if (state === 'connected')   { btn.textContent = '🔴 End Call'; st.textContent = 'Live — agent listening'; }
+  if (state==='idle')       { btn.textContent='🎙️ Live'; st.textContent='Tap for live voice call'; }
+  if (state==='connecting') { btn.textContent='⏳…';     st.textContent='Connecting…'; }
+  if (state==='connected')  { btn.textContent='🔴 Live'; st.textContent='Live call active'; }
+}
+
+function updateLiveBar() {
+  const has = !!ST.agentIds[ST.role];
+  document.getElementById('live-bar').classList.toggle('on', has);
+  setLiveBtnState('idle');
+  if (!has) stopLiveVoice();
 }
 
 function addLiveChip(msg) {
@@ -2533,22 +2782,14 @@ function addLiveChip(msg) {
   area.scrollTop = area.scrollHeight;
 }
 
-// Show/hide live bar when entering chat
-function updateLiveBar() {
-  const hasAgent = !!ST.agentIds[ST.role];
-  document.getElementById('live-bar').classList.toggle('on', hasAgent);
-  if (!hasAgent) stopLiveVoice();
-}
-
-// Save agent ID from settings
+/* ── Save agent ID from settings ── */
 function saveAgentId(role) {
-  const inp = document.getElementById('aid-' + role);
+  const inp = document.getElementById('aid-'+role);
   const val = inp?.value.trim();
   if (!val) { showToast('Please paste the Agent ID first'); return; }
   ST.agentIds[role] = val;
   localStorage.setItem('sv_aids', JSON.stringify(ST.agentIds));
-  inp.value = '';
-  inp.placeholder = val.slice(0, 18) + '…';
+  inp.value=''; inp.placeholder = val.slice(0,20)+'…';
   showToast('✅ Agent saved for ' + role);
   updateLiveBar();
 }
